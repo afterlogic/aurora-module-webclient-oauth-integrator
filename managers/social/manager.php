@@ -15,7 +15,6 @@ class CApiSocialManager extends AApiManagerWithStorage
 	public function __construct(CApiGlobalManager &$oManager, $sForcedStorage = '')
 	{
 		parent::__construct('social', $oManager, $sForcedStorage);
-		$this->inc('classes.social');
 	}
 	
 	/**

@@ -7,6 +7,8 @@ class ExternalServicesModule extends AApiModule
 	public function init() 
 	{
 		parent::init();
+
+		$this->incClass('social');
 		$this->oApiSocialManager = $this->GetManager('social');
 	}
 }
