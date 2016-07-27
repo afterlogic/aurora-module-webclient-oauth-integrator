@@ -145,10 +145,9 @@ class ExternalServicesModule extends AApiModule
 			else
 			{
 				$this->broadcastEvent('CreateAccount', array(
-					null,
-					0,
-					null,
-					null,
+					array(
+						'UserName' => $mResult['name']
+					),
 					'result' => &$oUser
 				));
 				
