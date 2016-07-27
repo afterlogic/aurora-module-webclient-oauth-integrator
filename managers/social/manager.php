@@ -7,14 +7,14 @@
  *
  * @package Social
  */
-class CApiSocialManager extends AApiManagerWithStorage
+class CApiExternalServicesSocialManager extends AApiManagerWithStorage
 {
 	/**
 	 * @param CApiGlobalManager &$oManager
 	 */
-	public function __construct(CApiGlobalManager &$oManager, $sForcedStorage = '')
+	public function __construct(CApiGlobalManager &$oManager, $sForcedStorage = '', $oModule = null)
 	{
-		parent::__construct('social', $oManager, $sForcedStorage);
+		parent::__construct('social', $oManager, $sForcedStorage, $oModule);
 	}
 	
 	/**
@@ -81,7 +81,7 @@ class CApiSocialManager extends AApiManagerWithStorage
 	 *
 	 * @return bool
 	 */
-	public function createSocial(CSocial &$oSocial)
+	public function createSocial(CSocialAccount &$oSocial)
 	{
 		$bResult = false;
 		try
@@ -109,7 +109,7 @@ class CApiSocialManager extends AApiManagerWithStorage
 	 *
 	 * @return bool
 	 */
-	public function updateSocial(CSocial &$oSocial)
+	public function updateSocial(CSocialAccount &$oSocial)
 	{
 		$bResult = false;
 		try
@@ -201,7 +201,7 @@ class CApiSocialManager extends AApiManagerWithStorage
 	 *
 	 * @return bool
 	 */
-	public function isSocialExists(CSocial $oSocial)
+	public function isSocialExists(CSocialAccount $oSocial)
 	{
 		$bResult = false;
 		try

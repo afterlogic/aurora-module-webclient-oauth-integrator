@@ -6,14 +6,14 @@
  * @package Social
  * @subpackage Storages
  */
-class CApiSocialCommandCreator extends api_CommandCreator
+class CApiExternalServicesSocialCommandCreator extends api_CommandCreator
 {
 	/**
-	 * @param CSocial $oSocial
+	 * @param CSocialAccount $oSocial
 	 *
 	 * @return string
 	 */
-	public function createSocial(CSocial $oSocial)
+	public function createSocial(CSocialAccount $oSocial)
 	{
 		$aResults = api_AContainer::DbInsertArrays($oSocial, $this->oHelper);
 
@@ -27,11 +27,11 @@ class CApiSocialCommandCreator extends api_CommandCreator
 	}
 
 	/**
-	 * @param CSocial $oSocial
+	 * @param CSocialAccount $oSocial
 	 *
 	 * @return string
 	 */
-	public function updateSocial(CSocial $oSocial)
+	public function updateSocial(CSocialAccount $oSocial)
 	{
 		$aResult = api_AContainer::DbUpdateArray($oSocial, $this->oHelper);
 
@@ -138,7 +138,7 @@ class CApiSocialCommandCreator extends api_CommandCreator
 	 */
 	protected function getSocialByWhere($sWhere)
 	{
-		$aMap = api_AContainer::DbReadKeys(CSocial::getStaticMap());
+		$aMap = api_AContainer::DbReadKeys(CSocialAccount::getStaticMap());
 		$aMap = array_map(array($this, 'escapeColumn'), $aMap);
 
 		$sSql = 'SELECT %s FROM %sawm_social WHERE %s';
@@ -151,7 +151,7 @@ class CApiSocialCommandCreator extends api_CommandCreator
  * @package Social
  * @subpackage Storages
  */
-class CApiSocialCommandCreatorMySQL extends CApiSocialCommandCreator
+class CApiExternalServicesSocialCommandCreatorMySQL extends CApiExternalServicesSocialCommandCreator
 {
 	// TODO
 }
@@ -160,7 +160,7 @@ class CApiSocialCommandCreatorMySQL extends CApiSocialCommandCreator
  * @package Social
  * @subpackage Storages
  */
-class CApiSocialCommandCreatorPostgreSQL  extends CApiSocialCommandCreatorMySQL
+class CApiExternalServicesSocialCommandCreatorPostgreSQL  extends CApiExternalServicesSocialCommandCreatorMySQL
 {
 	// TODO
 }

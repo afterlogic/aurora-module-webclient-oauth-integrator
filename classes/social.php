@@ -4,7 +4,7 @@
 
 /**
  * @property int $Id
- * @property int $IdAccount
+ * @property int $IdUser
  * @property string $IdSocial
  * @property int $Type
  * @property string $TypeStr
@@ -18,7 +18,7 @@
  * @package Social
  * @subpackage Classes
  */
-class CSocial extends api_AContainer
+class CSocialAccount extends api_AContainer
 {
 	public function __construct()
 	{
@@ -28,7 +28,7 @@ class CSocial extends api_AContainer
 
 		$this->SetDefaults(array(
 			'Id'			=> 0,
-			'IdAccount'		=> 0,
+			'IdUser'		=> 0,
 			'IdSocial'		=> '',
 			'Type'			=> \ESocialType::Unknown,
 			'TypeStr'		=> '',
@@ -73,7 +73,7 @@ class CSocial extends api_AContainer
 	{
 		return array(
 			'Id'			=> array('int', 'id', false, false),
-			'IdAccount'		=> array('int', 'id_acct', true, false),
+			'IdUser'		=> array('int', 'id_acct', true, false),
 			'IdSocial'		=> array('string(255)', 'id_social', true, false),
 			'Type'			=> array('int', 'type', true, false),
 			'TypeStr'		=> array('string(255)', 'type_str', true, false),
@@ -93,9 +93,9 @@ class CSocial extends api_AContainer
 	public function toArray()
 	{
 		return array(
-			'@Object'	=> 'Object/CSocial',
+			'@Object'	=> 'Object/CSocialAccount',
 			'Id'		=> $this->Id,
-			'IdAccount'	=> $this->IdAccount,
+			'IdUser'	=> $this->IdUser,
 			'IdSocial'	=> $this->IdSocial,
 			'Type'		=> $this->TypeStr,
 			//'TypeStr'	=> $this->TypeStr,

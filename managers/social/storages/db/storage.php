@@ -6,7 +6,7 @@
  * @package Social
  * @subpackage Storages
  */
-class CApiSocialDbStorage extends CApiSocialStorage
+class CApiExternalServicesSocialDbStorage extends CApiExternalServicesSocialStorage
 {
 	/**
 	 * @var CDbStorage $oConnection
@@ -28,8 +28,8 @@ class CApiSocialDbStorage extends CApiSocialStorage
 		$this->oConnection =& $oManager->GetConnection();
 		$this->oCommandCreator =& $oManager->GetCommandCreator(
 			$this, array(
-				EDbType::MySQL => 'CApiSocialCommandCreatorMySQL',
-				EDbType::PostgreSQL => 'CApiSocialCommandCreatorPostgreSQL'
+				EDbType::MySQL => 'CApiExternalServicesSocialCommandCreatorMySQL',
+				EDbType::PostgreSQL => 'CApiExternalServicesSocialCommandCreatorPostgreSQL'
 			)
 		);
 	}
@@ -37,7 +37,7 @@ class CApiSocialDbStorage extends CApiSocialStorage
 	/**
 	 * @param string $sSql
 	 *
-	 * @return CSocial
+	 * @return CSocialAccount
 	 */
 	protected function getSocialBySql($sSql)
 	{
@@ -47,7 +47,7 @@ class CApiSocialDbStorage extends CApiSocialStorage
 			$oRow = $this->oConnection->GetNextRecord();
 			if ($oRow)
 			{
-				$oSocial = new CSocial();
+				$oSocial = new CSocialAccount();
 				$oSocial->InitByDbRow($oRow);
 			}
 			$this->oConnection->FreeResult();
@@ -61,7 +61,7 @@ class CApiSocialDbStorage extends CApiSocialStorage
 	 * @param string $sIdSocial
 	 * @param string $sType
 	 *
-	 * @return CSocial
+	 * @return CSocialAccount
 	 */
 	public function getSocialById($sIdSocial, $sType)
 	{
@@ -72,7 +72,7 @@ class CApiSocialDbStorage extends CApiSocialStorage
 	 * @param int $iIdAccount
 	 * @param string $sType
 	 *
-	 * @return CSocial
+	 * @return CSocialAccount
 	 */
 	public function getSocial($iIdAccount, $sType)
 	{
@@ -92,7 +92,7 @@ class CApiSocialDbStorage extends CApiSocialStorage
 			$oRow = null;
 			while (false !== ($oRow = $this->oConnection->GetNextRecord()))
 			{
-				$oSocial = new \CSocial();
+				$oSocial = new \CSocialAccount();
 				$oSocial->InitByDbRow($oRow);
 				$aSocials[] = $oSocial;
 			}
@@ -103,11 +103,11 @@ class CApiSocialDbStorage extends CApiSocialStorage
 	}		
 	
 	/**
-	 * @param CSocial &$oSocial
+	 * @param CSocialAccount &$oSocial
 	 *
 	 * @return bool
 	 */
-	public function createSocial(\CSocial &$oSocial)
+	public function createSocial(\CSocialAccount &$oSocial)
 	{
 		$bResult = false;
 		if ($this->oConnection->Execute($this->oCommandCreator->createSocial($oSocial)))
@@ -121,11 +121,11 @@ class CApiSocialDbStorage extends CApiSocialStorage
 	}
 
 	/**
-	 * @param CSocial &$oSocial
+	 * @param CSocialAccount &$oSocial
 	 *
 	 * @return bool
 	 */
-	public function updateSocial(\CSocial &$oSocial)
+	public function updateSocial(\CSocialAccount &$oSocial)
 	{
 		$bResult = $this->oConnection->Execute($this->oCommandCreator->updateSocial($oSocial));
 		$this->throwDbExceptionIfExist();
@@ -170,14 +170,14 @@ class CApiSocialDbStorage extends CApiSocialStorage
 	}	
 
 	/**
-	 * @param CSocial &$oSocial
+	 * @param CSocialAccount &$oSocial
 	 *
 	 * @return bool
 	 */
-	public function isSocialExists(CSocial $oSocial)
+	public function isSocialExists(CSocialAccount $oSocial)
 	{
 		$bResult = false;
-		if ($this->oConnection->Execute($this->oCommandCreator->isSocialExists($oSocial->IdAccount, $oSocial->TypeStr)))
+		if ($this->oConnection->Execute($this->oCommandCreator->isSocialExists($oSocial->IdUser, $oSocial->TypeStr)))
 		{
 			$oRow = $this->oConnection->GetNextRecord();
 			if ($oRow)

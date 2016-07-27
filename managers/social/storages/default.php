@@ -6,7 +6,7 @@
  * @package Social
  * @subpackage Storages
  */
-class CApiSocialStorage extends AApiManagerStorage
+class CApiExternalServicesSocialStorage extends AApiManagerStorage
 {
 	/**
 	 * @param CApiGlobalManager &$oManager
@@ -40,7 +40,7 @@ class CApiSocialStorage extends AApiManagerStorage
 	 * @param string $sIdSocial
 	 * @param int $iType
 	 *
-	 * @return \CSocial
+	 * @return \CSocialAccount
 	 */
 	public function getSocialById($sIdSocial, $iType)
 	{
@@ -48,21 +48,21 @@ class CApiSocialStorage extends AApiManagerStorage
 	}	
 
 	/**
-	 * @param CSocial &$oSocial
+	 * @param CSocialAccount &$oSocial
 	 *
 	 * @return bool
 	 */
-	public function createSocial(CSocial &$oSocial)
+	public function createSocial(CSocialAccount &$oSocial)
 	{
 		
 	}
 
 	/**
-	 * @param CSocial &$oSocial
+	 * @param CSocialAccount &$oSocial
 	 *
 	 * @return bool
 	 */
-	public function updateSocial(CSocial &$oSocial)
+	public function updateSocial(CSocialAccount &$oSocial)
 	{
 
 	}
@@ -94,11 +94,11 @@ class CApiSocialStorage extends AApiManagerStorage
 	}	
 	
 	/**
-	 * @param CSocial &$oSocial
+	 * @param CSocialAccount &$oSocial
 	 *
 	 * @return bool
 	 */
-	public function isSocialExists(CSocial $oSocial)
+	public function isSocialExists(CSocialAccount $oSocial)
 	{
 		
 	}	
