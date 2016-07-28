@@ -63,7 +63,7 @@ class ExternalServicesModule extends AApiModule
 			{
 				$oAccountOld->setScope('auth');
 				$oAccount->Scopes = $oAccountOld->Scopes;
-				$this->oManager->updateAccoun($oAccount);
+				$this->oManager->updateAccount($oAccount);
 				
 				$oUser = \CApi::GetModuleDecorator('Core')->GetUser($oAccountOld->IdUser);
 			}

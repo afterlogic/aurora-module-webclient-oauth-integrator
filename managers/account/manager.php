@@ -161,7 +161,7 @@ class CApiExternalServicesAccountManager extends AApiManager
 	 *
 	 * @return bool
 	 */
-	public function updateSocial(COAuthAccount &$oAccount)
+	public function updateAccount(COAuthAccount &$oAccount)
 	{
 		$bResult = false;
 		try
