@@ -1,0 +1,5 @@
+<div class="content social" data-bind="foreach: externalServices"> 
+	<div data-bind="css: $data, visible: true, click: function () {$parent.externalAuthClick($data);}"> 
+		<span class="text" data-bind="i18n: {'key': 'CORECLIENT/ACTION_LOG_IN'}"></span>
+	</div>
+</div>

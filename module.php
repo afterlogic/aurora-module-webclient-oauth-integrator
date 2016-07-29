@@ -17,6 +17,7 @@ class ExternalServicesModule extends AApiModule
 		
 		$this->oManager = $this->GetManager('account');
 		$this->AddEntry('external-services', 'ExternalServicesEntry');
+		$this->includeTemplate('BasicAuthClient_LoginView', 'Login-After', 'templates/SignInButtonsView.html');
 	}
 	
 	public function ExternalServicesEntry()
@@ -63,7 +64,6 @@ class ExternalServicesModule extends AApiModule
 			{
 				$oAccountOld->setScope('auth');
 				$oAccount->Scopes = $oAccountOld->Scopes;
-				$oAccount->iId = $oAccountOld->iId;
 				$this->oManager->updateAccount($oAccount);
 				
 				$oUser = \CApi::GetModuleDecorator('Core')->GetUser($oAccountOld->IdUser);
@@ -100,5 +100,17 @@ class ExternalServicesModule extends AApiModule
 			}
 			\CApi::Location2('./' . $sError);
 		}
+	}
+	
+	/**
+	 * Returns all external services names.
+	 * 
+	 * @return array
+	 */
+	public function GetServices()
+	{
+		$aServices = array();
+		$this->broadcastEvent('GetServices', array(&$aServices));
+		return $aServices;
 	}
 }
