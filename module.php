@@ -108,4 +108,39 @@ class ExternalServicesModule extends AApiModule
 		$this->broadcastEvent('GetServices', array(&$aServices));
 		return $aServices;
 	}
+	
+	/**
+	 * Returns all external services settings.
+	 * 
+	 * @param \CUser $oUser User settings are obtained for.
+	 * 
+	 * @return array
+	 */
+	public function GetAppData($oUser = null)
+	{
+		if ($oUser && $oUser->Role === 0)
+		{
+			$aServices = array();
+			$this->broadcastEvent('GetServicesSettings', array(&$aServices));
+			return array(
+				'Services' => $aServices
+			);
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Updates all external services settings.
+	 * 
+	 * @param array $Services Array with services settings passed by reference.
+	 * 
+	 * @return boolean
+	 */
+	public function UpdateSettings($Services)
+	{
+		$this->broadcastEvent('UpdateServicesSettings', array($Services));
+		
+		return true;
+	}
 }
