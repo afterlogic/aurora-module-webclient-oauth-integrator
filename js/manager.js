@@ -21,7 +21,7 @@ module.exports = function (oAppData, iUserRole, bPublic) {
 	
 	return {
 		start: function (ModulesManager) {
-			App.subscribeEvent('BasicAuthClient::ConstructView::after', function (oParams) {
+			App.subscribeEvent('StandardLoginForm::ConstructView::after', function (oParams) {
 				if ('CLoginView' === oParams.Name)
 				{
 					oParams.View.externalAuthClick = function (sSocialName) {
