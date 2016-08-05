@@ -13,7 +13,8 @@ module.exports = function (oAppData, iUserRole, bPublic) {
 		Settings = require('modules/%ModuleName%/js/Settings.js'),
 		oSettings = _.extend({}, oAppData[Settings.ServerModuleName] || {}, oAppData['%ModuleName%'] || {}),
 		
-		bAdminUser = iUserRole === Enums.UserRole.SuperAdmin
+		bAdminUser = iUserRole === Enums.UserRole.SuperAdmin,
+		bPowerUser = iUserRole === Enums.UserRole.PowerUser
 	;
 
 	Settings.init(oSettings);
@@ -41,6 +42,12 @@ module.exports = function (oAppData, iUserRole, bPublic) {
 					Settings.HashModuleName,
 					TextUtils.i18n('%MODULENAME%/LABEL_ES_SETTINGS_TAB')
 				]);
+			}
+		},
+		getCreateLoginPasswordView: function () {
+			if (bPowerUser)
+			{
+				return require('modules/%ModuleName%/js/views/CreateLoginPasswordView.js');
 			}
 		}
 	};

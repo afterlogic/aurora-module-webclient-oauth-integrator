@@ -5,6 +5,8 @@ class ExternalServicesModule extends AApiModule
 	public $oApiManager = null;
 	
 	protected $aSettingsMap = array(
+		'AuthModuleName' => array('BasicAuth', 'string'),
+		'OnlyPasswordForAccountCreate' => array(true, 'bool'),
 		'Services' => array(array(), 'array')
 	);
 	
@@ -123,7 +125,15 @@ class ExternalServicesModule extends AApiModule
 			$aServices = array();
 			$this->broadcastEvent('GetServicesSettings', array(&$aServices));
 			return array(
-				'Services' => $aServices
+				'Services' => $aServices,
+			);
+		}
+		
+		if ($oUser && $oUser->Role === 1)
+		{
+			return array(
+				'AuthModuleName' => $this->getConfig('AuthModuleName'),
+				'OnlyPasswordForAccountCreate' => $this->getConfig('OnlyPasswordForAccountCreate'),
 			);
 		}
 		

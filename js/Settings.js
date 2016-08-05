@@ -1,12 +1,17 @@
 'use strict';
 
 var
-	_ = require('underscore')
+	_ = require('underscore'),
+	
+	Types = require('modules/CoreClient/js/utils/Types.js')
 ;
 
 module.exports = {
 	ServerModuleName: 'ExternalServices',
 	HashModuleName: 'externalServices',
+	
+	AuthModuleName: 'BasicAuth',
+	OnlyPasswordForAccountCreate: true,
 	
 	Services: [],
 	
@@ -19,6 +24,8 @@ module.exports = {
 	{
 		if (oAppDataSection)
 		{
+			this.AuthModuleName = Types.pString(oAppDataSection.AuthModuleName);
+			this.OnlyPasswordForAccountCreate = !!oAppDataSection.OnlyPasswordForAccountCreate;
 			this.Services = _.isArray(oAppDataSection.Services) ? oAppDataSection.Services : [];
 		}
 	},
