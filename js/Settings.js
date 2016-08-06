@@ -2,6 +2,7 @@
 
 var
 	_ = require('underscore'),
+	ko = require('knockout'),
 	
 	Types = require('modules/CoreClient/js/utils/Types.js')
 ;
@@ -12,6 +13,7 @@ module.exports = {
 	
 	AuthModuleName: 'BasicAuth',
 	OnlyPasswordForAccountCreate: true,
+	userAccountLogin: ko.observable(''),
 	
 	Services: [],
 	
@@ -28,6 +30,16 @@ module.exports = {
 			this.OnlyPasswordForAccountCreate = !!oAppDataSection.OnlyPasswordForAccountCreate;
 			this.Services = _.isArray(oAppDataSection.Services) ? oAppDataSection.Services : [];
 		}
+	},
+	
+	/**
+	 * Sets user auth account login.
+	 * 
+	 * @param {string} sUserAccountLogin
+	 */
+	setUserAccountLogin: function (sUserAccountLogin)
+	{
+		this.userAccountLogin(Types.pString(sUserAccountLogin));
 	},
 	
 	/**
