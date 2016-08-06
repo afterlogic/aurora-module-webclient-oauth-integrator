@@ -124,12 +124,11 @@ class ExternalServicesModule extends AApiModule
 	/**
 	 * Returns all external services settings.
 	 * 
-	 * @param \CUser $oUser User settings are obtained for.
-	 * 
 	 * @return array
 	 */
-	public function GetAppData($oUser = null)
+	public function GetAppData()
 	{
+		$oUser = \CApi::getAuthenticatedUser();
 		if ($oUser && $oUser->Role === 0)
 		{
 			$aServices = array();
