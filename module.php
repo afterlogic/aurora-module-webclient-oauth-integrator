@@ -26,16 +26,6 @@ class ExternalServicesModule extends AApiModule
 		$this->includeTemplate('StandardLoginForm_LoginView', 'Login-After', 'templates/SignInButtonsView.html');
 	}
 	
-	/**
-	 * Returns login of authenticated user oAuth account.
-	 * 
-	 * @return string|false
-	 */
-	public function GetUserAccountLogin()
-	{
-		return 'testOAuthAccountLogin';
-	}
-	
 	public function ExternalServicesEntry()
 	{
 		$mResult = false;
