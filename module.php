@@ -171,6 +171,19 @@ class ExternalServicesModule extends AApiModule
 	public function GetAccounts()
 	{
 		$UserId = \CApi::getAuthenticatedUserId();
-		return $this->oManager->getAccounts($UserId);
+		$aResult = array();
+		$mAccounts = $this->oManager->getAccounts($UserId);
+		if (is_array($mAccounts))
+		{
+			foreach ($mAccounts as $oAccount) {
+				$aResult[] = array(
+					'Id' => $oAccount->iObjectId,
+					'Type' => $oAccount->Type,
+					'Email' => $oAccount->Email,
+					'Name' => $oAccount->Name,
+				);
+			}
+		}
+		return $aResult;
 	}
 }

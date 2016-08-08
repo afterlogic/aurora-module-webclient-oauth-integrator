@@ -29,16 +29,16 @@ function CCreateLoginPasswordView()
 		if (!this.loginRequested() && this.visible() && this.visibleSetPasswordForm())
 		{
 			Ajax.send('%ModuleName%', 'GetAccounts', null, _.bind(function (oResponse) {
-				console.log('oResponse', oResponse);
-//				if (oResponse.Result)
-//				{
-//					this.login(Types.pString(oResponse.Result));
-//				}
-//				this.loginRequested(true);
-//				if (this.login() === '')
-//				{
-//					this.visibleSetPasswordForm(false);
-//				}
+				if (_.isArray(oResponse.Result) && oResponse.Result.length > 0)
+				{
+					this.login(Types.pString(oResponse.Result[0].Email));
+				}
+				console.log('this.login', this.login());
+				this.loginRequested(true);
+				if (this.login() === '')
+				{
+					this.visibleSetPasswordForm(false);
+				}
 			}, this));
 		}
 	}, this).extend({ throttle: 200 });
