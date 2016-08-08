@@ -28,16 +28,17 @@ function CCreateLoginPasswordView()
 	ko.computed(function () {
 		if (!this.loginRequested() && this.visible() && this.visibleSetPasswordForm())
 		{
-			Ajax.send('%ModuleName%', 'GetUserAccountLogin', null, _.bind(function (oResponse) {
-				if (oResponse.Result)
-				{
-					this.login(Types.pString(oResponse.Result));
-				}
-				this.loginRequested(true);
-				if (this.login() === '')
-				{
-					this.visibleSetPasswordForm(false);
-				}
+			Ajax.send('%ModuleName%', 'GetAccounts', null, _.bind(function (oResponse) {
+				console.log('oResponse', oResponse);
+//				if (oResponse.Result)
+//				{
+//					this.login(Types.pString(oResponse.Result));
+//				}
+//				this.loginRequested(true);
+//				if (this.login() === '')
+//				{
+//					this.visibleSetPasswordForm(false);
+//				}
 			}, this));
 		}
 	}, this).extend({ throttle: 200 });

@@ -2,7 +2,7 @@
 
 class ExternalServicesModule extends AApiModule
 {
-	public $oApiManager = null;
+	public $oManager = null;
 	
 	protected $aSettingsMap = array(
 		'AuthModuleName' => array('BasicAuth', 'string'),
@@ -166,12 +166,11 @@ class ExternalServicesModule extends AApiModule
 	/**
 	 * Get all external accounts.
 	 * 
-	 * @param int $UserId Id of user.
-	 * 
 	 * @return array
 	 */
-	public function GetAccounts($UserId)
+	public function GetAccounts()
 	{
-		return $this->oApiManager->getAccounts($UserId);
+		$UserId = \CApi::getAuthenticatedUserId();
+		return $this->oManager->getAccounts($UserId);
 	}
 }
