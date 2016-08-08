@@ -162,4 +162,16 @@ class ExternalServicesModule extends AApiModule
 		
 		return true;
 	}
+	
+	/**
+	 * Get all external accounts.
+	 * 
+	 * @param int $UserId Id of user.
+	 * 
+	 * @return array
+	 */
+	public function GetAccounts($UserId)
+	{
+		return $this->oApiManager->getAccounts($UserId);
+	}
 }
