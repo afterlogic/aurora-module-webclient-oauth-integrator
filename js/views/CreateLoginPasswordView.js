@@ -33,7 +33,6 @@ function CCreateLoginPasswordView()
 				{
 					this.login(Types.pString(oResponse.Result[0].Email));
 				}
-				console.log('this.login', this.login());
 				this.loginRequested(true);
 				if (this.login() === '')
 				{
