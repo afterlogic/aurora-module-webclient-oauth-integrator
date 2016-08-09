@@ -11,7 +11,7 @@ module.exports = {
 	ServerModuleName: 'ExternalServices',
 	HashModuleName: 'externalServices',
 	
-	AuthModuleName: 'BasicAuth',
+	AuthModuleName: 'StandardAuth',
 	OnlyPasswordForAccountCreate: true,
 	userAccountLogin: ko.observable(''),
 	

@@ -5,7 +5,7 @@ class ExternalServicesModule extends AApiModule
 	public $oManager = null;
 	
 	protected $aSettingsMap = array(
-		'AuthModuleName' => array('BasicAuth', 'string'),
+		'AuthModuleName' => array('StandardAuth', 'string'),
 		'OnlyPasswordForAccountCreate' => array(true, 'bool'),
 		'Services' => array(array(), 'array')
 	);
@@ -23,7 +23,7 @@ class ExternalServicesModule extends AApiModule
 		$this->oManager = $this->GetManager('account');
 		$this->setNonAuthorizedMethods(array('GetServices'));
 		$this->AddEntry('external-services', 'ExternalServicesEntry');
-		$this->includeTemplate('StandardLoginForm_LoginView', 'Login-After', 'templates/SignInButtonsView.html');
+		$this->includeTemplate('StandardLoginFormWebclient_LoginView', 'Login-After', 'templates/SignInButtonsView.html');
 	}
 	
 	public function ExternalServicesEntry()

@@ -24,7 +24,7 @@ module.exports = function (oAppData, iUserRole, bPublic) {
 	{
 		return {
 			start: function (ModulesManager) {
-				App.subscribeEvent('StandardLoginForm::ConstructView::after', function (oParams) {
+				App.subscribeEvent('StandardLoginFormWebclient::ConstructView::after', function (oParams) {
 					if ('CLoginView' === oParams.Name)
 					{
 						oParams.View.externalAuthClick = function (sSocialName) {
@@ -62,7 +62,7 @@ module.exports = function (oAppData, iUserRole, bPublic) {
 	{
 		return {
 			start: function (ModulesManager) {
-				ModulesManager.run('AdminPanelClient', 'registerAdminPanelTab', [
+				ModulesManager.run('AdminPanelWebclient', 'registerAdminPanelTab', [
 					function () { return require('modules/%ModuleName%/js/views/AdminSettingsView.js'); },
 					Settings.HashModuleName,
 					TextUtils.i18n('%MODULENAME%/LABEL_ES_SETTINGS_TAB')
