@@ -38,7 +38,7 @@ class COAuthAccount extends AEntity
 		));
 	}
 	
-	public static function createInstance($sModule = 'ExternalServices', $oParams = array())
+	public static function createInstance($sModule = 'OAuthIntegratorWebclient', $oParams = array())
 	{
 		return new COAuthAccount($sModule, $oParams);
 	}

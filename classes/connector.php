@@ -1,6 +1,6 @@
 <?php
 
-class CExternalServicesConnector
+class COAuthIntegratorConnector
 {
 	public static $ConnectorName = 'connector';
 	public static $Debug = true;

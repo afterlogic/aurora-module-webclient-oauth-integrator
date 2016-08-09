@@ -1,6 +1,6 @@
 <?php
 
-class ExternalServicesModule extends AApiModule
+class OAuthIntegratorWebclientModule extends AApiModule
 {
 	public $oManager = null;
 	
@@ -22,15 +22,15 @@ class ExternalServicesModule extends AApiModule
 		
 		$this->oManager = $this->GetManager('account');
 		$this->setNonAuthorizedMethods(array('GetServices'));
-		$this->AddEntry('external-services', 'ExternalServicesEntry');
+		$this->AddEntry('external-services', 'OAuthIntegratorEntry');
 		$this->includeTemplate('StandardLoginFormWebclient_LoginView', 'Login-After', 'templates/SignInButtonsView.html');
 	}
 	
-	public function ExternalServicesEntry()
+	public function OAuthIntegratorEntry()
 	{
 		$mResult = false;
 		$this->broadcastEvent(
-			'ExternalServicesAction', 
+			'OAuthIntegratorAction', 
 			array(
 				'service' => $this->oHttp->GetQuery('external-services', ''),
 				'result' => &$mResult
@@ -40,10 +40,10 @@ class ExternalServicesModule extends AApiModule
 		if (false !== $mResult && is_array($mResult))
 		{
 			$oUser = null;
-			$sExternalServicesRedirect = 'login';
+			$sOAuthIntegratorRedirect = 'login';
 			if (isset($_COOKIE["external-services-redirect"]))
 			{
-				$sExternalServicesRedirect = $_COOKIE["external-services-redirect"];
+				$sOAuthIntegratorRedirect = $_COOKIE["external-services-redirect"];
 				@setcookie('external-services-redirect', null);
 			}
 
@@ -88,7 +88,7 @@ class ExternalServicesModule extends AApiModule
 				}
 			}
 
-			if ($sExternalServicesRedirect === 'login')
+			if ($sOAuthIntegratorRedirect === 'login')
 			{
 				if ($oUser)
 				{

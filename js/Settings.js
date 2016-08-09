@@ -8,8 +8,8 @@ var
 ;
 
 module.exports = {
-	ServerModuleName: 'ExternalServices',
-	HashModuleName: 'externalServices',
+	ServerModuleName: 'OAuthIntegratorWebclient',
+	HashModuleName: 'oauth-integrator',
 	
 	AuthModuleName: 'StandardAuth',
 	OnlyPasswordForAccountCreate: true,

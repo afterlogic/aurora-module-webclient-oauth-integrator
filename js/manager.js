@@ -32,7 +32,7 @@ module.exports = function (oAppData, iUserRole, bPublic) {
 						};
 
 						oParams.View.externalServices = ko.observableArray([]);
-						Ajax.send('ExternalServices', 'GetServices', null, function (oResponse) {
+						Ajax.send('OAuthIntegratorWebclient', 'GetServices', null, function (oResponse) {
 							oParams.View.externalServices(oResponse.Result);
 						}, this);
 					}

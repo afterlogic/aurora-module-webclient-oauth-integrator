@@ -3,12 +3,12 @@
 /* -AFTERLOGIC LICENSE HEADER- */
 
 /**
- * CApiExternalServicesSocialManager class summary
+ * CApiOAuthIntegratorSocialManager class summary
  * 
  * @api
  * @package Account
  */
-class CApiExternalServicesAccountManager extends AApiManager
+class CApiOAuthIntegratorAccountManager extends AApiManager
 {
 	/**
 	 * @var CApiEavManager
