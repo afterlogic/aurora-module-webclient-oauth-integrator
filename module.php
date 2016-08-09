@@ -41,6 +41,11 @@ class ExternalServicesModule extends AApiModule
 		{
 			$oUser = null;
 			$sExternalServicesRedirect = 'login';
+			if (isset($_COOKIE["external-services-redirect"]))
+			{
+				$sExternalServicesRedirect = $_COOKIE["external-services-redirect"];
+				@setcookie('external-services-redirect', null);
+			}
 
 			$oAccount = new \COAuthAccount($this->GetName(), array());
 			$oAccount->Type = $mResult['type'];
@@ -50,24 +55,26 @@ class ExternalServicesModule extends AApiModule
 			$oAccount->Name = $mResult['name'];
 			$oAccount->Email = $mResult['email'];
 
-			if ($sExternalServicesRedirect === 'login')
+			$oAccountOld = $this->oManager->getAccountById($oAccount->IdSocial, $oAccount->Type);
+			if ($oAccountOld)
 			{
-				$oAccountOld = $this->oManager->getAccountById($oAccount->IdSocial, $oAccount->Type);
-				if ($oAccountOld)
-				{
-					$oAccountOld->setScope('auth');
-					$oAccount->Scopes = $oAccountOld->Scopes;
-					$oAccount->iId = $oAccountOld->iId;
-					$oAccount->IdUser = $oAccountOld->IdUser;
-					$this->oManager->updateAccount($oAccount);
+				$oAccountOld->setScope('auth');
+				$oAccount->Scopes = $oAccountOld->Scopes;
+				$oAccount->iId = $oAccountOld->iId;
+				$oAccount->IdUser = $oAccountOld->IdUser;
+				$this->oManager->updateAccount($oAccount);
 
-					$oUser = \CApi::GetModuleDecorator('Core')->GetUser($oAccount->IdUser);
-				}
-				else
+				$oUser = \CApi::GetModuleDecorator('Core')->GetUser($oAccount->IdUser);
+			}
+			else
+			{
+				if (isset($_COOKIE['AuthToken']))
 				{
+					$iUserId = \CApi::getAuthenticatedUserId($_COOKIE['AuthToken']);
 					$this->broadcastEvent('CreateAccount', array(
 						array(
-							'UserName' => $mResult['name']
+							'UserName' => $mResult['name'],
+							'UserId' => $iUserId
 						),
 						'result' => &$oUser
 					));
@@ -79,7 +86,10 @@ class ExternalServicesModule extends AApiModule
 						$this->oManager->createAccount($oAccount);
 					}
 				}
+			}
 
+			if ($sExternalServicesRedirect === 'login')
+			{
 				if ($oUser)
 				{
 					@setcookie(
@@ -95,7 +105,20 @@ class ExternalServicesModule extends AApiModule
 					);
 				}
 				\CApi::Location2('./');
-			}			
+			}
+			else
+			{
+				$sResult = $mResult !== false ? 'true' : 'false';
+				$sErrorMessage = '';
+				echo 
+				"<script>"
+					. "if (typeof(window.opener.".$mResult['type']."SettingsViewModelCallback) !== 'undefined') {"
+					.		"window.opener.".$mResult['type']."SettingsViewModelCallback(".$sResult . ", '".$sErrorMessage."');"
+					.		"window.close();"
+					. "}"
+				. "</script>";
+				exit;				
+			}
 		}
 	}
 	
@@ -176,4 +199,30 @@ class ExternalServicesModule extends AApiModule
 		}
 		return $aResult;
 	}
+	
+	/**
+	 * Get all external accounts.
+	 * 
+	 * @return array
+	 */
+	public function GetAccount($Type)
+	{
+		return $this->oManager->getAccount(
+			\CApi::getAuthenticatedUserId(), 
+			$Type
+		);
+	}	
+	
+	/**
+	 * Get all external accounts.
+	 * 
+	 * @return array
+	 */
+	public function DeleteAccount($Type)
+	{
+		return $this->oManager->deleteAccount(
+			\CApi::getAuthenticatedUserId(), 
+			$Type
+		);
+	}		
 }
