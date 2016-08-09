@@ -5,10 +5,10 @@ module.exports = function (oAppData, iUserRole, bPublic) {
 		_ = require('underscore'),
 		ko = require('knockout'),
 		
-		TextUtils = require('modules/CoreClient/js/utils/Text.js'),
+		TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
 				
-		Ajax = require('modules/CoreClient/js/Ajax.js'),
-		App = require('modules/CoreClient/js/App.js'),
+		Ajax = require('%PathToCoreWebclientModule%/js/Ajax.js'),
+		App = require('%PathToCoreWebclientModule%/js/App.js'),
 		
 		Settings = require('modules/%ModuleName%/js/Settings.js'),
 		oSettings = _.extend({}, oAppData[Settings.ServerModuleName] || {}, oAppData['%ModuleName%'] || {}),

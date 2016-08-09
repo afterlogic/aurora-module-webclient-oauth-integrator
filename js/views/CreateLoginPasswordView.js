@@ -4,10 +4,10 @@ var
 	_ = require('underscore'),
 	ko = require('knockout'),
 	
-	Types = require('modules/CoreClient/js/utils/Types.js'),
+	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js'),
 	
-	Ajax = require('modules/CoreClient/js/Ajax.js'),
-	App = require('modules/CoreClient/js/App.js'),
+	Ajax = require('%PathToCoreWebclientModule%/js/Ajax.js'),
+	App = require('%PathToCoreWebclientModule%/js/App.js'),
 	
 	Settings = require('modules/%ModuleName%/js/Settings.js')
 ;
