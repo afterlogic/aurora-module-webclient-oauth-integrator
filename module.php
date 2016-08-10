@@ -142,7 +142,7 @@ class OAuthIntegratorWebclientModule extends AApiModule
 	public function GetAppData()
 	{
 		$oUser = \CApi::getAuthenticatedUser();
-		if ($oUser && $oUser->Role === 0)
+		if (!empty($oUser) && $oUser->Role === \EUserRole::SuperAdmin)
 		{
 			$aServices = array();
 			$this->broadcastEvent('GetServicesSettings', array(&$aServices));
@@ -151,7 +151,7 @@ class OAuthIntegratorWebclientModule extends AApiModule
 			);
 		}
 		
-		if ($oUser && $oUser->Role === 1)
+		if (!empty($oUser) && $oUser->Role === \EUserRole::PowerUser)
 		{
 			return array(
 				'AuthModuleName' => $this->getConfig('AuthModuleName'),
