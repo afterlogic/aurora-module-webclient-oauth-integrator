@@ -71,20 +71,20 @@ class OAuthIntegratorWebclientModule extends AApiModule
 				if (isset($_COOKIE['AuthToken']))
 				{
 					$iUserId = \CApi::getAuthenticatedUserId($_COOKIE['AuthToken']);
-					$this->broadcastEvent('CreateAccount', array(
-						array(
-							'UserName' => $mResult['name'],
-							'UserId' => $iUserId
-						),
-						'result' => &$oUser
-					));
+				}
+				$this->broadcastEvent('CreateAccount', array(
+					array(
+						'UserName' => $mResult['name'],
+						'UserId' => $iUserId
+					),
+					'result' => &$oUser
+				));
 
-					if ($oUser instanceOf \CUser)
-					{
-						$oAccount->IdUser = $oUser->iId;
-						$oAccount->setScopes($mResult['scopes']);
-						$this->oManager->createAccount($oAccount);
-					}
+				if ($oUser instanceOf \CUser)
+				{
+					$oAccount->IdUser = $oUser->iId;
+					$oAccount->setScopes($mResult['scopes']);
+					$this->oManager->createAccount($oAccount);
 				}
 			}
 
