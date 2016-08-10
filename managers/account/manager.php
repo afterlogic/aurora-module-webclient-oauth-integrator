@@ -8,7 +8,7 @@
  * @api
  * @package Account
  */
-class CApiOAuthIntegratorAccountManager extends AApiManager
+class CApiOAuthIntegratorWebclientAccountManager extends AApiManager
 {
 	/**
 	 * @var CApiEavManager
