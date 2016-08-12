@@ -40,6 +40,7 @@ class OAuthIntegratorWebclientModule extends AApiModule
 		
 		if (false !== $mResult && is_array($mResult))
 		{
+			$iUserId = null;
 			$oUser = null;
 			$sOAuthIntegratorRedirect = 'login';
 			if (isset($_COOKIE["external-services-redirect"]))
@@ -73,11 +74,19 @@ class OAuthIntegratorWebclientModule extends AApiModule
 				{
 					$iUserId = \CApi::getAuthenticatedUserId($_COOKIE['AuthToken']);
 				}
-				$this->broadcastEvent('CreateAccount', array(
-					array(
-						'UserName' => $mResult['name'],
-						'UserId' => $iUserId
-					),
+				
+				if ($iUserId)
+				{
+					$this->broadcastEvent('CreateAccount', array(
+						array(
+							'UserName' => $mResult['name'],
+							'UserId' => $iUserId
+						),
+						'result' => &$oUser
+					));
+				}
+
+				$this->broadcastEvent('CreateOAuthAccount', array(
 					'result' => &$oUser
 				));
 
