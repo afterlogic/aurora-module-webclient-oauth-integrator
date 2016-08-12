@@ -25,6 +25,7 @@ class OAuthIntegratorWebclientModule extends AApiModule
 		$this->AddEntry('external-services', 'OAuthIntegratorEntry');
 		$this->includeTemplate('StandardLoginFormWebclient_LoginView', 'Login-After', 'templates/SignInButtonsView.html');
 		$this->includeTemplate('StandardRegisterFormWebclient_RegisterView', 'Register-After', 'templates/SignInButtonsView.html');
+		$this->subscribeEvent('Core::AfterDeleteUser', array($this, 'onAfterDeleteUser'));		
 	}
 	
 	public function OAuthIntegratorEntry()
@@ -235,4 +236,15 @@ class OAuthIntegratorWebclientModule extends AApiModule
 			$Type
 		);
 	}		
+	
+	/**
+	 * Deletes all oauth accounts which are owened by the specified user.
+	 * 
+	 * @param int $iUserId User Identificator.
+	 */	
+	public function onAfterDeleteUser($iUserId)
+	{
+		$this->oManager->deleteAccountByUserId($iUserId);
+	}
+	
 }
