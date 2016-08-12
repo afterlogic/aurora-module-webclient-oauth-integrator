@@ -24,6 +24,7 @@ class OAuthIntegratorWebclientModule extends AApiModule
 		$this->setNonAuthorizedMethods(array('GetServices'));
 		$this->AddEntry('external-services', 'OAuthIntegratorEntry');
 		$this->includeTemplate('StandardLoginFormWebclient_LoginView', 'Login-After', 'templates/SignInButtonsView.html');
+		$this->includeTemplate('StandardRegisterFormWebclient_RegisterView', 'Register-After', 'templates/SignInButtonsView.html');
 	}
 	
 	public function OAuthIntegratorEntry()

@@ -24,19 +24,25 @@ module.exports = function (oAppData, iUserRole, bPublic) {
 	{
 		return {
 			start: function (ModulesManager) {
-				App.subscribeEvent('StandardLoginFormWebclient::ConstructView::after', function (oParams) {
-					if ('CLoginView' === oParams.Name)
+				Settings.oauthServices = ko.observableArray([]);
+				
+				var fInitialize = function (oParams) {
+					if ('CLoginView' === oParams.Name || 'CRegisterView' === oParams.Name)
 					{
 						oParams.View.externalAuthClick = function (sSocialName) {
 							window.location.href = '?external-services=' + sSocialName;
 						};
 
-						oParams.View.externalServices = ko.observableArray([]);
-						Ajax.send('OAuthIntegratorWebclient', 'GetServices', null, function (oResponse) {
-							oParams.View.externalServices(oResponse.Result);
-						}, this);
+						oParams.View.oauthServices = Settings.oauthServices;
 					}
-				});
+				};
+				
+				Ajax.send(Settings.ServerModuleName, 'GetServices', null, function (oResponse) {
+					Settings.oauthServices(oResponse.Result);
+				}, this);
+
+				App.subscribeEvent('StandardLoginFormWebclient::ConstructView::after', fInitialize);
+				App.subscribeEvent('StandardRegisterFormWebclient::ConstructView::after', fInitialize);
 			}
 		};
 	}
