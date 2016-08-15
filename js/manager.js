@@ -5,15 +5,12 @@ module.exports = function (oAppData, iUserRole, bPublic) {
 		_ = require('underscore'),
 		ko = require('knockout'),
 		
-		TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
-				
 		Ajax = require('%PathToCoreWebclientModule%/js/Ajax.js'),
 		App = require('%PathToCoreWebclientModule%/js/App.js'),
 		
 		Settings = require('modules/%ModuleName%/js/Settings.js'),
 		oSettings = _.extend({}, oAppData[Settings.ServerModuleName] || {}, oAppData['%ModuleName%'] || {}),
 		
-		bAdminUser = iUserRole === Enums.UserRole.SuperAdmin,
 		bPowerUser = iUserRole === Enums.UserRole.PowerUser,
 		bAnonymUser = iUserRole === Enums.UserRole.Anonymous
 	;
@@ -60,19 +57,6 @@ module.exports = function (oAppData, iUserRole, bPublic) {
 			},
 			getCreateLoginPasswordView: function () {
 				return require('modules/%ModuleName%/js/views/CreateLoginPasswordView.js');
-			}
-		};
-	}
-	
-	if (bAdminUser)
-	{
-		return {
-			start: function (ModulesManager) {
-				ModulesManager.run('AdminPanelWebclient', 'registerAdminPanelTab', [
-					function () { return require('modules/%ModuleName%/js/views/AdminSettingsView.js'); },
-					Settings.HashModuleName,
-					TextUtils.i18n('%MODULENAME%/LABEL_ES_SETTINGS_TAB')
-				]);
 			}
 		};
 	}
