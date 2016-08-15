@@ -225,7 +225,18 @@ class CApiOAuthIntegratorWebclientAccountManager extends AApiManager
 		$bResult = false;
 		try
 		{
-			$bResult = $this->oStorage->deleteAccountByUserId($iIdUser);
+			$aSocials = $this->getAccounts($iIdUser);
+			foreach ($aSocials as $oSocial)
+			{
+				if ($oSocial)
+				{
+					if (!$this->oEavManager->deleteEntity($oSocial->iId))
+					{
+						throw new CApiManagerException(Errs::UsersManager_UserDeleteFailed);
+					}
+				}
+			}
+			$bResult = true;
 		}
 		catch (CApiBaseException $oException)
 		{
@@ -234,27 +245,7 @@ class CApiOAuthIntegratorWebclientAccountManager extends AApiManager
 		}
 
 		return $bResult;
-	}	
-	
-	/**
-	 * @param string $sEmail
-	 *
-	 * @return bool
-	 */
-	public function deleteAccountsByEmail($sEmail)
-	{
-		$bResult = false;
-		try
-		{
-			$bResult = $this->oStorage->deleteAccountsByEmail($sEmail);
-		}
-		catch (CApiBaseException $oException)
-		{
-			$bResult = false;
-			$this->setLastException($oException);
-		}
 
-		return $bResult;
 	}	
 	
 	/**
