@@ -22,7 +22,7 @@ class OAuthIntegratorWebclientModule extends AApiModule
 		
 		$this->oManager = $this->GetManager('account');
 		$this->setNonAuthorizedMethods(array('GetServices'));
-		$this->AddEntry('external-services', 'OAuthIntegratorEntry');
+		$this->AddEntry('oauth', 'OAuthIntegratorEntry');
 		$this->includeTemplate('StandardLoginFormWebclient_LoginView', 'Login-After', 'templates/SignInButtonsView.html');
 		$this->includeTemplate('StandardRegisterFormWebclient_RegisterView', 'Register-After', 'templates/SignInButtonsView.html');
 		$this->subscribeEvent('Core::AfterDeleteUser', array($this, 'onAfterDeleteUser'));		
@@ -34,7 +34,7 @@ class OAuthIntegratorWebclientModule extends AApiModule
 		$this->broadcastEvent(
 			'OAuthIntegratorAction', 
 			array(
-				'service' => $this->oHttp->GetQuery('external-services', ''),
+				'service' => $this->oHttp->GetQuery('oauth', ''),
 				'result' => &$mResult
 			)
 		);
@@ -44,10 +44,10 @@ class OAuthIntegratorWebclientModule extends AApiModule
 			$iUserId = null;
 			$oUser = null;
 			$sOAuthIntegratorRedirect = 'login';
-			if (isset($_COOKIE["external-services-redirect"]))
+			if (isset($_COOKIE["oauth-redirect"]))
 			{
-				$sOAuthIntegratorRedirect = $_COOKIE["external-services-redirect"];
-				@setcookie('external-services-redirect', null);
+				$sOAuthIntegratorRedirect = $_COOKIE["oauth-redirect"];
+				@setcookie('oauth-redirect', null);
 			}
 
 			$oAccount = new \COAuthAccount($this->GetName(), array());
