@@ -30,7 +30,7 @@ module.exports = function (oAppData, iUserRole, bPublic) {
 					if ('CLoginView' === oParams.Name || 'CRegisterView' === oParams.Name)
 					{
 						oParams.View.externalAuthClick = function (sSocialName) {
-							window.location.href = '?external-services=' + sSocialName;
+							window.location.href = '?oauth=' + sSocialName;
 						};
 
 						oParams.View.oauthServices = Settings.oauthServices;
