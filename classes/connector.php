@@ -15,8 +15,8 @@ class COAuthIntegratorConnector
 	
 	public function Init() 
 	{
-		self::$Scopes = isset($_COOKIE['external-services-scopes']) ? 
-			explode('|', $_COOKIE['external-services-scopes']) : array();
+		self::$Scopes = isset($_COOKIE['oauth-scopes']) ? 
+			explode('|', $_COOKIE['oauth-scopes']) : array();
 	}
 
 	public function GetSupportedScopes() 
