@@ -162,7 +162,7 @@ class OAuthIntegratorWebclientModule extends AApiModule
 			);
 		}
 		
-		if (!empty($oUser) && $oUser->Role === \EUserRole::PowerUser)
+		if (!empty($oUser) && $oUser->Role === \EUserRole::NormalUser)
 		{
 			return array(
 				'AuthModuleName' => $this->getConfig('AuthModuleName'),

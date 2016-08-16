@@ -11,7 +11,7 @@ module.exports = function (oAppData, iUserRole, bPublic) {
 		Settings = require('modules/%ModuleName%/js/Settings.js'),
 		oSettings = _.extend({}, oAppData[Settings.ServerModuleName] || {}, oAppData['%ModuleName%'] || {}),
 		
-		bPowerUser = iUserRole === Enums.UserRole.PowerUser,
+		bPowerUser = iUserRole === Enums.UserRole.NormalUser,
 		bAnonymUser = iUserRole === Enums.UserRole.Anonymous
 	;
 
