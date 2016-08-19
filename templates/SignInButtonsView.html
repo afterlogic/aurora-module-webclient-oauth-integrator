@@ -1,3 +1,9 @@
-<div class="content social" data-bind="foreach: oauthServices"> 
-	<div data-bind="css: $data, visible: true, click: function () {$parent.externalAuthClick($data);}"><span class="text">Log In</span></div>
+<div class="content social">
+	<div class="info" data-bind="visible: $data.ViewConstructorName === 'CRegisterView', i18n: {'key': '%MODULENAME%/LABEL_REGISTER_INFO'}"></div>
+	<div class="info" data-bind="visible: $data.ViewConstructorName === 'CLoginView', i18n: {'key': '%MODULENAME%/LABEL_LOGIN_INFO'}"></div>
+	<!-- ko foreach: oauthServices -->
+	<div class="button" data-bind="css: $data, visible: true, click: function () {$parent.externalAuthClick($data);}">
+		<span class="text" data-bind="i18n: {'key': $root.ViewConstructorName === 'CRegisterView' ? '%MODULENAME%/LABEL_SIGN_UP' : '%MODULENAME%/LABEL_SIGN_IN'}"></span>
+	</div>
+	<!-- /ko -->
 </div>
