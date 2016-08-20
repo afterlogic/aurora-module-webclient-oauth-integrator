@@ -140,6 +140,8 @@ class OAuthIntegratorWebclientModule extends AApiModule
 	 */
 	public function GetServices()
 	{
+		\CApi::checkUserRoleIsAtLeast(\EUserRole::Anonymous);
+		
 		$aServices = array();
 		$this->broadcastEvent('GetServices', array(&$aServices));
 		return $aServices;
@@ -182,6 +184,8 @@ class OAuthIntegratorWebclientModule extends AApiModule
 	 */
 	public function UpdateSettings($Services)
 	{
+		\CApi::checkUserRoleIsAtLeast(\EUserRole::TenantAdmin);
+		
 		$this->broadcastEvent('UpdateServicesSettings', array($Services));
 		
 		return true;
@@ -194,6 +198,8 @@ class OAuthIntegratorWebclientModule extends AApiModule
 	 */
 	public function GetAccounts()
 	{
+		\CApi::checkUserRoleIsAtLeast(\EUserRole::NormalUser);
+		
 		$UserId = \CApi::getAuthenticatedUserId();
 		$aResult = array();
 		$mAccounts = $this->oManager->getAccounts($UserId);
@@ -212,9 +218,9 @@ class OAuthIntegratorWebclientModule extends AApiModule
 	}
 	
 	/**
-	 * Get all external accounts.
-	 * 
-	 * @return array
+	 * Returns oauth account with specified type.
+	 * @param string $Type Type of oauth account.
+	 * @return \COAuthAccount
 	 */
 	public function GetAccount($Type)
 	{
@@ -225,9 +231,9 @@ class OAuthIntegratorWebclientModule extends AApiModule
 	}	
 	
 	/**
-	 * Get all external accounts.
-	 * 
-	 * @return array
+	 * Deletes oauth account with specified type.
+	 * @param string $Type Type of oauth account.
+	 * @return boolean
 	 */
 	public function DeleteAccount($Type)
 	{
@@ -246,5 +252,4 @@ class OAuthIntegratorWebclientModule extends AApiModule
 	{
 		$this->oManager->deleteAccountByUserId($iUserId);
 	}
-	
 }
