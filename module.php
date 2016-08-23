@@ -101,6 +101,7 @@ class OAuthIntegratorWebclientModule extends AApiModule
 
 			if ($sOAuthIntegratorRedirect === 'login')
 			{
+				$sErrorCode = '';
 				if ($oUser)
 				{
 					@setcookie(
@@ -115,7 +116,11 @@ class OAuthIntegratorWebclientModule extends AApiModule
 						)
 					);
 				}
-				\CApi::Location2('./');
+				else
+				{
+					$sErrorCode = '?error=1';
+				}
+				\CApi::Location2('./'.$sErrorCode);
 			}
 			else
 			{
@@ -123,9 +128,13 @@ class OAuthIntegratorWebclientModule extends AApiModule
 				$sErrorMessage = '';
 				echo 
 				"<script>"
-					. "if (typeof(window.opener.".$mResult['type']."SettingsViewModelCallback) !== 'undefined') {"
-					.		"window.opener.".$mResult['type']."SettingsViewModelCallback(".$sResult . ", '".$sErrorMessage."');"
+					. "if (typeof(window.opener.".$mResult['type']."ConnectCallback) !== 'undefined') {"
+					.	" try {"
+					.		"window.opener.".$mResult['type']."ConnectCallback(".$sResult . ", '".$sErrorMessage."');"
+					.	" }"	
+					.	" finally  {"
 					.		"window.close();"
+					.	" }"	
 					. "}"
 				. "</script>";
 				exit;				
