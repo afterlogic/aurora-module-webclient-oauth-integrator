@@ -41,7 +41,8 @@ class OAuthIntegratorWebclientModule extends AApiModule
 		
 		if (false !== $mResult && is_array($mResult))
 		{
-			$iUserId = null;
+			$iAuthUserId = isset($_COOKIE['AuthToken']) ? \CApi::getAuthenticatedUserId($_COOKIE['AuthToken']) : null;
+			
 			$oUser = null;
 			$sOAuthIntegratorRedirect = 'login';
 			if (isset($_COOKIE["oauth-redirect"]))
@@ -71,17 +72,12 @@ class OAuthIntegratorWebclientModule extends AApiModule
 			}
 			else
 			{
-				if (isset($_COOKIE['AuthToken']))
-				{
-					$iUserId = \CApi::getAuthenticatedUserId($_COOKIE['AuthToken']);
-				}
-				
-				if ($iUserId)
+				if ($iAuthUserId)
 				{
 					$this->broadcastEvent('CreateAccount', array(
 						array(
 							'UserName' => $mResult['name'],
-							'UserId' => $iUserId
+							'UserId' => $iAuthUserId
 						),
 						'result' => &$oUser
 					));
@@ -118,19 +114,25 @@ class OAuthIntegratorWebclientModule extends AApiModule
 				}
 				else
 				{
-					$sErrorCode = '?error=1';
+					$sErrorCode = '?error=002&module='.$this->GetName();
 				}
 				\CApi::Location2('./'.$sErrorCode);
 			}
 			else
 			{
 				$sResult = $mResult !== false ? 'true' : 'false';
-				$sErrorMessage = '';
+
+				if ($oUser && $iAuthUserId && $oUser->iId !== $iAuthUserId)
+				{
+					$sResult = 'false';
+					$sErrorCode = '003';
+				}
+				
 				echo 
 				"<script>"
 					.	" try {"
 					.		"if (typeof(window.opener.".$mResult['type']."ConnectCallback) !== 'undefined') {"
-					.			"window.opener.".$mResult['type']."ConnectCallback(".$sResult . ", '".$sErrorMessage."');"
+					.			"window.opener.".$mResult['type']."ConnectCallback(".$sResult . ", '".$sErrorCode."','".$this->GetName()."');"
 					.		"}"
 					.	" }"	
 					.	" finally  {"
