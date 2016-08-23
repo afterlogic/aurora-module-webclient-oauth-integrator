@@ -10,7 +10,6 @@
 	}
 	
 	.button {
-		background-position: 8px;
 		background-repeat: no-repeat;
 		border-radius: 4px;
 		color: #fff;
@@ -18,13 +17,22 @@
 		display: inline-block;
 		height: 18px;
 		margin-bottom: 14px;
-		padding: 10px 0;
-		text-align: center;
-		width: 100%;
+		padding: 10px 0 10px 54px;
+		position: relative;
+		text-align: left;
+		width: 184px;
+		
+		.border {
+			width: 1px;
+			height: 38px;
+			position: absolute;
+			left: 38px;
+			top: 0;
+		}
 
 		.text {
-			font-size: 11pt;
-			font-weight: bold;
+			font-size: 10.5pt;
+			font-weight: normal;
 		}
 	}
 }
