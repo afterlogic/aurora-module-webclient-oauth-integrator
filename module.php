@@ -128,14 +128,14 @@ class OAuthIntegratorWebclientModule extends AApiModule
 				$sErrorMessage = '';
 				echo 
 				"<script>"
-					. "if (typeof(window.opener.".$mResult['type']."ConnectCallback) !== 'undefined') {"
 					.	" try {"
-					.		"window.opener.".$mResult['type']."ConnectCallback(".$sResult . ", '".$sErrorMessage."');"
+					.		"if (typeof(window.opener.".$mResult['type']."ConnectCallback) !== 'undefined') {"
+					.			"window.opener.".$mResult['type']."ConnectCallback(".$sResult . ", '".$sErrorMessage."');"
+					.		"}"
 					.	" }"	
 					.	" finally  {"
 					.		"window.close();"
 					.	" }"	
-					. "}"
 				. "</script>";
 				exit;				
 			}
