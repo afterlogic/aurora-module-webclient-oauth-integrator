@@ -40,6 +40,7 @@ module.exports = function (oAppData, iUserRole, bPublic) {
 					if ('CLoginView' === oParams.Name || 'CRegisterView' === oParams.Name)
 					{
 						oParams.View.externalAuthClick = function (sSocialName) {
+							$.cookie('oauth-redirect', 'CLoginView' === oParams.Name ? 'login' : 'register');
 							window.location.href = '?oauth=' + sSocialName;
 						};
 
