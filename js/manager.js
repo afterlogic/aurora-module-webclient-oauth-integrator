@@ -14,7 +14,18 @@ module.exports = function (oAppData, iUserRole, bPublic) {
 		oSettings = _.extend({}, oAppData[Settings.ServerModuleName] || {}, oAppData['%ModuleName%'] || {}),
 		
 		bPowerUser = iUserRole === Enums.UserRole.NormalUser,
-		bAnonymUser = iUserRole === Enums.UserRole.Anonymous
+		bAnonymUser = iUserRole === Enums.UserRole.Anonymous,
+		
+		fGetErrorMessageByCode = function (oError) {
+			switch (oError.ErrorCode)
+			{
+				case Settings.EOAuthIntegratorError.ServiceNotAllowed: return TextUtils.i18n('%MODULENAME%/ERROR_SERVICE_NOT_ALLOWED');
+				case Settings.EOAuthIntegratorError.AccountNotAllowedToLogIn: return TextUtils.i18n('%MODULENAME%/ERROR_ACCOUNT_NOT_ALLOWED');
+				case Settings.EOAuthIntegratorError.AccountAlreadyConnected: return TextUtils.i18n('%MODULENAME%/ERROR_ACCOUNT_ALREADY_CONNECTED');
+			}
+			return '';
+		}
+
 	;
 
 	Settings.init(oSettings);
@@ -43,16 +54,7 @@ module.exports = function (oAppData, iUserRole, bPublic) {
 				App.subscribeEvent('StandardLoginFormWebclient::ConstructView::after', fInitialize);
 				App.subscribeEvent('StandardRegisterFormWebclient::ConstructView::after', fInitialize);
 			},
-			getErrorMessageByCode: function (oError)
-			{
-				switch (oError.ErrorCode)
-				{
-					case Settings.EOAuthIntegratorError.ServiceNotAllowed: return TextUtils.i18n('%MODULENAME%/ERROR_SERVICE_NOT_ALLOWED');
-					case Settings.EOAuthIntegratorError.AccountNotAllowedToLogIn: return TextUtils.i18n('%MODULENAME%/ERROR_ACCOUNT_NOT_ALLOWED');
-					case Settings.EOAuthIntegratorError.AccountAlreadyConnected: return TextUtils.i18n('%MODULENAME%/ERROR_ACCOUNT_ALREADY_CONNECTED');
-				}
-				return '';
-			}
+			getErrorMessageByCode: fGetErrorMessageByCode
 		};
 	}
 	
@@ -69,7 +71,8 @@ module.exports = function (oAppData, iUserRole, bPublic) {
 			},
 			getCreateLoginPasswordView: function () {
 				return require('modules/%ModuleName%/js/views/CreateLoginPasswordView.js');
-			}
+			},
+			getErrorMessageByCode: fGetErrorMessageByCode
 		};
 	}
 	
