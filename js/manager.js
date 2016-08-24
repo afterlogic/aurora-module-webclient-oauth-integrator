@@ -5,6 +5,8 @@ module.exports = function (oAppData, iUserRole, bPublic) {
 		_ = require('underscore'),
 		ko = require('knockout'),
 		
+		TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
+		
 		Ajax = require('%PathToCoreWebclientModule%/js/Ajax.js'),
 		App = require('%PathToCoreWebclientModule%/js/App.js'),
 		
@@ -40,6 +42,16 @@ module.exports = function (oAppData, iUserRole, bPublic) {
 
 				App.subscribeEvent('StandardLoginFormWebclient::ConstructView::after', fInitialize);
 				App.subscribeEvent('StandardRegisterFormWebclient::ConstructView::after', fInitialize);
+			},
+			getErrorMessageByCode: function (oError)
+			{
+				switch (oError.ErrorCode)
+				{
+					case Settings.EOAuthIntegratorError.ServiceNotAllowed: return TextUtils.i18n('%MODULENAME%/ERROR_SERVICE_NOT_ALLOWED');
+					case Settings.EOAuthIntegratorError.AccountNotAllowedToLogIn: return TextUtils.i18n('%MODULENAME%/ERROR_ACCOUNT_NOT_ALLOWED');
+					case Settings.EOAuthIntegratorError.AccountAlreadyConnected: return TextUtils.i18n('%MODULENAME%/ERROR_ACCOUNT_ALREADY_CONNECTED');
+				}
+				return '';
 			}
 		};
 	}

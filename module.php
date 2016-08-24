@@ -1,5 +1,18 @@
 <?php
 
+class EOAuthIntegratorError extends AEnumeration
+{
+	const ServiceNotAllowed = 1;
+	const AccountNotAllowedToLogIn = 2;
+	const AccountAlreadyConnected = 3;
+
+	protected $aConsts = array(
+		'ServiceNotAllowed' => self::ServiceNotAllowed,
+		'AccountNotAllowedToLogIn' => self::AccountNotAllowedToLogIn,
+		'AccountAlreadyConnected' => self::AccountAlreadyConnected,
+	);
+}
+
 class OAuthIntegratorWebclientModule extends AApiModule
 {
 	public $oManager = null;
@@ -114,7 +127,7 @@ class OAuthIntegratorWebclientModule extends AApiModule
 				}
 				else
 				{
-					$sErrorCode = '?error=002&module='.$this->GetName();
+					$sErrorCode = '?error=' . EOAuthIntegratorError::AccountNotAllowedToLogIn . '&module=' . $this->GetName();
 				}
 				\CApi::Location2('./'.$sErrorCode);
 			}
@@ -125,7 +138,7 @@ class OAuthIntegratorWebclientModule extends AApiModule
 				if ($oUser && $iAuthUserId && $oUser->iId !== $iAuthUserId)
 				{
 					$sResult = 'false';
-					$sErrorCode = '003';
+					$sErrorCode = EOAuthIntegratorError::AccountAlreadyConnected;
 				}
 				
 				echo 
@@ -165,25 +178,25 @@ class OAuthIntegratorWebclientModule extends AApiModule
 	 */
 	public function GetAppData()
 	{
+		$aSettings = array(
+			'EOAuthIntegratorError' => (new \EOAuthIntegratorError)->getMap(),
+		);
+		
 		$oUser = \CApi::getAuthenticatedUser();
 		if (!empty($oUser) && $oUser->Role === \EUserRole::SuperAdmin)
 		{
 			$aServices = array();
 			$this->broadcastEvent('GetServicesSettings', array(&$aServices));
-			return array(
-				'Services' => $aServices,
-			);
+			$aSettings['Services'] = $aServices;
 		}
 		
 		if (!empty($oUser) && $oUser->Role === \EUserRole::NormalUser)
 		{
-			return array(
-				'AuthModuleName' => $this->getConfig('AuthModuleName'),
-				'OnlyPasswordForAccountCreate' => $this->getConfig('OnlyPasswordForAccountCreate'),
-			);
+			$aSettings['AuthModuleName'] = $this->getConfig('AuthModuleName');
+			$aSettings['OnlyPasswordForAccountCreate'] = $this->getConfig('OnlyPasswordForAccountCreate');
 		}
 		
-		return null;
+		return $aSettings;
 	}
 	
 	/**
