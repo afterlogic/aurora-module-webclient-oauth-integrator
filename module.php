@@ -141,18 +141,25 @@ class OAuthIntegratorWebclientModule extends AApiModule
 					$sErrorCode = EOAuthIntegratorError::AccountAlreadyConnected;
 				}
 				
-				echo 
-				"<script>"
-					.	" try {"
-					.		"if (typeof(window.opener.".$mResult['type']."ConnectCallback) !== 'undefined') {"
-					.			"window.opener.".$mResult['type']."ConnectCallback(".$sResult . ", '".$sErrorCode."','".$this->GetName()."');"
-					.		"}"
-					.	" }"	
-					.	" finally  {"
-					.		"window.close();"
-					.	" }"	
-				. "</script>";
-				exit;				
+				if ($sOAuthIntegratorRedirect == 'register')
+				{
+					\CApi::Location2('./?error='.$sErrorCode);
+				}
+				else
+				{
+					echo 
+					"<script>"
+						.	" try {"
+						.		"if (typeof(window.opener.".$mResult['type']."ConnectCallback) !== 'undefined') {"
+						.			"window.opener.".$mResult['type']."ConnectCallback(".$sResult . ", '".$sErrorCode."','".$this->GetName()."');"
+						.		"}"
+						.	" }"	
+						.	" finally  {"
+						.		"window.close();"
+						.	" }"	
+					. "</script>";
+					exit;				
+				}
 			}
 		}
 	}
