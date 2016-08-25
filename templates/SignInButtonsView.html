@@ -1,4 +1,4 @@
-<div class="content social">
+<div class="content social" data-bind="visible: oauthServices.length > 0">
 	<div class="info" data-bind="visible: $data.ViewConstructorName === 'CRegisterView', i18n: {'key': '%MODULENAME%/LABEL_REGISTER_INFO'}"></div>
 	<div class="info" data-bind="visible: $data.ViewConstructorName === 'CLoginView', i18n: {'key': '%MODULENAME%/LABEL_LOGIN_INFO'}"></div>
 	<!-- ko foreach: oauthServices -->
