@@ -128,6 +128,7 @@ class OAuthIntegratorWebclientModule extends AApiModule
 							)
 						)
 					);
+					\CApi::Location2('./');
 				}
 				else
 				{
