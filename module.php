@@ -75,6 +75,11 @@ class OAuthIntegratorWebclientModule extends AApiModule
 			$oAccountOld = $this->oManager->getAccountById($oAccount->IdSocial, $oAccount->Type);
 			if ($oAccountOld)
 			{
+				if ($sOAuthIntegratorRedirect == 'register')
+				{
+					\CApi::Location2('./?error=' . EOAuthIntegratorError::AccountAlreadyConnected . '&module=' . $this->GetName());
+				}
+				
 				$oAccountOld->setScope('auth');
 				$oAccount->Scopes = $oAccountOld->Scopes;
 				$oAccount->iId = $oAccountOld->iId;
@@ -108,9 +113,8 @@ class OAuthIntegratorWebclientModule extends AApiModule
 				}
 			}
 
-			if ($sOAuthIntegratorRedirect === 'login')
+			if ($sOAuthIntegratorRedirect === 'login' || $sOAuthIntegratorRedirect === 'register')
 			{
-				$sErrorUrlPart = '';
 				if ($oUser)
 				{
 					@setcookie(
@@ -127,42 +131,32 @@ class OAuthIntegratorWebclientModule extends AApiModule
 				}
 				else
 				{
-					$sErrorUrlPart = '?error=' . EOAuthIntegratorError::AccountNotAllowedToLogIn . '&module=' . $this->GetName();
+					\CApi::Location2('./?error=' . EOAuthIntegratorError::AccountNotAllowedToLogIn . '&module=' . $this->GetName());
 				}
-				\CApi::Location2('./' . $sErrorUrlPart);
 			}
 			else
 			{
 				$sResult = $mResult !== false ? 'true' : 'false';
 				$sErrorCode = '';
-				$sErrorUrlPart = '';
 
 				if ($oUser && $iAuthUserId && $oUser->iId !== $iAuthUserId)
 				{
 					$sResult = 'false';
 					$sErrorCode = EOAuthIntegratorError::AccountAlreadyConnected;
-					$sErrorUrlPart = '?error=' . EOAuthIntegratorError::AccountAlreadyConnected . '&module=' . $this->GetName();
 				}
 				
-				if ($sOAuthIntegratorRedirect == 'register')
-				{
-					\CApi::Location2('./' . $sErrorUrlPart);
-				}
-				else
-				{
-					echo 
-					"<script>"
-						.	" try {"
-						.		"if (typeof(window.opener.".$mResult['type']."ConnectCallback) !== 'undefined') {"
-						.			"window.opener.".$mResult['type']."ConnectCallback(".$sResult . ", '".$sErrorCode."','".$this->GetName()."');"
-						.		"}"
-						.	" }"	
-						.	" finally  {"
-						.		"window.close();"
-						.	" }"	
-					. "</script>";
-					exit;				
-				}
+				echo 
+				"<script>"
+					.	" try {"
+					.		"if (typeof(window.opener.".$mResult['type']."ConnectCallback) !== 'undefined') {"
+					.			"window.opener.".$mResult['type']."ConnectCallback(".$sResult . ", '".$sErrorCode."','".$this->GetName()."');"
+					.		"}"
+					.	" }"	
+					.	" finally  {"
+					.		"window.close();"
+					.	" }"	
+				. "</script>";
+				exit;				
 			}
 		}
 	}
