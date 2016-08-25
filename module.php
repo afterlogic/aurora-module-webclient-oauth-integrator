@@ -149,12 +149,15 @@ class OAuthIntegratorWebclientModule extends AApiModule
 				echo 
 				"<script>"
 					.	" try {"
+					."console.log(window.opener);"
+					."console.log('".$mResult['type']."ConnectCallback');"
+					."console.log(window.opener.".$mResult['type']."ConnectCallback);"
 					.		"if (typeof(window.opener.".$mResult['type']."ConnectCallback) !== 'undefined') {"
 					.			"window.opener.".$mResult['type']."ConnectCallback(".$sResult . ", '".$sErrorCode."','".$this->GetName()."');"
 					.		"}"
 					.	" }"	
 					.	" finally  {"
-					.		"window.close();"
+//					.		"window.close();"
 					.	" }"	
 				. "</script>";
 				exit;				
