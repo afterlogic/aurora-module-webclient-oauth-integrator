@@ -185,6 +185,8 @@ class OAuthIntegratorWebclientModule extends AApiModule
 	 */
 	public function GetAppData()
 	{
+		\CApi::checkUserRoleIsAtLeast(\EUserRole::Anonymous);
+		
 		$aSettings = array(
 			'EOAuthIntegratorError' => (new \EOAuthIntegratorError)->getMap(),
 		);
@@ -255,6 +257,8 @@ class OAuthIntegratorWebclientModule extends AApiModule
 	 */
 	public function GetAccount($Type)
 	{
+		\CApi::checkUserRoleIsAtLeast(\EUserRole::Anonymous);
+		
 		return $this->oManager->getAccount(
 			\CApi::getAuthenticatedUserId(), 
 			$Type
@@ -268,6 +272,8 @@ class OAuthIntegratorWebclientModule extends AApiModule
 	 */
 	public function DeleteAccount($Type)
 	{
+		\CApi::checkUserRoleIsAtLeast(\EUserRole::Customer);
+		
 		return $this->oManager->deleteAccount(
 			\CApi::getAuthenticatedUserId(), 
 			$Type
