@@ -110,7 +110,7 @@ class OAuthIntegratorWebclientModule extends AApiModule
 
 			if ($sOAuthIntegratorRedirect === 'login')
 			{
-				$sErrorCode = '';
+				$sErrorUrlPart = '';
 				if ($oUser)
 				{
 					@setcookie(
@@ -127,23 +127,26 @@ class OAuthIntegratorWebclientModule extends AApiModule
 				}
 				else
 				{
-					$sErrorCode = '?error=' . EOAuthIntegratorError::AccountNotAllowedToLogIn . '&module=' . $this->GetName();
+					$sErrorUrlPart = '?error=' . EOAuthIntegratorError::AccountNotAllowedToLogIn . '&module=' . $this->GetName();
 				}
-				\CApi::Location2('./'.$sErrorCode);
+				\CApi::Location2('./' . $sErrorUrlPart);
 			}
 			else
 			{
 				$sResult = $mResult !== false ? 'true' : 'false';
+				$sErrorCode = '';
+				$sErrorUrlPart = '';
 
 				if ($oUser && $iAuthUserId && $oUser->iId !== $iAuthUserId)
 				{
 					$sResult = 'false';
 					$sErrorCode = EOAuthIntegratorError::AccountAlreadyConnected;
+					$sErrorUrlPart = '?error=' . EOAuthIntegratorError::AccountAlreadyConnected . '&module=' . $this->GetName();
 				}
 				
 				if ($sOAuthIntegratorRedirect == 'register')
 				{
-					\CApi::Location2('./?error='.$sErrorCode);
+					\CApi::Location2('./' . $sErrorUrlPart);
 				}
 				else
 				{
