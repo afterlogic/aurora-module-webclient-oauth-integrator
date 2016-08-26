@@ -34,7 +34,6 @@ class OAuthIntegratorWebclientModule extends AApiModule
 		);
 		
 		$this->oManager = $this->GetManager('account');
-		$this->setNonAuthorizedMethods(array('GetServices'));
 		$this->AddEntry('oauth', 'OAuthIntegratorEntry');
 		$this->includeTemplate('StandardLoginFormWebclient_LoginView', 'Login-After', 'templates/SignInButtonsView.html', $this->GetName());
 		$this->includeTemplate('StandardRegisterFormWebclient_RegisterView', 'Register-After', 'templates/SignInButtonsView.html', $this->GetName());
