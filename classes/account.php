@@ -31,7 +31,7 @@ class COAuthAccount extends AEntity
 			'Type'			=> array('string', ''),
 			'Name'			=> array('string', ''),
 			'Email'			=> array('string', ''),
-			'AccessToken'	=> array('string', ''),
+			'AccessToken'	=> array('text', ''),
 			'RefreshToken'	=> array('string', ''),
 			'Scopes'		=> array('string', ''),
 			'Disabled'		=> array('bool', false)
