@@ -277,6 +277,11 @@ class OAuthIntegratorWebclientModule extends AApiModule
 		);
 	}		
 	
+	public function UpdateAccount(\COAuthAccount $oAccount)
+	{
+		return $this->oManager->updateAccount($oAccount);
+	}
+	
 	/**
 	 * Deletes all oauth accounts which are owened by the specified user.
 	 * 
