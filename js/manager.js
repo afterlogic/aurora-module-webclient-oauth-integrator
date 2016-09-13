@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function (oAppData, iUserRole, bPublic) {
+module.exports = function (oAppData) {
 	var
 		_ = require('underscore'),
 		$ = require('jquery'),
@@ -14,8 +14,8 @@ module.exports = function (oAppData, iUserRole, bPublic) {
 		Settings = require('modules/%ModuleName%/js/Settings.js'),
 		oSettings = _.extend({}, oAppData[Settings.ServerModuleName] || {}, oAppData['%ModuleName%'] || {}),
 		
-		bPowerUser = iUserRole === Enums.UserRole.NormalUser,
-		bAnonymUser = iUserRole === Enums.UserRole.Anonymous,
+		bPowerUser = App.getUserRole() === Enums.UserRole.NormalUser,
+		bAnonymUser = App.getUserRole() === Enums.UserRole.Anonymous,
 		
 		fGetErrorMessageByCode = function (oError) {
 			switch (oError.ErrorCode)
@@ -78,5 +78,5 @@ module.exports = function (oAppData, iUserRole, bPublic) {
 		};
 	}
 	
-	return {};
+	return null;
 };
