@@ -176,7 +176,7 @@ class OAuthIntegratorWebclientModule extends AApiModule
 	}
 	
 	/**
-	 * Returns all external services settings.
+	 * Returns all external services settings for authenticated user.
 	 * 
 	 * @return array
 	 */
