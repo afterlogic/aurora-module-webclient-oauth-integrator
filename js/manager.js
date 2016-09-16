@@ -7,6 +7,7 @@ module.exports = function (oAppData) {
 		ko = require('knockout'),
 		
 		TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
+		Types = require('%PathToCoreWebclientModule%/js/utils/Types.js'),
 		
 		Ajax = require('%PathToCoreWebclientModule%/js/Ajax.js'),
 		App = require('%PathToCoreWebclientModule%/js/App.js'),
@@ -14,7 +15,7 @@ module.exports = function (oAppData) {
 		Settings = require('modules/%ModuleName%/js/Settings.js'),
 		oSettings = _.extend({}, oAppData[Settings.ServerModuleName] || {}, oAppData['%ModuleName%'] || {}),
 		
-		bPowerUser = App.getUserRole() === Enums.UserRole.NormalUser,
+		bNormalUser = App.getUserRole() === Enums.UserRole.NormalUser,
 		bAnonymUser = App.getUserRole() === Enums.UserRole.Anonymous,
 		
 		fGetErrorMessageByCode = function (oError) {
@@ -60,16 +61,19 @@ module.exports = function (oAppData) {
 		};
 	}
 	
-	if (bPowerUser)
+	if (bNormalUser)
 	{
 		return {
 			start: function (ModulesManager) {
-				Ajax.send(Settings.AuthModuleName, 'GetUserAccountLogin', null, function (oResponse) {
-					if (oResponse.Result)
+				App.subscribeEvent('ReceiveAjaxResponse::after', function (oParams) {
+					if (oParams.Request.Module === 'StandardAuth' && oParams.Request.Method === 'GetUserAccounts')
 					{
-						Settings.setUserAccountLogin(oResponse.Result);
+						if (Types.isNonEmptyArray(oParams.Response.Result))
+						{
+							Settings.setUserAccountLogin(oParams.Response.Result[0].login);
+						}
 					}
-				}, this);
+				});
 			},
 			getCreateLoginPasswordView: function () {
 				return require('modules/%ModuleName%/js/views/CreateLoginPasswordView.js');
