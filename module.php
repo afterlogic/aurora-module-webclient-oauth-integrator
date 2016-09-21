@@ -1,11 +1,27 @@
 <?php
+/*
+ * @copyright Copyright (c) 2016, Afterlogic Corp.
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License, version 3,
+ * as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License, version 3,
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ */
 
 class EOAuthIntegratorError extends AEnumeration
 {
 	const ServiceNotAllowed = 1;
 	const AccountNotAllowedToLogIn = 2;
 	const AccountAlreadyConnected = 3;
-
+	
 	protected $aConsts = array(
 		'ServiceNotAllowed' => self::ServiceNotAllowed,
 		'AccountNotAllowedToLogIn' => self::AccountNotAllowedToLogIn,
@@ -23,12 +39,18 @@ class OAuthIntegratorWebclientModule extends AApiModule
 		'Services' => array(array(), 'array')
 	);
 	
-	public function init() 
+	/***** private functions *****/
+	/**
+	 * Initializes module.
+	 * 
+	 * @ignore
+	 */
+	public function init()
 	{
 		$this->incClasses(array(
-				'OAuthClient/http', 
+				'OAuthClient/http',
 				'OAuthClient/oauth_client',
-				'account', 
+				'account',
 				'connector'
 			)
 		);
@@ -37,14 +59,30 @@ class OAuthIntegratorWebclientModule extends AApiModule
 		$this->AddEntry('oauth', 'OAuthIntegratorEntry');
 		$this->includeTemplate('StandardLoginFormWebclient_LoginView', 'Login-After', 'templates/SignInButtonsView.html', $this->GetName());
 		$this->includeTemplate('StandardRegisterFormWebclient_RegisterView', 'Register-After', 'templates/SignInButtonsView.html', $this->GetName());
-		$this->subscribeEvent('Core::AfterDeleteUser', array($this, 'onAfterDeleteUser'));		
+		$this->subscribeEvent('Core::AfterDeleteUser', array($this, 'onAfterDeleteUser'));
 	}
 	
+	/**
+	 * Deletes all oauth accounts which are owened by the specified user.
+	 * 
+	 * @ignore
+	 * @param int $iUserId User identificator.
+	 */
+	public function onAfterDeleteUser($iUserId)
+	{
+		$this->oManager->deleteAccountByUserId($iUserId);
+	}
+	/***** private functions *****/
+	
+	/***** public functions *****/
+	/**
+	 * @ignore
+	 */
 	public function OAuthIntegratorEntry()
 	{
 		$mResult = false;
 		$this->broadcastEvent(
-			'OAuthIntegratorAction', 
+			'OAuthIntegratorAction',
 			array(
 				'service' => $this->oHttp->GetQuery('oauth', ''),
 				'result' => &$mResult
@@ -62,7 +100,7 @@ class OAuthIntegratorWebclientModule extends AApiModule
 				$sOAuthIntegratorRedirect = $_COOKIE["oauth-redirect"];
 				@setcookie('oauth-redirect', null);
 			}
-
+			
 			$oAccount = new \COAuthAccount($this->GetName(), array());
 			$oAccount->Type = $mResult['type'];
 			$oAccount->AccessToken = isset($mResult['access_token']) ? $mResult['access_token'] : '';
@@ -70,7 +108,7 @@ class OAuthIntegratorWebclientModule extends AApiModule
 			$oAccount->IdSocial = $mResult['id'];
 			$oAccount->Name = $mResult['name'];
 			$oAccount->Email = $mResult['email'];
-
+			
 			$oAccountOld = $this->oManager->getAccountById($oAccount->IdSocial, $oAccount->Type);
 			if ($oAccountOld)
 			{
@@ -84,7 +122,7 @@ class OAuthIntegratorWebclientModule extends AApiModule
 				$oAccount->iId = $oAccountOld->iId;
 				$oAccount->IdUser = $oAccountOld->IdUser;
 				$this->oManager->updateAccount($oAccount);
-
+				
 				$oUser = \CApi::GetModuleDecorator('Core')->GetUser($oAccount->IdUser);
 			}
 			else
@@ -99,11 +137,11 @@ class OAuthIntegratorWebclientModule extends AApiModule
 						'result' => &$oUser
 					));
 				}
-
+				
 				$this->broadcastEvent('CreateOAuthAccount', array(
 					'result' => &$oUser
 				));
-
+				
 				if ($oUser instanceOf \CUser)
 				{
 					$oAccount->IdUser = $oUser->iId;
@@ -111,13 +149,13 @@ class OAuthIntegratorWebclientModule extends AApiModule
 					$this->oManager->createAccount($oAccount);
 				}
 			}
-
+			
 			if ($sOAuthIntegratorRedirect === 'login' || $sOAuthIntegratorRedirect === 'register')
 			{
 				if ($oUser)
 				{
 					@setcookie(
-						System\Service::AUTH_TOKEN_KEY, 
+						System\Service::AUTH_TOKEN_KEY,
 						\CApi::UserSession()->Set(
 							array(
 								'token' => 'auth',
@@ -138,31 +176,60 @@ class OAuthIntegratorWebclientModule extends AApiModule
 			{
 				$sResult = $mResult !== false ? 'true' : 'false';
 				$sErrorCode = '';
-
+				
 				if ($oUser && $iAuthUserId && $oUser->iId !== $iAuthUserId)
 				{
 					$sResult = 'false';
 					$sErrorCode = EOAuthIntegratorError::AccountAlreadyConnected;
 				}
 				
-				echo 
+				echo
 				"<script>"
 					.	" try {"
 					.		"if (typeof(window.opener.".$mResult['type']."ConnectCallback) !== 'undefined') {"
 					.			"window.opener.".$mResult['type']."ConnectCallback(".$sResult . ", '".$sErrorCode."','".$this->GetName()."');"
 					.		"}"
-					.	" }"	
+					.	" }"
 					.	" finally  {"
 					.		"window.close();"
-					.	" }"	
+					.	" }"
 				. "</script>";
-				exit;				
+				exit;
 			}
 		}
 	}
 	
 	/**
-	 * Returns all external services names.
+	 * Returns oauth account with specified type.
+	 * 
+	 * @param string $Type Type of oauth account.
+	 * @return \COAuthAccount
+	 */
+	public function GetAccount($Type)
+	{
+		\CApi::checkUserRoleIsAtLeast(\EUserRole::Anonymous);
+		
+		return $this->oManager->getAccount(
+			\CApi::getAuthenticatedUserId(),
+			$Type
+		);
+	}
+	
+	/**
+	 * Updates oauth acount.
+	 * 
+	 * @param \COAuthAccount $oAccount Oauth account.
+	 * @return boolean
+	 */
+	public function UpdateAccount(\COAuthAccount $oAccount)
+	{
+		return $this->oManager->updateAccount($oAccount);
+	}
+	/***** public functions *****/
+	
+	/***** public functions might be called with web API *****/
+	/**
+	 * Returns all oauth services names.
 	 * 
 	 * @return array
 	 */
@@ -176,7 +243,7 @@ class OAuthIntegratorWebclientModule extends AApiModule
 	}
 	
 	/**
-	 * Returns all external services settings for authenticated user.
+	 * Returns all oauth services settings for authenticated user.
 	 * 
 	 * @return array
 	 */
@@ -206,7 +273,7 @@ class OAuthIntegratorWebclientModule extends AApiModule
 	}
 	
 	/**
-	 * Updates all external services settings.
+	 * Updates all oauth services settings.
 	 * 
 	 * @param array $Services Array with services settings passed by reference.
 	 * 
@@ -222,7 +289,7 @@ class OAuthIntegratorWebclientModule extends AApiModule
 	}
 	
 	/**
-	 * Get all external accounts.
+	 * Get all oauth accounts.
 	 * 
 	 * @return array
 	 */
@@ -248,22 +315,8 @@ class OAuthIntegratorWebclientModule extends AApiModule
 	}
 	
 	/**
-	 * Returns oauth account with specified type.
-	 * @param string $Type Type of oauth account.
-	 * @return \COAuthAccount
-	 */
-	public function GetAccount($Type)
-	{
-		\CApi::checkUserRoleIsAtLeast(\EUserRole::Anonymous);
-		
-		return $this->oManager->getAccount(
-			\CApi::getAuthenticatedUserId(), 
-			$Type
-		);
-	}	
-	
-	/**
 	 * Deletes oauth account with specified type.
+	 * 
 	 * @param string $Type Type of oauth account.
 	 * @return boolean
 	 */
@@ -272,23 +325,9 @@ class OAuthIntegratorWebclientModule extends AApiModule
 		\CApi::checkUserRoleIsAtLeast(\EUserRole::Customer);
 		
 		return $this->oManager->deleteAccount(
-			\CApi::getAuthenticatedUserId(), 
+			\CApi::getAuthenticatedUserId(),
 			$Type
 		);
-	}		
-	
-	public function UpdateAccount(\COAuthAccount $oAccount)
-	{
-		return $this->oManager->updateAccount($oAccount);
 	}
-	
-	/**
-	 * Deletes all oauth accounts which are owened by the specified user.
-	 * 
-	 * @param int $iUserId User Identificator.
-	 */	
-	public function onAfterDeleteUser($iUserId)
-	{
-		$this->oManager->deleteAccountByUserId($iUserId);
-	}
+	/***** public functions might be called with web API *****/
 }
