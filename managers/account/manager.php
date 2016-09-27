@@ -5,7 +5,6 @@
 /**
  * CApiOAuthIntegratorSocialManager class summary
  * 
- * @api
  * @package Account
  */
 class CApiOAuthIntegratorWebclientAccountManager extends AApiManager

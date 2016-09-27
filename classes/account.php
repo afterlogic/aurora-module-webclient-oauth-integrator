@@ -14,8 +14,8 @@
  * @property string $Scopes
  * @property bool $Disabled
  *
- * @package Social
- * @subpackage Classes
+ * @package Classes
+ * @subpackage Social
  */
 class COAuthAccount extends AEntity
 {
