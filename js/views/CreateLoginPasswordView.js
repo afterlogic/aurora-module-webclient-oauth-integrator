@@ -28,8 +28,8 @@ function CCreateLoginPasswordView()
 	ko.computed(function () {
 		if (!this.loginRequested() && this.visible() && this.visibleSetPasswordForm())
 		{
-			Ajax.send('%ModuleName%', 'GetAccounts', null, _.bind(function (oResponse) {
-				if (_.isArray(oResponse.Result) && oResponse.Result.length > 0)
+			Ajax.send(Settings.ServerModuleName, 'GetAccounts', null, _.bind(function (oResponse) {
+				if (Types.isNonEmptyArray(oResponse.Result))
 				{
 					this.login(Types.pString(oResponse.Result[0].Email));
 				}
