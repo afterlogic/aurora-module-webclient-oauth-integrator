@@ -15,9 +15,8 @@
  * You should have received a copy of the GNU Affero General Public License, version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  * 
- * @package Modules
+ * @internal
  */
-
 class EOAuthIntegratorError extends AEnumeration
 {
 	const ServiceNotAllowed = 1;
@@ -31,6 +30,9 @@ class EOAuthIntegratorError extends AEnumeration
 	);
 }
 
+/**
+ * @package Modules
+ */
 class OAuthIntegratorWebclientModule extends AApiModule
 {
 	public $oManager = null;
