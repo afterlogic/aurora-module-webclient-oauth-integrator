@@ -308,7 +308,8 @@ class OAuthIntegratorWebclientModule extends AApiModule
 		{
 			foreach ($mAccounts as $oAccount) {
 				$aResult[] = array(
-					'Id' => $oAccount->iObjectId,
+					'Id' => $oAccount->iId,
+					'UUID' => $oAccount->sUUID,
 					'Type' => $oAccount->Type,
 					'Email' => $oAccount->Email,
 					'Name' => $oAccount->Name,
