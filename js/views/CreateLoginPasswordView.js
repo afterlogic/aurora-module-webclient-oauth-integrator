@@ -4,6 +4,8 @@ var
 	_ = require('underscore'),
 	ko = require('knockout'),
 	
+	TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
+	
 	Screens = require('%PathToCoreWebclientModule%/js/Screens.js'),
 	App = require('%PathToCoreWebclientModule%/js/App.js'),
 	
@@ -58,7 +60,7 @@ CCreateLoginPasswordView.prototype.setPassword = function ()
 		this.passwordFocus(true);
 		return;
 	}
-	if (this.password() === this.confirmPassword())
+	if (this.password() !== this.confirmPassword())
 	{
 		Screens.showError(TextUtils.i18n('COREWEBCLIENT/ERROR_PASSWORDS_DO_NOT_MATCH'));
 		this.confirmPasswordFocus(true);
