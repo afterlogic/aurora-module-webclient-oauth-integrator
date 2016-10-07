@@ -26,26 +26,8 @@ function CCreateLoginPasswordView()
 	this.confirmPassword = ko.observable('');
 	this.confirmPasswordFocus = ko.observable(false);
 	this.login = ko.computed(function () {
-		App.userPublicId();
+		return App.userPublicId();
 	}, this);
-//	this.loginRequested = ko.observable(false);
-//	
-//	ko.computed(function () {
-//		if (!this.loginRequested() && this.visible() && this.visibleSetPasswordForm())
-//		{
-//			Ajax.send(Settings.ServerModuleName, 'GetAccounts', null, _.bind(function (oResponse) {
-//				if (Types.isNonEmptyArray(oResponse.Result))
-//				{
-//					this.login(Types.pString(oResponse.Result[0].Email));
-//				}
-//				this.loginRequested(true);
-//				if (this.login() === '')
-//				{
-//					this.visibleSetPasswordForm(false);
-//				}
-//			}, this));
-//		}
-//	}, this).extend({ throttle: 200 });
 }
 
 CCreateLoginPasswordView.prototype.ViewTemplate = '%ModuleName%_CreateLoginPasswordView';
