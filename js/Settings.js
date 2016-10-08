@@ -4,7 +4,9 @@ var
 	_ = require('underscore'),
 	ko = require('knockout'),
 	
-	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js')
+	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js'),
+	
+	App = require('%PathToCoreWebclientModule%/js/App.js')
 ;
 
 module.exports = {
@@ -34,6 +36,7 @@ module.exports = {
 			this.Services = _.isArray(oAppDataSection.Services) ? oAppDataSection.Services : [];
 			this.EOAuthIntegratorError = oAppDataSection.EOAuthIntegratorError ? oAppDataSection.EOAuthIntegratorError : {};
 		}
+		App.registerUserAccountsCount(this.userAccountsCount);
 	},
 	
 	/**
