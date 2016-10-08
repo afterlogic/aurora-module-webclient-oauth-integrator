@@ -68,11 +68,9 @@ module.exports = function (oAppData) {
 				var fGetAccounts = function () {
 					Ajax.send(Settings.ServerModuleName, 'GetAccounts', null, function (oResponse) {
 						Settings.userAccountsCount(_.isArray(oResponse.Result) ? oResponse.Result.length : 0);
-						console.log('Settings.userAccountsCount', Settings.userAccountsCount());
 					});
 				};
 				App.subscribeEvent('OAuthAccountChange::after', function () {
-					console.log('OAuthAccountChange::after');
 					fGetAccounts();
 				});
 				fGetAccounts();
