@@ -14,6 +14,7 @@ module.exports = {
 	AuthModuleName: 'StandardAuth',
 	OnlyPasswordForAccountCreate: true,
 	userAccountLogin: ko.observable(''),
+	userAccountsCount: ko.observable(0),
 	
 	EOAuthIntegratorError: {},
 	

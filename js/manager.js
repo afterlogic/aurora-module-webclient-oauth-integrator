@@ -65,6 +65,17 @@ module.exports = function (oAppData) {
 	{
 		return {
 			start: function (ModulesManager) {
+				var fGetAccounts = function () {
+					Ajax.send(Settings.ServerModuleName, 'GetAccounts', null, function (oResponse) {
+						Settings.userAccountsCount(_.isArray(oResponse.Result) ? oResponse.Result.length : 0);
+						console.log('Settings.userAccountsCount', Settings.userAccountsCount());
+					});
+				};
+				App.subscribeEvent('OAuthAccountChange::after', function () {
+					console.log('OAuthAccountChange::after');
+					fGetAccounts();
+				});
+				fGetAccounts();
 				App.subscribeEvent('ReceiveAjaxResponse::after', function (oParams) {
 					if (oParams.Request.Module === 'StandardAuth' && oParams.Request.Method === 'GetUserAccounts')
 					{
