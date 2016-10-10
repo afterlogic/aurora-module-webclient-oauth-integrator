@@ -77,9 +77,9 @@ module.exports = function (oAppData) {
 				App.subscribeEvent('ReceiveAjaxResponse::after', function (oParams) {
 					if (oParams.Request.Module === 'StandardAuth' && oParams.Request.Method === 'GetUserAccounts')
 					{
-						if (Types.isNonEmptyArray(oParams.Response.Result))
+						if (Types.isNonEmptyArray(oParams.MainResponse.Result))
 						{
-							Settings.setUserAccountLogin(oParams.Response.Result[0].login);
+							Settings.setUserAccountLogin(oParams.MainResponse.Result[0].login);
 						}
 					}
 				});
