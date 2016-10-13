@@ -88,9 +88,9 @@ class OAuthIntegratorWebclientModule extends AApiModule
 		$this->broadcastEvent(
 			'OAuthIntegratorAction',
 			array(
-				'service' => $this->oHttp->GetQuery('oauth', ''),
-				'result' => &$mResult
-			)
+				'service' => $this->oHttp->GetQuery('oauth', '')
+			),
+			$mResult
 		);
 		
 		if (false !== $mResult && is_array($mResult))
@@ -133,18 +133,21 @@ class OAuthIntegratorWebclientModule extends AApiModule
 			{
 				if ($iAuthUserId)
 				{
-					$this->broadcastEvent('CreateAccount', array(
+					$this->broadcastEvent(
+						'CreateAccount', 
 						array(
 							'UserName' => $mResult['name'],
 							'UserId' => $iAuthUserId
 						),
-						'result' => &$oUser
-					));
+						$oUser
+					);
 				}
 				
-				$this->broadcastEvent('CreateOAuthAccount', array(
-					'result' => &$oUser
-				));
+				$this->broadcastEvent(
+					'CreateOAuthAccount', 
+					array(),
+					$oUser
+				);
 				
 				if ($oUser instanceOf \CUser)
 				{
