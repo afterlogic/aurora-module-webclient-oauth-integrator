@@ -245,7 +245,11 @@ class OAuthIntegratorWebclientModule extends AApiModule
 		\CApi::checkUserRoleIsAtLeast(\EUserRole::Anonymous);
 		
 		$aServices = array();
-		$this->broadcastEvent('GetServices', array(&$aServices));
+		$this->broadcastEvent(
+			'GetServices', 
+			array(), 
+			$aServices
+		);
 		return $aServices;
 	}
 	
