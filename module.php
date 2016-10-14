@@ -72,7 +72,7 @@ class OAuthIntegratorWebclientModule extends AApiModule
 	 * @ignore
 	 * @param int $iUserId User identificator.
 	 */
-	public function onAfterDeleteUser($iUserId)
+	public function onAfterDeleteUser($aArgs, &$iUserId)
 	{
 		$this->oManager->deleteAccountByUserId($iUserId);
 	}
