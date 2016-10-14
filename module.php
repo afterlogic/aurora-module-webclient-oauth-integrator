@@ -85,11 +85,12 @@ class OAuthIntegratorWebclientModule extends AApiModule
 	public function OAuthIntegratorEntry()
 	{
 		$mResult = false;
+		$aArgs = array(
+			'Service' => $this->oHttp->GetQuery('oauth', '')
+		);
 		$this->broadcastEvent(
 			'OAuthIntegratorAction',
-			array(
-				'service' => $this->oHttp->GetQuery('oauth', '')
-			),
+			$aArgs,
 			$mResult
 		);
 		
@@ -133,19 +134,21 @@ class OAuthIntegratorWebclientModule extends AApiModule
 			{
 				if ($iAuthUserId)
 				{
+					$aArgs = array(
+						'UserName' => $mResult['name'],
+						'UserId' => $iAuthUserId
+					);
 					$this->broadcastEvent(
 						'CreateAccount', 
-						array(
-							'UserName' => $mResult['name'],
-							'UserId' => $iAuthUserId
-						),
+						$aArgs,
 						$oUser
 					);
 				}
 				
+				$aArgs = array();
 				$this->broadcastEvent(
 					'CreateOAuthAccount', 
-					array(),
+					$aArgs,
 					$oUser
 				);
 				
@@ -245,9 +248,10 @@ class OAuthIntegratorWebclientModule extends AApiModule
 		\CApi::checkUserRoleIsAtLeast(\EUserRole::Anonymous);
 		
 		$aServices = array();
+		$aArgs = array();
 		$this->broadcastEvent(
 			'GetServices', 
-			array(), 
+			$aArgs, 
 			$aServices
 		);
 		return $aServices;
@@ -269,8 +273,13 @@ class OAuthIntegratorWebclientModule extends AApiModule
 		$oUser = \CApi::getAuthenticatedUser();
 		if (!empty($oUser) && $oUser->Role === \EUserRole::SuperAdmin)
 		{
+			$aArgs = array();
 			$aServices = array();
-			$this->broadcastEvent('GetServicesSettings', array(&$aServices));
+			$this->broadcastEvent(
+				'GetServicesSettings', 
+				$aArgs,
+				$aServices
+			);
 			$aSettings['Services'] = $aServices;
 		}
 		
@@ -294,7 +303,13 @@ class OAuthIntegratorWebclientModule extends AApiModule
 	{
 		\CApi::checkUserRoleIsAtLeast(\EUserRole::TenantAdmin);
 		
-		$this->broadcastEvent('UpdateServicesSettings', array($Services));
+		$aArgs = array(
+			'Services' => $Services
+		);
+		$this->broadcastEvent(
+			'UpdateServicesSettings', 
+			$aArgs
+		);
 		
 		return true;
 	}
