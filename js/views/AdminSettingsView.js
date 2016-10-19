@@ -5,7 +5,7 @@ var
 	ko = require('knockout'),
 	
 	ModulesManager = require('%PathToCoreWebclientModule%/js/ModulesManager.js'),
-	CAbstractSettingsFormView = ModulesManager.run('SettingsWebclient', 'getAbstractSettingsFormViewClass'),
+	CAbstractSettingsFormView = ModulesManager.run('AdminPanelWebclient', 'getAbstractSettingsFormViewClass'),
 	
 	Settings = require('modules/%ModuleName%/js/Settings.js')
 ;
