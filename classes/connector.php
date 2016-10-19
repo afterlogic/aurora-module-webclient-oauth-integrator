@@ -7,7 +7,7 @@
 class COAuthIntegratorConnector
 {
 	public static $ConnectorName = 'connector';
-	public static $Debug = true;
+	public static $Debug = false;
 	public static $Scopes = array();
 	
 	public $oModule = null;
