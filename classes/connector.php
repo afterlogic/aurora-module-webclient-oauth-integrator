@@ -17,7 +17,7 @@ class COAuthIntegratorConnector
 		$this->oModule = $oModule;
 	}
 	
-	public function Init() 
+	public function Init($sId, $sSecret) 
 	{
 		self::$Scopes = isset($_COOKIE['oauth-scopes']) ? 
 			explode('|', $_COOKIE['oauth-scopes']) : array();
