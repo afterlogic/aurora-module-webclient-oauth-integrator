@@ -6,7 +6,7 @@
  */
 class COAuthIntegratorConnector
 {
-	public static $ConnectorName = 'connector';
+	protected $Name = 'connector';
 	public static $Debug = false;
 	public static $Scopes = array();
 	
@@ -17,20 +17,7 @@ class COAuthIntegratorConnector
 		$this->oModule = $oModule;
 	}
 	
-	public function Init($sId, $sSecret) 
+	public function Init($sId, $sSecret, $sScope = '') 
 	{
-		self::$Scopes = isset($_COOKIE['oauth-scopes']) ? 
-			explode('|', $_COOKIE['oauth-scopes']) : array();
-	}
-
-	public function GetSupportedScopes() 
-	{
-		return array();
-	}
-
-	protected function _socialError($oClientError, $sSocialName)
-	{
-		\CApi::Log($sSocialName, ' error');
-		\CApi::LogObject($oClientError);
 	}
 }

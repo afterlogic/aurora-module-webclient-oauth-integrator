@@ -51,7 +51,8 @@ class OAuthIntegratorWebclientModule extends AApiModule
 	 */
 	public function init()
 	{
-		$this->incClasses(array(
+		$this->incClasses(
+			array(
 				'OAuthClient/http',
 				'OAuthClient/oauth_client',
 				'account',
@@ -106,15 +107,15 @@ class OAuthIntegratorWebclientModule extends AApiModule
 				@setcookie('oauth-redirect', null);
 			}
 			
-			$oAccount = new \COAuthAccount($this->GetName(), array());
-			$oAccount->Type = $mResult['type'];
-			$oAccount->AccessToken = isset($mResult['access_token']) ? $mResult['access_token'] : '';
-			$oAccount->RefreshToken = isset($mResult['refresh_token']) ? $mResult['refresh_token'] : '';
-			$oAccount->IdSocial = $mResult['id'];
-			$oAccount->Name = $mResult['name'];
-			$oAccount->Email = $mResult['email'];
+			$oOAuthAccount = new \COAuthAccount($this->GetName(), array());
+			$oOAuthAccount->Type = $mResult['type'];
+			$oOAuthAccount->AccessToken = isset($mResult['access_token']) ? $mResult['access_token'] : '';
+			$oOAuthAccount->RefreshToken = isset($mResult['refresh_token']) ? $mResult['refresh_token'] : '';
+			$oOAuthAccount->IdSocial = $mResult['id'];
+			$oOAuthAccount->Name = $mResult['name'];
+			$oOAuthAccount->Email = $mResult['email'];
 			
-			$oAccountOld = $this->oManager->getAccountById($oAccount->IdSocial, $oAccount->Type);
+			$oAccountOld = $this->oManager->getAccountById($oOAuthAccount->IdSocial, $oOAuthAccount->Type);
 			if ($oAccountOld)
 			{
 				if ($sOAuthIntegratorRedirect == 'register')
@@ -122,13 +123,12 @@ class OAuthIntegratorWebclientModule extends AApiModule
 					\CApi::Location2('./?error=' . EOAuthIntegratorError::AccountAlreadyConnected . '&module=' . $this->GetName());
 				}
 				
-				$oAccountOld->setScope('auth');
-				$oAccount->Scopes = $oAccountOld->Scopes;
-				$oAccount->iId = $oAccountOld->iId;
-				$oAccount->IdUser = $oAccountOld->IdUser;
-				$this->oManager->updateAccount($oAccount);
+				$oOAuthAccount->setScopes($mResult['scopes']);
+				$oOAuthAccount->iId = $oAccountOld->iId;
+				$oOAuthAccount->IdUser = $oAccountOld->IdUser;
+				$this->oManager->updateAccount($oOAuthAccount);
 				
-				$oUser = \CApi::GetModuleDecorator('Core')->GetUser($oAccount->IdUser);
+				$oUser = \CApi::GetModuleDecorator('Core')->GetUser($oOAuthAccount->IdUser);
 			}
 			else
 			{
@@ -154,9 +154,9 @@ class OAuthIntegratorWebclientModule extends AApiModule
 				
 				if ($oUser instanceOf \CUser)
 				{
-					$oAccount->IdUser = $oUser->iId;
-					$oAccount->setScopes($mResult['scopes']);
-					$this->oManager->createAccount($oAccount);
+					$oOAuthAccount->IdUser = $oUser->iId;
+					$oOAuthAccount->setScopes($mResult['scopes']);
+					$this->oManager->createAccount($oOAuthAccount);
 				}
 			}
 			
@@ -246,15 +246,6 @@ class OAuthIntegratorWebclientModule extends AApiModule
 	public function GetServices()
 	{
 		\CApi::checkUserRoleIsAtLeast(\EUserRole::Anonymous);
-		
-		$mResult = array();
-		$aArgs = array();
-		$this->broadcastEvent(
-			'GetServices', 
-			$aArgs, 
-			$mResult
-		);
-		return $mResult;
 	}
 	
 	/**
