@@ -118,9 +118,14 @@ class OAuthIntegratorWebclientModule extends AApiModule
 			$oAccountOld = $this->oManager->getAccountById($oOAuthAccount->IdSocial, $oOAuthAccount->Type);
 			if ($oAccountOld)
 			{
-				if ($sOAuthIntegratorRedirect == 'register')
+				if ($sOAuthIntegratorRedirect === 'register')
 				{
 					\CApi::Location2('./?error=' . EOAuthIntegratorError::AccountAlreadyConnected . '&module=' . $this->GetName());
+				}
+				
+				if (!$oAccountOld->issetScope('auth'))
+				{
+					\CApi::Location2('./?error=' . EOAuthIntegratorError::AccountNotAllowedToLogIn . '&module=' . $this->GetName());
 				}
 				
 				$oOAuthAccount->setScopes($mResult['scopes']);
