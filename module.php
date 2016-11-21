@@ -176,7 +176,8 @@ class OAuthIntegratorWebclientModule extends AApiModule
 								'token' => 'auth',
 								'sign-me' => true,
 								'id' => $oUser->iId,
-								'time' => time() + 60 * 60 * 24 * 30
+								'time' => time() + 60 * 60 * 24 * 30,
+								'account' => $oOAuthAccount->iId
 							)
 						)
 					);
