@@ -256,7 +256,7 @@ class CApiOAuthIntegratorWebclientAccountManager extends AApiManager
 	{
 		$bResult = false;
 		
-		$oResult = $this->oEavManager->getEntityById($oAccount->iId);
+		$oResult = $this->oEavManager->getEntity($oAccount->iId);
 				
 		if ($oResult instanceof \COAuthAccount)
 		{
