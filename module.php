@@ -65,6 +65,7 @@ class OAuthIntegratorWebclientModule extends AApiModule
 		$this->includeTemplate('StandardLoginFormWebclient_LoginView', 'Login-After', 'templates/SignInButtonsView.html', $this->GetName());
 		$this->includeTemplate('StandardRegisterFormWebclient_RegisterView', 'Register-After', 'templates/SignInButtonsView.html', $this->GetName());
 		$this->subscribeEvent('Core::AfterDeleteUser', array($this, 'onAfterDeleteUser'));
+		$this->subscribeEvent('Core::GetAccounts', array($this, 'onGetAccounts'));
 	}
 	
 	/**
@@ -77,6 +78,32 @@ class OAuthIntegratorWebclientModule extends AApiModule
 	{
 		$this->oManager->deleteAccountByUserId($iUserId);
 	}
+	
+	/**
+	 * 
+	 * @param array $aArgs
+	 * @param array $aResult
+	 */
+	public function onGetAccounts($aArgs, &$aResult)
+	{
+		$aUserInfo = \CApi::getAuthenticatedUserInfo($aArgs['AuthToken']);
+		if (isset($aUserInfo['userId']))
+		{
+			$iUserId = $aUserInfo['userId'];
+			$mAccounts = $this->oManager->getAccounts($iUserId);
+			if (is_array($mAccounts))
+			{
+				foreach ($mAccounts as $oAccount) {
+					$aResult[] = array(
+						'Id' => $oAccount->iId,
+						'UUID' => $oAccount->sUUID,
+						'Type' => $oAccount->getName(),
+						'Email' => $oAccount->Email
+					);
+				}
+			}
+		}
+	}		
 	/***** private functions *****/
 	
 	/***** public functions *****/
