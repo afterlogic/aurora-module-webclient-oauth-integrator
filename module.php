@@ -72,7 +72,7 @@ class OAuthIntegratorWebclientModule extends AApiModule
 	 * Deletes all oauth accounts which are owened by the specified user.
 	 * 
 	 * @ignore
-	 * @param int $iUserId User identificator.
+	 * @param int $iUserId User identifier.
 	 */
 	public function onAfterDeleteUser($aArgs, &$iUserId)
 	{
