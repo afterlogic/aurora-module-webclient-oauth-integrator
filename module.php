@@ -183,6 +183,29 @@ class OAuthIntegratorWebclientModule extends AApiModule
 					$oUser
 				);
 				
+				if (!($oUser instanceOf \CUser))
+				{
+					\CApi::$__SKIP_CHECK_USER_ROLE__ = true;
+					
+					try
+					{
+						$iUserId = \CApi::GetModuleDecorator('Core')->CreateUser(0, $oOAuthAccount->Email);
+						if ($iUserId)
+						{
+							$oUser = \CApi::GetModuleDecorator('Core')->GetUser($iUserId);
+						}
+					}
+					catch (\System\Exceptions\AuroraApiException $oException)
+					{
+						if ($oException->getCode() === \System\Notifications::UserAlreadyExists)
+						{
+							\CApi::Location2('./?error=' . EOAuthIntegratorError::AccountAlreadyConnected . '&module=' . $this->GetName());
+						}
+					}
+					
+					\CApi::$__SKIP_CHECK_USER_ROLE__ = false;
+				}
+				
 				if ($oUser instanceOf \CUser)
 				{
 					$oOAuthAccount->IdUser = $oUser->iId;
