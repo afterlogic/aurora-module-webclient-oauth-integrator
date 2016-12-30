@@ -183,7 +183,7 @@ class OAuthIntegratorWebclientModule extends AApiModule
 					$oUser
 				);
 				
-				if (!($oUser instanceOf \CUser))
+				if (!($oUser instanceOf \CUser) && $sOAuthIntegratorRedirect === 'register')
 				{
 					\CApi::$__SKIP_CHECK_USER_ROLE__ = true;
 					
