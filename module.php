@@ -149,7 +149,7 @@ class OAuthIntegratorWebclientModule extends AApiModule
 					\CApi::Location2('./?error=' . EOAuthIntegratorError::AccountAlreadyConnected . '&module=' . $this->GetName());
 				}
 				
-				if (!$oAccountOld->issetScope('auth'))
+				if (!$oAccountOld->issetScope('auth') && $sOAuthIntegratorRedirect !== 'connect')
 				{
 					\CApi::Location2('./?error=' . EOAuthIntegratorError::AccountNotAllowedToLogIn . '&module=' . $this->GetName());
 				}
