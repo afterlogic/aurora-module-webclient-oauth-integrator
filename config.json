@@ -1,0 +1,4 @@
+{
+    "AuthModuleName": "StandardAuth",
+    "OnlyPasswordForAccountCreate": true
+}
