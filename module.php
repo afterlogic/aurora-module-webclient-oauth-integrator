@@ -37,11 +37,6 @@ class OAuthIntegratorWebclientModule extends AApiModule
 {
 	public $oManager = null;
 	
-	protected $aSettingsMap = array(
-		'AuthModuleName' => array('StandardAuth', 'string'),
-		'OnlyPasswordForAccountCreate' => array(true, 'bool')
-	);
-	
 	/***** private functions *****/
 	/**
 	 * Initializes module.

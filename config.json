@@ -1,4 +1,10 @@
 {
-    "AuthModuleName": "StandardAuth",
-    "OnlyPasswordForAccountCreate": true
+    "AuthModuleName": [
+		"StandardAuth",
+		"string"
+	],
+    "OnlyPasswordForAccountCreate": [
+		true,
+		"book"
+	]
 }
