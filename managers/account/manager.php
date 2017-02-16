@@ -214,7 +214,7 @@ class CApiOAuthIntegratorWebclientAccountManager extends AApiManager
 			$oSocial = $this->getAccount($iIdUser, $sType);
 			if ($oSocial)
 			{
-				if (!$this->oEavManager->deleteEntity($oSocial->iId))
+				if (!$this->oEavManager->deleteEntity($oSocial->EntityId))
 				{
 					throw new CApiManagerException(Errs::UsersManager_UserDeleteFailed);
 				}
@@ -245,7 +245,7 @@ class CApiOAuthIntegratorWebclientAccountManager extends AApiManager
 			{
 				if ($oSocial)
 				{
-					if (!$this->oEavManager->deleteEntity($oSocial->iId))
+					if (!$this->oEavManager->deleteEntity($oSocial->EntityId))
 					{
 						throw new CApiManagerException(Errs::UsersManager_UserDeleteFailed);
 					}
@@ -272,7 +272,7 @@ class CApiOAuthIntegratorWebclientAccountManager extends AApiManager
 	{
 		$bResult = false;
 		
-		$oResult = $this->oEavManager->getEntity($oAccount->iId);
+		$oResult = $this->oEavManager->getEntity($oAccount->EntityId);
 				
 		if ($oResult instanceof \COAuthAccount)
 		{

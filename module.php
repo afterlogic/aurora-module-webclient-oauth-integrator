@@ -89,8 +89,8 @@ class OAuthIntegratorWebclientModule extends AApiModule
 			{
 				foreach ($mAccounts as $oAccount) {
 					$aResult[] = array(
-						'Id' => $oAccount->iId,
-						'UUID' => $oAccount->sUUID,
+						'Id' => $oAccount->EntityId,
+						'UUID' => $oAccount->UUID,
 						'Type' => $oAccount->getName(),
 						'Email' => $oAccount->Email
 					);
@@ -150,7 +150,7 @@ class OAuthIntegratorWebclientModule extends AApiModule
 				}
 				
 				$oOAuthAccount->setScopes($mResult['scopes']);
-				$oOAuthAccount->iId = $oAccountOld->iId;
+				$oOAuthAccount->EntityId = $oAccountOld->EntityId;
 				$oOAuthAccount->IdUser = $oAccountOld->IdUser;
 				$this->oManager->updateAccount($oOAuthAccount);
 				
@@ -203,7 +203,7 @@ class OAuthIntegratorWebclientModule extends AApiModule
 				
 				if ($oUser instanceOf \CUser)
 				{
-					$oOAuthAccount->IdUser = $oUser->iId;
+					$oOAuthAccount->IdUser = $oUser->EntityId;
 					$oOAuthAccount->setScopes($mResult['scopes']);
 					$this->oManager->createAccount($oOAuthAccount);
 				}
@@ -219,9 +219,9 @@ class OAuthIntegratorWebclientModule extends AApiModule
 							array(
 								'token' => 'auth',
 								'sign-me' => true,
-								'id' => $oUser->iId,
+								'id' => $oUser->EntityId,
 								'time' => time() + 60 * 60 * 24 * 30,
-								'account' => $oOAuthAccount->iId
+								'account' => $oOAuthAccount->EntityId
 							)
 						)
 					);
@@ -237,7 +237,7 @@ class OAuthIntegratorWebclientModule extends AApiModule
 				$sResult = $mResult !== false ? 'true' : 'false';
 				$sErrorCode = '';
 				
-				if ($oUser && $iAuthUserId && $oUser->iId !== $iAuthUserId)
+				if ($oUser && $iAuthUserId && $oUser->EntityId !== $iAuthUserId)
 				{
 					$sResult = 'false';
 					$sErrorCode = EOAuthIntegratorError::AccountAlreadyConnected;
@@ -371,8 +371,8 @@ class OAuthIntegratorWebclientModule extends AApiModule
 		{
 			foreach ($mAccounts as $oAccount) {
 				$aResult[] = array(
-					'Id' => $oAccount->iId,
-					'UUID' => $oAccount->sUUID,
+					'Id' => $oAccount->EntityId,
+					'UUID' => $oAccount->UUID,
 					'Type' => $oAccount->Type,
 					'Email' => $oAccount->Email,
 					'Name' => $oAccount->Name,
