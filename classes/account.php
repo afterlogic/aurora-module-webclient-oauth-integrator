@@ -35,28 +35,18 @@
  */
 class COAuthAccount extends AEntity
 {
-	public function __construct($sModule, $oParams)
-	{
-		parent::__construct(get_class($this), $sModule);
+	protected $aStaticMap = array(
+		'IdUser'		=> array('int', 0),
+		'IdSocial'		=> array('string', ''),
+		'Type'			=> array('string', ''),
+		'Name'			=> array('string', ''),
+		'Email'			=> array('string', ''),
+		'AccessToken'	=> array('text', ''),
+		'RefreshToken'	=> array('string', ''),
+		'Scopes'		=> array('string', ''),
+		'Disabled'		=> array('bool', false)
+	);	
 
-		$this->setStaticMap(array(
-			'IdUser'		=> array('int', 0),
-			'IdSocial'		=> array('string', ''),
-			'Type'			=> array('string', ''),
-			'Name'			=> array('string', ''),
-			'Email'			=> array('string', ''),
-			'AccessToken'	=> array('text', ''),
-			'RefreshToken'	=> array('string', ''),
-			'Scopes'		=> array('string', ''),
-			'Disabled'		=> array('bool', false)
-		));
-	}
-	
-	public static function createInstance($sModule = 'OAuthIntegratorWebclient', $oParams = array())
-	{
-		return new COAuthAccount($sModule, $oParams);
-	}
-	
 	public function getScopesAsArray()
 	{
 		$aResult = array();
