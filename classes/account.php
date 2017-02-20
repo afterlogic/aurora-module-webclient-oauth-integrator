@@ -33,7 +33,7 @@
  * @package Classes
  * @subpackage Social
  */
-class COAuthAccount extends AEntity
+class COAuthAccount extends CEntity
 {
 	protected $aStaticMap = array(
 		'IdUser'		=> array('int', 0),
