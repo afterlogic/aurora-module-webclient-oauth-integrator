@@ -17,7 +17,10 @@
  * 
  * @internal
  */
-class EOAuthIntegratorError extends AEnumeration
+
+namespace Aurora\Modules;
+
+class EOAuthIntegratorError extends \AEnumeration
 {
 	const ServiceNotAllowed = 1;
 	const AccountNotAllowedToLogIn = 2;
@@ -33,7 +36,7 @@ class EOAuthIntegratorError extends AEnumeration
 /**
  * @package Modules
  */
-class OAuthIntegratorWebclientModule extends AApiModule
+class OAuthIntegratorWebclientModule extends \AApiModule
 {
 	public $oManager = null;
 	
@@ -85,7 +88,7 @@ class OAuthIntegratorWebclientModule extends AApiModule
 		{
 			$iUserId = $aUserInfo['userId'];
 			$mAccounts = $this->oManager->getAccounts($iUserId);
-			if (is_array($mAccounts))
+			if (\is_array($mAccounts))
 			{
 				foreach ($mAccounts as $oAccount) {
 					$aResult[] = array(
@@ -116,7 +119,7 @@ class OAuthIntegratorWebclientModule extends AApiModule
 			$mResult
 		);
 		
-		if (false !== $mResult && is_array($mResult))
+		if (false !== $mResult && \is_array($mResult))
 		{
 			$iAuthUserId = isset($_COOKIE['AuthToken']) ? \CApi::getAuthenticatedUserId($_COOKIE['AuthToken']) : null;
 			
@@ -125,7 +128,7 @@ class OAuthIntegratorWebclientModule extends AApiModule
 			if (isset($_COOKIE["oauth-redirect"]))
 			{
 				$sOAuthIntegratorRedirect = $_COOKIE["oauth-redirect"];
-				@setcookie('oauth-redirect', null);
+				@\setcookie('oauth-redirect', null);
 			}
 			
 			$oOAuthAccount = new \COAuthAccount($this->GetName(), array());
@@ -213,14 +216,14 @@ class OAuthIntegratorWebclientModule extends AApiModule
 			{
 				if ($oUser)
 				{
-					@setcookie(
+					@\setcookie(
 						System\Service::AUTH_TOKEN_KEY,
 						\CApi::UserSession()->Set(
 							array(
 								'token' => 'auth',
 								'sign-me' => true,
 								'id' => $oUser->EntityId,
-								'time' => time() + 60 * 60 * 24 * 30,
+								'time' => \time() + 60 * 60 * 24 * 30,
 								'account' => $oOAuthAccount->EntityId
 							)
 						)
@@ -308,7 +311,7 @@ class OAuthIntegratorWebclientModule extends AApiModule
 		\CApi::checkUserRoleIsAtLeast(\EUserRole::Anonymous);
 		
 		$aSettings = array(
-			'EOAuthIntegratorError' => (new \EOAuthIntegratorError)->getMap(),
+			'EOAuthIntegratorError' => (new EOAuthIntegratorError)->getMap(),
 		);
 		
 		$oUser = \CApi::getAuthenticatedUser();
@@ -367,7 +370,7 @@ class OAuthIntegratorWebclientModule extends AApiModule
 		$UserId = \CApi::getAuthenticatedUserId();
 		$aResult = array();
 		$mAccounts = $this->oManager->getAccounts($UserId);
-		if (is_array($mAccounts))
+		if (\is_array($mAccounts))
 		{
 			foreach ($mAccounts as $oAccount) {
 				$aResult[] = array(
