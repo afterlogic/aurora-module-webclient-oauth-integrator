@@ -36,7 +36,7 @@ class EOAuthIntegratorError extends \AEnumeration
 /**
  * @package Modules
  */
-class OAuthIntegratorWebclientModule extends \AApiModule
+class OAuthIntegratorWebclientModule extends \Aurora\System\AbstractModule
 {
 	public $oManager = null;
 	
@@ -83,7 +83,7 @@ class OAuthIntegratorWebclientModule extends \AApiModule
 	 */
 	public function onGetAccounts($aArgs, &$aResult)
 	{
-		$aUserInfo = \CApi::getAuthenticatedUserInfo($aArgs['AuthToken']);
+		$aUserInfo = \Aurora\System\Api::getAuthenticatedUserInfo($aArgs['AuthToken']);
 		if (isset($aUserInfo['userId']))
 		{
 			$iUserId = $aUserInfo['userId'];
@@ -121,7 +121,7 @@ class OAuthIntegratorWebclientModule extends \AApiModule
 		
 		if (false !== $mResult && \is_array($mResult))
 		{
-			$iAuthUserId = isset($_COOKIE['AuthToken']) ? \CApi::getAuthenticatedUserId($_COOKIE['AuthToken']) : null;
+			$iAuthUserId = isset($_COOKIE['AuthToken']) ? \Aurora\System\Api::getAuthenticatedUserId($_COOKIE['AuthToken']) : null;
 			
 			$oUser = null;
 			$sOAuthIntegratorRedirect = 'login';
@@ -144,12 +144,12 @@ class OAuthIntegratorWebclientModule extends \AApiModule
 			{
 				if ($sOAuthIntegratorRedirect === 'register')
 				{
-					\CApi::Location2('./?error=' . EOAuthIntegratorError::AccountAlreadyConnected . '&module=' . $this->GetName());
+					\Aurora\System\Api::Location2('./?error=' . EOAuthIntegratorError::AccountAlreadyConnected . '&module=' . $this->GetName());
 				}
 				
 				if (!$oAccountOld->issetScope('auth') && $sOAuthIntegratorRedirect !== 'connect')
 				{
-					\CApi::Location2('./?error=' . EOAuthIntegratorError::AccountNotAllowedToLogIn . '&module=' . $this->GetName());
+					\Aurora\System\Api::Location2('./?error=' . EOAuthIntegratorError::AccountNotAllowedToLogIn . '&module=' . $this->GetName());
 				}
 				
 				$oOAuthAccount->setScopes($mResult['scopes']);
@@ -157,7 +157,7 @@ class OAuthIntegratorWebclientModule extends \AApiModule
 				$oOAuthAccount->IdUser = $oAccountOld->IdUser;
 				$this->oManager->updateAccount($oOAuthAccount);
 				
-				$oUser = \CApi::GetModuleDecorator('Core')->GetUser($oOAuthAccount->IdUser);
+				$oUser = \Aurora\System\Api::GetModuleDecorator('Core')->GetUser($oOAuthAccount->IdUser);
 			}
 			else
 			{
@@ -183,25 +183,25 @@ class OAuthIntegratorWebclientModule extends \AApiModule
 				
 				if (!($oUser instanceOf \CUser) && $sOAuthIntegratorRedirect === 'register')
 				{
-					\CApi::$__SKIP_CHECK_USER_ROLE__ = true;
+					\Aurora\System\Api::$__SKIP_CHECK_USER_ROLE__ = true;
 					
 					try
 					{
-						$iUserId = \CApi::GetModuleDecorator('Core')->CreateUser(0, $oOAuthAccount->Email);
+						$iUserId = \Aurora\System\Api::GetModuleDecorator('Core')->CreateUser(0, $oOAuthAccount->Email);
 						if ($iUserId)
 						{
-							$oUser = \CApi::GetModuleDecorator('Core')->GetUser($iUserId);
+							$oUser = \Aurora\System\Api::GetModuleDecorator('Core')->GetUser($iUserId);
 						}
 					}
 					catch (\System\Exceptions\AuroraApiException $oException)
 					{
 						if ($oException->getCode() === \System\Notifications::UserAlreadyExists)
 						{
-							\CApi::Location2('./?error=' . EOAuthIntegratorError::AccountAlreadyConnected . '&module=' . $this->GetName());
+							\Aurora\System\Api::Location2('./?error=' . EOAuthIntegratorError::AccountAlreadyConnected . '&module=' . $this->GetName());
 						}
 					}
 					
-					\CApi::$__SKIP_CHECK_USER_ROLE__ = false;
+					\Aurora\System\Api::$__SKIP_CHECK_USER_ROLE__ = false;
 				}
 				
 				if ($oUser instanceOf \CUser)
@@ -218,7 +218,7 @@ class OAuthIntegratorWebclientModule extends \AApiModule
 				{
 					@\setcookie(
 						System\Service::AUTH_TOKEN_KEY,
-						\CApi::UserSession()->Set(
+						\Aurora\System\Api::UserSession()->Set(
 							array(
 								'token' => 'auth',
 								'sign-me' => true,
@@ -228,11 +228,11 @@ class OAuthIntegratorWebclientModule extends \AApiModule
 							)
 						)
 					);
-					\CApi::Location2('./');
+					\Aurora\System\Api::Location2('./');
 				}
 				else
 				{
-					\CApi::Location2('./?error=' . EOAuthIntegratorError::AccountNotAllowedToLogIn . '&module=' . $this->GetName());
+					\Aurora\System\Api::Location2('./?error=' . EOAuthIntegratorError::AccountNotAllowedToLogIn . '&module=' . $this->GetName());
 				}
 			}
 			else
@@ -270,10 +270,10 @@ class OAuthIntegratorWebclientModule extends \AApiModule
 	 */
 	public function GetAccount($Type)
 	{
-		\CApi::checkUserRoleIsAtLeast(\EUserRole::Anonymous);
+		\Aurora\System\Api::checkUserRoleIsAtLeast(\EUserRole::Anonymous);
 		
 		return $this->oManager->getAccount(
-			\CApi::getAuthenticatedUserId(),
+			\Aurora\System\Api::getAuthenticatedUserId(),
 			$Type
 		);
 	}
@@ -298,7 +298,7 @@ class OAuthIntegratorWebclientModule extends \AApiModule
 	 */
 	public function GetServices()
 	{
-		\CApi::checkUserRoleIsAtLeast(\EUserRole::Anonymous);
+		\Aurora\System\Api::checkUserRoleIsAtLeast(\EUserRole::Anonymous);
 	}
 	
 	/**
@@ -308,13 +308,13 @@ class OAuthIntegratorWebclientModule extends \AApiModule
 	 */
 	public function GetSettings()
 	{
-		\CApi::checkUserRoleIsAtLeast(\EUserRole::Anonymous);
+		\Aurora\System\Api::checkUserRoleIsAtLeast(\EUserRole::Anonymous);
 		
 		$aSettings = array(
 			'EOAuthIntegratorError' => (new EOAuthIntegratorError)->getMap(),
 		);
 		
-		$oUser = \CApi::getAuthenticatedUser();
+		$oUser = \Aurora\System\Api::getAuthenticatedUser();
 		if (!empty($oUser) && $oUser->Role === \EUserRole::SuperAdmin)
 		{
 			$aArgs = array();
@@ -345,7 +345,7 @@ class OAuthIntegratorWebclientModule extends \AApiModule
 	 */
 	public function UpdateSettings($Services)
 	{
-		\CApi::checkUserRoleIsAtLeast(\EUserRole::TenantAdmin);
+		\Aurora\System\Api::checkUserRoleIsAtLeast(\EUserRole::TenantAdmin);
 		
 		$aArgs = array(
 			'Services' => $Services
@@ -365,9 +365,9 @@ class OAuthIntegratorWebclientModule extends \AApiModule
 	 */
 	public function GetAccounts()
 	{
-		\CApi::checkUserRoleIsAtLeast(\EUserRole::NormalUser);
+		\Aurora\System\Api::checkUserRoleIsAtLeast(\EUserRole::NormalUser);
 		
-		$UserId = \CApi::getAuthenticatedUserId();
+		$UserId = \Aurora\System\Api::getAuthenticatedUserId();
 		$aResult = array();
 		$mAccounts = $this->oManager->getAccounts($UserId);
 		if (\is_array($mAccounts))
@@ -393,10 +393,10 @@ class OAuthIntegratorWebclientModule extends \AApiModule
 	 */
 	public function DeleteAccount($Type)
 	{
-		\CApi::checkUserRoleIsAtLeast(\EUserRole::Customer);
+		\Aurora\System\Api::checkUserRoleIsAtLeast(\EUserRole::Customer);
 		
 		return $this->oManager->deleteAccount(
-			\CApi::getAuthenticatedUserId(),
+			\Aurora\System\Api::getAuthenticatedUserId(),
 			$Type
 		);
 	}

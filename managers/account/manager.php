@@ -23,7 +23,7 @@
  * 
  * @package Account
  */
-class CApiOAuthIntegratorWebclientAccountManager extends AApiManager
+class CApiOAuthIntegratorWebclientAccountManager extends \Aurora\System\AbstractManager
 {
 	/**
 	 * @var CApiEavManager
@@ -31,13 +31,13 @@ class CApiOAuthIntegratorWebclientAccountManager extends AApiManager
 	public $oEavManager = null;
 	
 	/**
-	 * @param CApiGlobalManager &$oManager
+	 * @param \Aurora\System\GlobalManager &$oManager
 	 */
-	public function __construct(CApiGlobalManager &$oManager, $sForcedStorage = '', AApiModule $oModule = null)
+	public function __construct(\Aurora\System\GlobalManager &$oManager, $sForcedStorage = '', \Aurora\System\AbstractModule $oModule = null)
 	{
 		parent::__construct('account', $oManager, $oModule);
 		
-		$this->oEavManager = \CApi::GetSystemManager('eav', 'db');
+		$this->oEavManager = \Aurora\System\Api::GetSystemManager('eav', 'db');
 	}
 	
 	/**
@@ -185,7 +185,7 @@ class CApiOAuthIntegratorWebclientAccountManager extends AApiManager
 			{
 				if (!$this->oEavManager->saveEntity($oAccount))
 				{
-					throw new CApiManagerException(Errs::UsersManager_UserCreateFailed);
+					throw new \CApiManagerException(Errs::UsersManager_UserCreateFailed);
 				}
 			}
 
@@ -216,7 +216,7 @@ class CApiOAuthIntegratorWebclientAccountManager extends AApiManager
 			{
 				if (!$this->oEavManager->deleteEntity($oSocial->EntityId))
 				{
-					throw new CApiManagerException(Errs::UsersManager_UserDeleteFailed);
+					throw new \CApiManagerException(Errs::UsersManager_UserDeleteFailed);
 				}
 				$bResult = true;
 			}
@@ -247,7 +247,7 @@ class CApiOAuthIntegratorWebclientAccountManager extends AApiManager
 				{
 					if (!$this->oEavManager->deleteEntity($oSocial->EntityId))
 					{
-						throw new CApiManagerException(Errs::UsersManager_UserDeleteFailed);
+						throw new \CApiManagerException(Errs::UsersManager_UserDeleteFailed);
 					}
 				}
 			}
