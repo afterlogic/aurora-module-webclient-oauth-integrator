@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Copyright (c) 2016, Afterlogic Corp.
+ * @copyright Copyright (c) 2017, Afterlogic Corp.
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -20,7 +20,7 @@
 
 namespace Aurora\Modules;
 
-class EOAuthIntegratorError extends \AEnumeration
+class EOAuthIntegratorError extends \AbstractEnumeration
 {
 	const ServiceNotAllowed = 1;
 	const AccountNotAllowedToLogIn = 2;
@@ -193,7 +193,7 @@ class OAuthIntegratorWebclientModule extends \Aurora\System\AbstractModule
 							$oUser = \Aurora\System\Api::GetModuleDecorator('Core')->GetUser($iUserId);
 						}
 					}
-					catch (\System\Exceptions\AuroraApiException $oException)
+					catch (\System\Exceptions\ApiException $oException)
 					{
 						if ($oException->getCode() === \System\Notifications::UserAlreadyExists)
 						{
@@ -217,7 +217,7 @@ class OAuthIntegratorWebclientModule extends \Aurora\System\AbstractModule
 				if ($oUser)
 				{
 					@\setcookie(
-						System\Service::AUTH_TOKEN_KEY,
+						\Aurora\System\Service::AUTH_TOKEN_KEY,
 						\Aurora\System\Api::UserSession()->Set(
 							array(
 								'token' => 'auth',
