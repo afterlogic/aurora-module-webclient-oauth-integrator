@@ -131,7 +131,7 @@ class OAuthIntegratorWebclientModule extends \Aurora\System\AbstractModule
 				@\setcookie('oauth-redirect', null);
 			}
 			
-			$oOAuthAccount = new \COAuthAccount($this->GetName(), array());
+			$oOAuthAccount = new \COAuthAccount($this->GetName());
 			$oOAuthAccount->Type = $mResult['type'];
 			$oOAuthAccount->AccessToken = isset($mResult['access_token']) ? $mResult['access_token'] : '';
 			$oOAuthAccount->RefreshToken = isset($mResult['refresh_token']) ? $mResult['refresh_token'] : '';
