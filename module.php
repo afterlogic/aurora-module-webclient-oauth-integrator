@@ -217,7 +217,7 @@ class OAuthIntegratorWebclientModule extends \Aurora\System\Module\AbstractModul
 				if ($oUser)
 				{
 					@\setcookie(
-						\Aurora\System\Service::AUTH_TOKEN_KEY,
+						\Aurora\System\Application::AUTH_TOKEN_KEY,
 						\Aurora\System\Api::UserSession()->Set(
 							array(
 								'token' => 'auth',
