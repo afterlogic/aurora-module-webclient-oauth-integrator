@@ -65,7 +65,7 @@ class CApiOAuthIntegratorWebclientAccountManager extends \Aurora\System\Abstract
 				$mResult = $aEntities[0];
 			}
 		}
-		catch (CApiBaseException $oException)
+		catch (\Aurora\System\Exceptions\BaseException $oException)
 		{
 			$mResult = false;
 			$this->setLastException($oException);
@@ -100,7 +100,7 @@ class CApiOAuthIntegratorWebclientAccountManager extends \Aurora\System\Abstract
 			}
 			
 		}
-		catch (CApiBaseException $oException)
+		catch (\Aurora\System\Exceptions\BaseException $oException)
 		{
 			$mResult = false;
 			$this->setLastException($oException);
@@ -127,7 +127,7 @@ class CApiOAuthIntegratorWebclientAccountManager extends \Aurora\System\Abstract
 					'IdUser' => $iIdUser
 				));
 		}
-		catch (CApiBaseException $oException)
+		catch (\Aurora\System\Exceptions\BaseException $oException)
 		{
 			$aResult = false;
 			$this->setLastException($oException);
@@ -151,18 +151,18 @@ class CApiOAuthIntegratorWebclientAccountManager extends \Aurora\System\Abstract
 				{
 					if (!$this->oEavManager->saveEntity($oAccount))
 					{
-						throw new \CApiManagerException(Errs::UsersManager_UserCreateFailed);
+						throw new \Aurora\System\Exceptions\ManagerException(Errs::UsersManager_UserCreateFailed);
 					}
 				}
 				else
 				{
-					throw new \CApiManagerException(Errs::UsersManager_UserAlreadyExists);
+					throw new \Aurora\System\Exceptions\ManagerException(Errs::UsersManager_UserAlreadyExists);
 				}
 			}
 
 			$bResult = true;
 		}
-		catch (CApiBaseException $oException)
+		catch (\Aurora\System\Exceptions\BaseException $oException)
 		{
 			$bResult = false;
 			$this->setLastException($oException);
@@ -185,13 +185,13 @@ class CApiOAuthIntegratorWebclientAccountManager extends \Aurora\System\Abstract
 			{
 				if (!$this->oEavManager->saveEntity($oAccount))
 				{
-					throw new \CApiManagerException(Errs::UsersManager_UserCreateFailed);
+					throw new \Aurora\System\Exceptions\ManagerException(Errs::UsersManager_UserCreateFailed);
 				}
 			}
 
 			$bResult = true;
 		}
-		catch (CApiBaseException $oException)
+		catch (\Aurora\System\Exceptions\BaseException $oException)
 		{
 			$bResult = false;
 			$this->setLastException($oException);
@@ -216,12 +216,12 @@ class CApiOAuthIntegratorWebclientAccountManager extends \Aurora\System\Abstract
 			{
 				if (!$this->oEavManager->deleteEntity($oSocial->EntityId))
 				{
-					throw new \CApiManagerException(Errs::UsersManager_UserDeleteFailed);
+					throw new \Aurora\System\Exceptions\ManagerException(Errs::UsersManager_UserDeleteFailed);
 				}
 				$bResult = true;
 			}
 		}
-		catch (CApiBaseException $oException)
+		catch (\Aurora\System\Exceptions\BaseException $oException)
 		{
 			$bResult = false;
 			$this->setLastException($oException);
@@ -247,13 +247,13 @@ class CApiOAuthIntegratorWebclientAccountManager extends \Aurora\System\Abstract
 				{
 					if (!$this->oEavManager->deleteEntity($oSocial->EntityId))
 					{
-						throw new \CApiManagerException(Errs::UsersManager_UserDeleteFailed);
+						throw new \Aurora\System\Exceptions\ManagerException(Errs::UsersManager_UserDeleteFailed);
 					}
 				}
 			}
 			$bResult = true;
 		}
-		catch (CApiBaseException $oException)
+		catch (\Aurora\System\Exceptions\BaseException $oException)
 		{
 			$bResult = false;
 			$this->setLastException($oException);
