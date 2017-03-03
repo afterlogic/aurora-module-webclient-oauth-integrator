@@ -36,7 +36,7 @@ class EOAuthIntegratorError extends \AbstractEnumeration
 /**
  * @package Modules
  */
-class OAuthIntegratorWebclientModule extends \Aurora\System\AbstractModule
+class OAuthIntegratorWebclientModule extends \Aurora\System\Module\AbstractModule
 {
 	public $oManager = null;
 	
@@ -193,9 +193,9 @@ class OAuthIntegratorWebclientModule extends \Aurora\System\AbstractModule
 							$oUser = \Aurora\System\Api::GetModuleDecorator('Core')->GetUser($iUserId);
 						}
 					}
-					catch (\System\Exceptions\ApiException $oException)
+					catch (\Aurora\System\Exceptions\ApiException $oException)
 					{
-						if ($oException->getCode() === \System\Notifications::UserAlreadyExists)
+						if ($oException->getCode() === \Aurora\System\Notifications::UserAlreadyExists)
 						{
 							\Aurora\System\Api::Location2('./?error=' . EOAuthIntegratorError::AccountAlreadyConnected . '&module=' . $this->GetName());
 						}
