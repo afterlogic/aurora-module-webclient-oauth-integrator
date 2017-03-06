@@ -18,7 +18,7 @@
  * @internal
  */
 
-namespace Aurora\Modules;
+namespace Aurora\Modules\OAuthIntegratorWebclient;
 
 class EOAuthIntegratorError extends \AbstractEnumeration
 {
@@ -36,7 +36,7 @@ class EOAuthIntegratorError extends \AbstractEnumeration
 /**
  * @package Modules
  */
-class OAuthIntegratorWebclientModule extends \Aurora\System\Module\AbstractModule
+class Module extends \Aurora\System\Module\AbstractModule
 {
 	public $oManager = null;
 	
