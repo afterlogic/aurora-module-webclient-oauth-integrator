@@ -23,7 +23,7 @@
  * 
  * @package Account
  */
-class CApiOAuthIntegratorWebclientAccountManager extends \Aurora\System\AbstractManager
+class CApiOAuthIntegratorWebclientAccountManager extends \Aurora\System\Managers\AbstractManager
 {
 	/**
 	 * @var CApiEavManager
@@ -31,9 +31,9 @@ class CApiOAuthIntegratorWebclientAccountManager extends \Aurora\System\Abstract
 	public $oEavManager = null;
 	
 	/**
-	 * @param \Aurora\System\GlobalManager &$oManager
+	 * @param \Aurora\System\Managers\GlobalManager &$oManager
 	 */
-	public function __construct(\Aurora\System\GlobalManager &$oManager, $sForcedStorage = '', \Aurora\System\Module\AbstractModule $oModule = null)
+	public function __construct(\Aurora\System\Managers\GlobalManager &$oManager, $sForcedStorage = '', \Aurora\System\Module\AbstractModule $oModule = null)
 	{
 		parent::__construct('account', $oManager, $oModule);
 		
