@@ -36,7 +36,7 @@ class EOAuthIntegratorError extends \AbstractEnumeration
 /**
  * @package Modules
  */
-class Module extends \Aurora\System\Module\AbstractModule
+class Module extends \Aurora\System\Module\AbstractWebclientModule
 {
 	public $oManager = null;
 	
