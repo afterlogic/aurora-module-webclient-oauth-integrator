@@ -121,6 +121,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 		
 		if (false !== $mResult && \is_array($mResult))
 		{
+			$oCoreModuleDecorator = \Aurora\System\Api::GetModuleDecorator('Core');
 			$iAuthUserId = isset($_COOKIE['AuthToken']) ? \Aurora\System\Api::getAuthenticatedUserId($_COOKIE['AuthToken']) : null;
 			
 			$oUser = null;
@@ -144,12 +145,16 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 			{
 				if ($sOAuthIntegratorRedirect === 'register')
 				{
-					\Aurora\System\Api::Location2('./?error=' . EOAuthIntegratorError::AccountAlreadyConnected . '&module=' . $this->GetName());
+					\Aurora\System\Api::Location2(
+						'./?error=' . EOAuthIntegratorError::AccountAlreadyConnected . '&module=' . $this->GetName()
+					);
 				}
 				
 				if (!$oAccountOld->issetScope('auth') && $sOAuthIntegratorRedirect !== 'connect')
 				{
-					\Aurora\System\Api::Location2('./?error=' . EOAuthIntegratorError::AccountNotAllowedToLogIn . '&module=' . $this->GetName());
+					\Aurora\System\Api::Location2(
+						'./?error=' . EOAuthIntegratorError::AccountNotAllowedToLogIn . '&module=' . $this->GetName()
+					);
 				}
 				
 				$oOAuthAccount->setScopes($mResult['scopes']);
@@ -157,7 +162,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 				$oOAuthAccount->IdUser = $oAccountOld->IdUser;
 				$this->oManager->updateAccount($oOAuthAccount);
 				
-				$oUser = \Aurora\System\Api::GetModuleDecorator('Core')->GetUser($oOAuthAccount->IdUser);
+				$oUser = $oCoreModuleDecorator->GetUser($oOAuthAccount->IdUser);
 			}
 			else
 			{
@@ -181,27 +186,30 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 					$oUser
 				);
 				
-				if (!($oUser instanceOf \CUser) && $sOAuthIntegratorRedirect === 'register')
+				if (!($oUser instanceOf \CUser)  && 
+						($sOAuthIntegratorRedirect === 'register' || $this->getConfig('AllowNewUsersRegister', false)))
 				{
-					\Aurora\System\Api::$__SKIP_CHECK_USER_ROLE__ = true;
+					\Aurora\System\Api::skipCheckUserRole(true);
 					
 					try
 					{
-						$iUserId = \Aurora\System\Api::GetModuleDecorator('Core')->CreateUser(0, $oOAuthAccount->Email);
+						$iUserId = $oCoreModuleDecorator->CreateUser(0, $oOAuthAccount->Email);
 						if ($iUserId)
 						{
-							$oUser = \Aurora\System\Api::GetModuleDecorator('Core')->GetUser($iUserId);
+							$oUser = $oCoreModuleDecorator->GetUser($iUserId);
 						}
 					}
 					catch (\Aurora\System\Exceptions\ApiException $oException)
 					{
 						if ($oException->getCode() === \Aurora\System\Notifications::UserAlreadyExists)
 						{
-							\Aurora\System\Api::Location2('./?error=' . EOAuthIntegratorError::AccountAlreadyConnected . '&module=' . $this->GetName());
+							\Aurora\System\Api::Location2(
+								'./?error=' . EOAuthIntegratorError::AccountAlreadyConnected . '&module=' . $this->GetName()
+							);
 						}
 					}
 					
-					\Aurora\System\Api::$__SKIP_CHECK_USER_ROLE__ = false;
+					\Aurora\System\Api::skipCheckUserRole(false);
 				}
 				
 				if ($oUser instanceOf \CUser)
@@ -232,7 +240,9 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 				}
 				else
 				{
-					\Aurora\System\Api::Location2('./?error=' . EOAuthIntegratorError::AccountNotAllowedToLogIn . '&module=' . $this->GetName());
+					\Aurora\System\Api::Location2(
+						'./?error=' . EOAuthIntegratorError::AccountNotAllowedToLogIn . '&module=' . $this->GetName()
+					);
 				}
 			}
 			else

@@ -10,5 +10,9 @@
     "OnlyPasswordForAccountCreate": [
 		true,
 		"book"
-	]
+	],
+    "AllowNewUsersRegister": [
+        true,
+        "bool"
+    ]	
 }
