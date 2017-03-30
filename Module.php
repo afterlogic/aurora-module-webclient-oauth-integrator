@@ -14,12 +14,14 @@
  *
  * You should have received a copy of the GNU Affero General Public License, version 3,
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
- * 
- * @internal
  */
 
 namespace Aurora\Modules\OAuthIntegratorWebclient;
 
+/**
+ * @internal
+ * @package Modules
+ */
 class EOAuthIntegratorError extends \AbstractEnumeration
 {
 	const ServiceNotAllowed = 1;
