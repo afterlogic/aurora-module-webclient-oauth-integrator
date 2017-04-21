@@ -12,7 +12,7 @@
 		"book"
 	],
     "AllowNewUsersRegister": [
-        true,
+        false,
         "bool"
     ]	
 }
