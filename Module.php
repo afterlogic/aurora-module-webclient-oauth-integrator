@@ -218,19 +218,32 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 			{
 				if ($oUser)
 				{
-					@\setcookie(
-						\Aurora\System\Application::AUTH_TOKEN_KEY,
-						\Aurora\System\Api::UserSession()->Set(
-							array(
-								'token' => 'auth',
-								'sign-me' => true,
-								'id' => $oUser->EntityId,
-								'time' => \time() + 60 * 60 * 24 * 30,
-								'account' => $oOAuthAccount->EntityId
-							)
+					$sAuthToken = \Aurora\System\Api::UserSession()->Set(
+						array(
+							'token' => 'auth',
+							'sign-me' => true,
+							'id' => $oUser->EntityId,
+							'time' => \time() + 60 * 60 * 24 * 30,
+							'account' => $oOAuthAccount->EntityId
 						)
 					);
-					\Aurora\System\Api::Location2('./');
+					@\setcookie(
+						\Aurora\System\Application::AUTH_TOKEN_KEY,
+						$sAuthToken
+					);
+					
+					if ($this->oHttp->GetQuery('mobile', '0') === '1')
+					{
+						return json_encode(
+							array(
+								'AuthToken' => $sAuthToken
+							)
+						);
+					}
+					else
+					{
+						\Aurora\System\Api::Location2('./');
+					}
 				}
 				else
 				{
