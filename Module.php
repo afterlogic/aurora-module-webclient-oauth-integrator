@@ -14,7 +14,7 @@ namespace Aurora\Modules\OAuthIntegratorWebclient;
  * @internal
  * @package Modules
  */
-class EOAuthIntegratorError extends \AbstractEnumeration
+class EOAuthIntegratorError extends \Aurora\System\Enums\AbstractEnumeration
 {
 	const ServiceNotAllowed = 1;
 	const AccountNotAllowedToLogIn = 2;
@@ -287,7 +287,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 	 */
 	public function GetAccount($Type)
 	{
-		\Aurora\System\Api::checkUserRoleIsAtLeast(\EUserRole::Anonymous);
+		\Aurora\System\Api::checkUserRoleIsAtLeast(\Aurora\System\Enums\UserRole::Anonymous);
 		
 		return $this->oManager->getAccount(
 			\Aurora\System\Api::getAuthenticatedUserId(),
@@ -315,7 +315,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 	 */
 	public function GetServices()
 	{
-		\Aurora\System\Api::checkUserRoleIsAtLeast(\EUserRole::Anonymous);
+		\Aurora\System\Api::checkUserRoleIsAtLeast(\Aurora\System\Enums\UserRole::Anonymous);
 	}
 	
 	/**
@@ -325,14 +325,14 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 	 */
 	public function GetSettings()
 	{
-		\Aurora\System\Api::checkUserRoleIsAtLeast(\EUserRole::Anonymous);
+		\Aurora\System\Api::checkUserRoleIsAtLeast(\Aurora\System\Enums\UserRole::Anonymous);
 		
 		$aSettings = array(
 			'EOAuthIntegratorError' => (new EOAuthIntegratorError)->getMap(),
 		);
 		
 		$oUser = \Aurora\System\Api::getAuthenticatedUser();
-		if (!empty($oUser) && $oUser->Role === \EUserRole::SuperAdmin)
+		if (!empty($oUser) && $oUser->Role === \Aurora\System\Enums\UserRole::SuperAdmin)
 		{
 			$aArgs = array();
 			$aServices = array();
@@ -344,7 +344,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 			$aSettings['Services'] = $aServices;
 		}
 		
-		if (!empty($oUser) && $oUser->Role === \EUserRole::NormalUser)
+		if (!empty($oUser) && $oUser->Role === \Aurora\System\Enums\UserRole::NormalUser)
 		{
 			$aSettings['AuthModuleName'] = $this->getConfig('AuthModuleName');
 			$aSettings['OnlyPasswordForAccountCreate'] = $this->getConfig('OnlyPasswordForAccountCreate');
@@ -362,7 +362,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 	 */
 	public function UpdateSettings($Services)
 	{
-		\Aurora\System\Api::checkUserRoleIsAtLeast(\EUserRole::TenantAdmin);
+		\Aurora\System\Api::checkUserRoleIsAtLeast(\Aurora\System\Enums\UserRole::TenantAdmin);
 		
 		$aArgs = array(
 			'Services' => $Services
@@ -382,7 +382,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 	 */
 	public function GetAccounts()
 	{
-		\Aurora\System\Api::checkUserRoleIsAtLeast(\EUserRole::NormalUser);
+		\Aurora\System\Api::checkUserRoleIsAtLeast(\Aurora\System\Enums\UserRole::NormalUser);
 		
 		$UserId = \Aurora\System\Api::getAuthenticatedUserId();
 		$aResult = array();
@@ -410,7 +410,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 	 */
 	public function DeleteAccount($Type)
 	{
-		\Aurora\System\Api::checkUserRoleIsAtLeast(\EUserRole::Customer);
+		\Aurora\System\Api::checkUserRoleIsAtLeast(\Aurora\System\Enums\UserRole::Customer);
 		
 		return $this->oManager->deleteAccount(
 			\Aurora\System\Api::getAuthenticatedUserId(),
