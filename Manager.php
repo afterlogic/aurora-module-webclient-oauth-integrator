@@ -8,26 +8,20 @@
  * For full statements of the licenses see LICENSE-AFTERLOGIC and LICENSE-AGPL3 files.
  */
 
-/**
- * CApiOAuthIntegratorSocialManager class summary
- * 
- * @package Account
- */
-class CApiOAuthIntegratorWebclientAccountManager extends \Aurora\System\Managers\AbstractManager
+namespace Aurora\Modules\OAuthIntegratorWebclient;
+
+class Manager extends \Aurora\System\Managers\AbstractManager
 {
 	/**
 	 * @var \Aurora\System\Managers\Eav\Manager
 	 */
 	public $oEavManager = null;
 	
-	/**
-	 * @param \Aurora\System\Managers\GlobalManager &$oManager
-	 */
-	public function __construct(\Aurora\System\Managers\GlobalManager &$oManager, $sForcedStorage = '', \Aurora\System\Module\AbstractModule $oModule = null)
+	public function __construct($sForcedStorage = '', \Aurora\System\Module\AbstractModule $oModule = null)
 	{
-		parent::__construct('account', $oManager, $oModule);
+		parent::__construct('account', $oModule);
 		
-		$this->oEavManager = \Aurora\System\Api::GetSystemManager('eav', 'db');
+		$this->oEavManager = new \Aurora\System\Managers\Eav\Manager();
 	}
 	
 	/**
@@ -130,7 +124,7 @@ class CApiOAuthIntegratorWebclientAccountManager extends \Aurora\System\Managers
 	 *
 	 * @return bool
 	 */
-	public function createAccount(COAuthAccount &$oAccount)
+	public function createAccount(\COAuthAccount &$oAccount)
 	{
 		$bResult = false;
 		try
@@ -166,7 +160,7 @@ class CApiOAuthIntegratorWebclientAccountManager extends \Aurora\System\Managers
 	 *
 	 * @return bool
 	 */
-	public function updateAccount(COAuthAccount &$oAccount)
+	public function updateAccount(\COAuthAccount &$oAccount)
 	{
 		$bResult = false;
 		try
@@ -258,7 +252,7 @@ class CApiOAuthIntegratorWebclientAccountManager extends \Aurora\System\Managers
 	 *
 	 * @return bool
 	 */
-	public function isExists(COAuthAccount $oAccount)
+	public function isExists(\COAuthAccount $oAccount)
 	{
 		$bResult = false;
 		

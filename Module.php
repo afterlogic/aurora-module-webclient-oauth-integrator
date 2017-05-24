@@ -51,7 +51,8 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 			)
 		);
 		
-		$this->oManager = $this->GetManager('account');
+		$this->oManager = new \Aurora\Modules\OAuthIntegratorWebclient\Manager('', $this);
+		
 		$this->AddEntry('oauth', 'OAuthIntegratorEntry');
 		$this->includeTemplate('StandardLoginFormWebclient_LoginView', 'Login-After', 'templates/SignInButtonsView.html', $this->GetName());
 		$this->includeTemplate('StandardRegisterFormWebclient_RegisterView', 'Register-After', 'templates/SignInButtonsView.html', $this->GetName());
