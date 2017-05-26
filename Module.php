@@ -116,7 +116,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 		
 		if (false !== $mResult && \is_array($mResult))
 		{
-			$oCoreModuleDecorator = \Aurora\System\Api::GetModuleDecorator('Core');
+			$oCoreModuleDecorator = \Aurora\Modules\Core\Module::Decorator();
 			$iAuthUserId = isset($_COOKIE['AuthToken']) ? \Aurora\System\Api::getAuthenticatedUserId($_COOKIE['AuthToken']) : null;
 			
 			$oUser = null;
