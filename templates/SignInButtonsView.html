@@ -1,4 +1,4 @@
-<div class="content social" data-bind="visible: oauthServices().length > 0">
+<div class="content social" data-bind="if: typeof oauthServices !== 'undefined' && oauthServices().length > 0">
 	<div class="info" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SIGN_BUTTONS'}"></div>
 	<!-- ko foreach: oauthServices -->
 	<div class="button" data-bind="css: $data, click: function () {$parent.externalAuthClick($data);}">

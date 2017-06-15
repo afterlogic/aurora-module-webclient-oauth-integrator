@@ -6,6 +6,8 @@
 		"afterlogic/aurora-framework": "~0.4"
 	},
 	"extra": {
-		"installer-name": "OAuthIntegratorWebclient"
+		"installer-name": "OAuthIntegratorWebclient",
+		"include-in-mobile": false,
+		"include-in-desktop": true
 	}
 }
