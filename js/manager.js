@@ -67,7 +67,17 @@ module.exports = function (oAppData) {
 			start: function (ModulesManager) {
 				var fGetAccounts = function () {
 					Ajax.send(Settings.ServerModuleName, 'GetAccounts', null, function (oResponse) {
-						Settings.userAccountsCount(_.isArray(oResponse.Result) ? oResponse.Result.length : 0);
+						var iAuthAccountCount = 0;
+						if (_.isArray(oResponse.Result))
+						{
+							_.each(oResponse.Result, function (oAccount) {
+								if (oAccount.Scopes.indexOf('auth') !== -1)
+								{
+									iAuthAccountCount++;
+								}
+							});
+						}
+						Settings.userAccountsCount(iAuthAccountCount);
 					});
 				};
 				App.subscribeEvent('OAuthAccountChange::after', function () {

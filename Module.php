@@ -397,6 +397,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 					'Type' => $oAccount->Type,
 					'Email' => $oAccount->Email,
 					'Name' => $oAccount->Name,
+					'Scopes' => $oAccount->Scopes,
 				);
 			}
 		}
