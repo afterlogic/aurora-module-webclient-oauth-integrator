@@ -43,6 +43,8 @@ module.exports = function (oAppData) {
 					{
 						oParams.View.externalAuthClick = function (sSocialName) {
 							$.cookie('oauth-redirect', 'CLoginView' === oParams.Name ? 'login' : 'register');
+							$.cookie('oauth-scopes', 'auth');
+
 							window.location.href = '?oauth=' + sSocialName;
 						};
 
