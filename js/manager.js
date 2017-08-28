@@ -6,6 +6,7 @@ module.exports = function (oAppData) {
 		$ = require('jquery'),
 		ko = require('knockout'),
 		
+		Routing = require('%PathToCoreWebclientModule%/js/Routing.js'),
 		TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
 		Types = require('%PathToCoreWebclientModule%/js/utils/Types.js'),
 		
@@ -37,10 +38,19 @@ module.exports = function (oAppData) {
 		return {
 			start: function (ModulesManager) {
 				Settings.oauthServices = ko.observableArray([]);
+				var fGetInvitationLinkHash = function () {
+					var aHashArray = Routing.getCurrentHashArray();
+					if (aHashArray.length >= 2 && aHashArray[0] === Settings.RegisterModuleHash)
+					{
+						return aHashArray[1];
+					}
+					return '';
+				};
 				
 				var fInitialize = function (oParams) {
 					if ('CLoginView' === oParams.Name || 'CRegisterView' === oParams.Name)
 					{
+						var sInvitationLinkHash = fGetInvitationLinkHash();
 						oParams.View.externalAuthClick = function (sSocialName) {
 							$.cookie('oauth-redirect', 'CLoginView' === oParams.Name ? 'login' : 'register');
 							$.cookie('oauth-scopes', 'auth');

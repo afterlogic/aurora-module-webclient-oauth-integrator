@@ -114,6 +114,23 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 			$mResult
 		);
 		
+		$sError = $this->oHttp->GetQuery('error', null);
+		if (isset($sError))
+		{
+			if (isset($_COOKIE["oauth-redirect"]))
+			{
+				$sOAuthIntegratorRedirect = $_COOKIE["oauth-redirect"];
+				$sInvitationLinkHash =  isset($_COOKIE["InvitationLinkHash"]) ? $_COOKIE["InvitationLinkHash"] : null;
+				if ($sOAuthIntegratorRedirect === 'register' && isset($sInvitationLinkHash))
+				{
+					
+					\Aurora\System\Api::Location2(
+						'./#register/' . $sInvitationLinkHash
+					);
+				}
+				
+			}
+		}
 		if (false !== $mResult && \is_array($mResult))
 		{
 			$oCoreModuleDecorator = \Aurora\Modules\Core\Module::Decorator();
