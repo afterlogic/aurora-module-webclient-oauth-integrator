@@ -196,7 +196,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 					$oUser
 				);
 				
-				if (!($oUser instanceOf \CUser)  && 
+				if (!($oUser instanceOf \Aurora\Modules\Core\Classes\User)  && 
 						($sOAuthIntegratorRedirect === 'register' || $this->getConfig('AllowNewUsersRegister', false)))
 				{
 					\Aurora\System\Api::skipCheckUserRole(true);
@@ -222,7 +222,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 					\Aurora\System\Api::skipCheckUserRole(false);
 				}
 				
-				if ($oUser instanceOf \CUser)
+				if ($oUser instanceOf \Aurora\Modules\Core\Classes\User)
 				{
 					$oOAuthAccount->IdUser = $oUser->EntityId;
 					$oOAuthAccount->setScopes($mResult['scopes']);
