@@ -8,6 +8,8 @@
  * For full statements of the licenses see LICENSE-AFTERLOGIC and LICENSE-AGPL3 files.
  */
 
+namespace Aurora\Modules\OAuthIntegratorWebclient\Classes;
+
 /**
  * @property int $Id
  * @property int $IdUser
@@ -23,7 +25,7 @@
  * @package Classes
  * @subpackage Social
  */
-class COAuthAccount extends \Aurora\System\EAV\Entity
+class Account extends \Aurora\System\EAV\Entity
 {
 	protected $aStaticMap = array(
 		'IdUser'		=> array('int', 0),

@@ -144,7 +144,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 				@\setcookie('oauth-redirect', null);
 			}
 			
-			$oOAuthAccount = new \COAuthAccount($this->GetName());
+			$oOAuthAccount = new \Aurora\Modules\OAuthIntegratorWebclient\Classes\Account($this->GetName());
 			$oOAuthAccount->Type = $mResult['type'];
 			$oOAuthAccount->AccessToken = isset($mResult['access_token']) ? $mResult['access_token'] : '';
 			$oOAuthAccount->RefreshToken = isset($mResult['refresh_token']) ? $mResult['refresh_token'] : '';
@@ -301,7 +301,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 	 * Returns oauth account with specified type.
 	 * 
 	 * @param string $Type Type of oauth account.
-	 * @return \COAuthAccount
+	 * @return \Aurora\Modules\OAuthIntegratorWebclient\Classes\Account
 	 */
 	public function GetAccount($Type)
 	{
@@ -316,10 +316,10 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 	/**
 	 * Updates oauth acount.
 	 * 
-	 * @param \COAuthAccount $oAccount Oauth account.
+	 * @param \Aurora\Modules\OAuthIntegratorWebclient\Classes\Account $oAccount Oauth account.
 	 * @return boolean
 	 */
-	public function UpdateAccount(\COAuthAccount $oAccount)
+	public function UpdateAccount(\Aurora\Modules\OAuthIntegratorWebclient\Classes\Account $oAccount)
 	{
 		return $this->oManager->updateAccount($oAccount);
 	}

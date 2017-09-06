@@ -28,7 +28,7 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 	 * @param int $iUserId
 	 * @param string $sType
 	 *
-	 * @return \COAuthAccount
+	 * @return \Aurora\Modules\OAuthIntegratorWebclient\Classes\Account
 	 */
 	public function getAccount($iUserId, $sType)
 	{
@@ -36,7 +36,7 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 		try
 		{
 			$aEntities = $this->oEavManager->getEntities(
-				'COAuthAccount', 
+				__NAMESPACE__ .  '\Classes\Account', 
 				array(),
 				0,
 				0,
@@ -69,7 +69,7 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 		try
 		{
 			$aEntities = $this->oEavManager->getEntities(
-				'COAuthAccount', 
+				__NAMESPACE__ .  '\Classes\Account', 
 				array(),
 				0,
 				0,
@@ -103,7 +103,7 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 		try
 		{
 			$aResult = $this->oEavManager->getEntities(
-				'COAuthAccount', 
+				__NAMESPACE__ .  '\Classes\Account', 
 				array(),
 				0,
 				0,
@@ -120,11 +120,11 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 	}	
 	
 	/**
-	 * @param COAuthAccount &$oAccount
+	 * @param \Aurora\Modules\OAuthIntegratorWebclient\Classes\Account &$oAccount
 	 *
 	 * @return bool
 	 */
-	public function createAccount(\COAuthAccount &$oAccount)
+	public function createAccount(\Aurora\Modules\OAuthIntegratorWebclient\Classes\Account &$oAccount)
 	{
 		$bResult = false;
 		try
@@ -156,11 +156,11 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 	}
 
 	/**
-	 * @param COAuthAccount &$oAccount
+	 * @param \Aurora\Modules\OAuthIntegratorWebclient\Classes\Account &$oAccount
 	 *
 	 * @return bool
 	 */
-	public function updateAccount(\COAuthAccount &$oAccount)
+	public function updateAccount(\Aurora\Modules\OAuthIntegratorWebclient\Classes\Account &$oAccount)
 	{
 		$bResult = false;
 		try
@@ -248,17 +248,17 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 	}	
 	
 	/**
-	 * @param COAuthAccount &$oAccount
+	 * @param \Aurora\Modules\OAuthIntegratorWebclient\Classes\Account &$oAccount
 	 *
 	 * @return bool
 	 */
-	public function isExists(\COAuthAccount $oAccount)
+	public function isExists(\Aurora\Modules\OAuthIntegratorWebclient\Classes\Account $oAccount)
 	{
 		$bResult = false;
 		
 		$oResult = $this->oEavManager->getEntity($oAccount->EntityId);
 				
-		if ($oResult instanceof \COAuthAccount)
+		if ($oResult instanceof \Aurora\Modules\OAuthIntegratorWebclient\Classes\Account)
 		{
 			$bResult = true;
 		}

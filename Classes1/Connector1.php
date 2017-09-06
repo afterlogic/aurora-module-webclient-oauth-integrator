@@ -8,12 +8,14 @@
  * For full statements of the licenses see LICENSE-AFTERLOGIC and LICENSE-AGPL3 files.
  */
 
+namespace Aurora\Modules\OAuthIntegratorWebclient\Classes;
+
 /**
  *
  * @package Classes
  * @subpackage AuthIntegrator
  */
-class COAuthIntegratorConnector
+class Connector
 {
 	protected $Name = 'connector';
 	public static $Debug = false;
