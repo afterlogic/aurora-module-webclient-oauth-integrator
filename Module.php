@@ -45,9 +45,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 		$this->incClasses(
 			array(
 				'OAuthClient/http',
-				'OAuthClient/oauth_client',
-				'account',
-				'connector'
+				'OAuthClient/oauth_client'
 			)
 		);
 		
