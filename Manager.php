@@ -36,7 +36,7 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 		try
 		{
 			$aEntities = $this->oEavManager->getEntities(
-				$this->oModule->getNamespace() .  '\Classes\Account', 
+				$this->getModule()->getNamespace() .  '\Classes\Account',
 				array(),
 				0,
 				0,
@@ -69,7 +69,7 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 		try
 		{
 			$aEntities = $this->oEavManager->getEntities(
-				$this->oModule->getNamespace() .  '\Classes\Account', 
+				$this->getModule()->getNamespace() .  '\Classes\Account',
 				array(),
 				0,
 				0,
@@ -103,7 +103,7 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 		try
 		{
 			$aResult = $this->oEavManager->getEntities(
-				$this->oModule->getNamespace() .  '\Classes\Account', 
+				$this->getModule()->getNamespace() .  '\Classes\Account',
 				array(),
 				0,
 				0,
