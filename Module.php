@@ -138,7 +138,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 				@\setcookie('oauth-redirect', null);
 			}
 			
-			$oOAuthAccount = new \Aurora\Modules\OAuthIntegratorWebclient\Classes\Account($this->GetName());
+			$oOAuthAccount = new Classes\Account($this->GetName());
 			$oOAuthAccount->Type = $mResult['type'];
 			$oOAuthAccount->AccessToken = isset($mResult['access_token']) ? $mResult['access_token'] : '';
 			$oOAuthAccount->RefreshToken = isset($mResult['refresh_token']) ? $mResult['refresh_token'] : '';

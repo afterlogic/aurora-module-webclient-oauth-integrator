@@ -36,7 +36,7 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 		try
 		{
 			$aEntities = $this->oEavManager->getEntities(
-				__NAMESPACE__ .  '\Classes\Account', 
+				$this->oModule->getNamespace() .  '\Classes\Account', 
 				array(),
 				0,
 				0,
@@ -69,7 +69,7 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 		try
 		{
 			$aEntities = $this->oEavManager->getEntities(
-				__NAMESPACE__ .  '\Classes\Account', 
+				$this->oModule->getNamespace() .  '\Classes\Account', 
 				array(),
 				0,
 				0,
@@ -103,7 +103,7 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 		try
 		{
 			$aResult = $this->oEavManager->getEntities(
-				__NAMESPACE__ .  '\Classes\Account', 
+				$this->oModule->getNamespace() .  '\Classes\Account', 
 				array(),
 				0,
 				0,
@@ -258,7 +258,7 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 		
 		$oResult = $this->oEavManager->getEntity($oAccount->EntityId);
 				
-		if ($oResult instanceof \Aurora\Modules\OAuthIntegratorWebclient\Classes\Account)
+		if ($oResult instanceof Classes\Account)
 		{
 			$bResult = true;
 		}

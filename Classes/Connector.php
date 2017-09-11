@@ -28,7 +28,5 @@ class Connector
 		$this->oModule = $oModule;
 	}
 	
-	public function Init($sId, $sSecret, $sScope = '') 
-	{
-	}
+	public function Init($sId, $sSecret, $sScope = '') {}
 }
