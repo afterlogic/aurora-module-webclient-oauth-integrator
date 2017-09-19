@@ -1,8 +1,8 @@
 <?php
 /*
- * login_with_paypal.php
+ * login_with_pinterest.php
  *
- * @(#) $Id: login_with_paypal.php,v 1.2 2016/01/14 21:34:04 mlemos Exp $
+ * @(#) $Id: login_with_pinterest.php,v 1.1 2017/03/17 09:08:30 mlemos Exp $
  *
  */
 
@@ -13,30 +13,27 @@
 	require('oauth_client.php');
 
 	$client = new oauth_client_class;
-
-	 // Use 'PaypalApplication' for application only authorization
-	 // Use 'PaypalSandbox' for sandbox access authorization
-	$client->server = 'Paypal';
-
+	$client->server = 'Pinterest';
 	$client->debug = true;
 	$client->debug_http = true;
 	$client->redirect_uri = 'http://'.$_SERVER['HTTP_HOST'].
-		dirname(strtok($_SERVER['REQUEST_URI'],'?')).'/login_with_paypal.php';
+		dirname(strtok($_SERVER['REQUEST_URI'],'?')).'/login_with_pinterest.php';
 
 	$client->client_id = ''; $application_line = __LINE__;
 	$client->client_secret = '';
 
 	if(strlen($client->client_id) == 0
 	|| strlen($client->client_secret) == 0)
-		die('Please go to Paypal Developer site and create an application '.
-			'https://developer.paypal.com/webapps/developer/applications/myapps '.
-			'and in the line '.$application_line. ' set the client_id to Client ID '.
-			'and client_secret with Client secret. '.
-			'The site domain must have the same domain of '.$client->redirect_uri);
+		die('Please go to Google APIs console page '.
+			'https://developers.pinterest.com/apps/ in the API access tab, '.
+			'create a new client ID, and in the line '.$application_line.
+			' set the client_id to Client ID and client_secret with Client Secret. '.
+			'The callback URL must be '.$client->redirect_uri.' but make sure '.
+			'the domain is valid and can be resolved by a public DNS.');
 
 	/* API permissions
 	 */
-	$client->scope = 'openid profile email address';
+	$client->scope = 'read_public';
 	if(($success = $client->Initialize()))
 	{
 		if(($success = $client->Process()))
@@ -49,7 +46,7 @@
 			elseif(strlen($client->access_token))
 			{
 				$success = $client->CallAPI(
-					'https://api.paypal.com/v1/identity/openidconnect/userinfo/?schema=openid',
+					'https://api.pinterest.com/v1/me/',
 					'GET', array(), array('FailOnAccessError'=>true), $user);
 			}
 		}
@@ -60,16 +57,15 @@
 	if($success)
 	{
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE html>
 <html>
 <head>
-<title>Paypal OAuth client results</title>
+<title>Pinterest OAuth client results</title>
 </head>
 <body>
 <?php
-		$name = (IsSet($user->given_name) ? $user->given_name : $user->user_id);
-		echo '<h1>', HtmlSpecialChars($name),
-			' you have logged in successfully with Paypal!</h1>';
+		echo '<h1>', HtmlSpecialChars($user->data->first_name),
+			' you have logged in successfully with Google!</h1>';
 		echo '<pre>', HtmlSpecialChars(print_r($user, 1)), '</pre>';
 ?>
 </body>
@@ -79,7 +75,7 @@
 	else
 	{
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE html>
 <html>
 <head>
 <title>OAuth client error</title>

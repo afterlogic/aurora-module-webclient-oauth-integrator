@@ -1,8 +1,8 @@
 <?php
 /*
- * login_with_vk.php
+ * login_with_yammer.php
  *
- * @(#) $Id: login_with_vk.php,v 1.2 2017/08/20 20:15:53 mlemos Exp $
+ * @(#) $Id: login_with_yammer.php,v 1.1 2017/02/07 09:09:58 mlemos Exp $
  *
  */
 
@@ -13,38 +13,40 @@
 	require('oauth_client.php');
 
 	$client = new oauth_client_class;
-	$client->debug = false;
+	$client->debug = true;
 	$client->debug_http = true;
-	$client->server = 'VK';
-	$client->redirect_uri = 'http://'.$_SERVER['HTTP_HOST'].
-		dirname(strtok($_SERVER['REQUEST_URI'],'?')).'/login_with_vk.php';
+	$client->server = 'Yammer';
+	$client->redirect_uri = 'https://'.$_SERVER['HTTP_HOST'].
+		dirname(strtok($_SERVER['REQUEST_URI'],'?')).'/login_with_yammer.php';
 
 	$client->client_id = ''; $application_line = __LINE__;
 	$client->client_secret = '';
 
 	if(strlen($client->client_id) == 0
 	|| strlen($client->client_secret) == 0)
-		die('Please go to VK create application page http://vk.com/editapp?act=create , '.
-			'create a Website application, and in the line '.$application_line.
-			' set the client_id to App ID/API Key and client_secret with App Secret');
+		die('Please go to Yammer applications page '.
+			'https://www.yammer.com/client_applications (you need to already have '.
+			'logged in your Yammer account)in the Register New App form. '.
+			'Then in the line '.$application_line.
+			' set the client_id to Client ID and client_secret with Client Secret. '.
+			'The Callback URL must be '.$client->redirect_uri);
 
 	/* API permissions
-	 *
-	 * Check for the numbers for each permission to add at
-	 *
-	 * https://vk.com/dev/permissions
-	 *
-	 * email - 4194304
 	 */
-	$client->scope = strval(4194304+0);
+	$client->scope = '';
 	if(($success = $client->Initialize()))
 	{
 		if(($success = $client->Process()))
 		{
-			if(strlen($client->access_token))
+			if(strlen($client->authorization_error))
+			{
+				$client->error = $client->authorization_error;
+				$success = false;
+			}
+			elseif(strlen($client->access_token))
 			{
 				$success = $client->CallAPI(
-					'https://api.vk.com/method/users.get', 
+					'https://www.yammer.com/api/v1/users.json',
 					'GET', array(), array('FailOnAccessError'=>true), $user);
 			}
 		}
@@ -58,15 +60,13 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-<title>VK OAuth client results</title>
+<title>Yammer OAuth client results</title>
 </head>
 <body>
 <?php
-		echo '<h1>', HtmlSpecialChars($user->response[0]->first_name), 
-			' you have logged in successfully with VK!</h1>';
+		echo '<h1>', HtmlSpecialChars($user[0]->first_name),
+			' you have logged in successfully with Yammer!</h1>';
 		echo '<pre>', HtmlSpecialChars(print_r($user, 1)), '</pre>';
-		echo '<p>User email and other details returned with the access token:</p>';
-		echo '<pre>', HtmlSpecialChars(print_r($client->access_token_response, 1)), '</pre>';
 ?>
 </body>
 </html>

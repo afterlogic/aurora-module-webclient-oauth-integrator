@@ -1,8 +1,8 @@
 <?php
 /*
- * login_with_vk.php
+ * login_with_fitbit2.php
  *
- * @(#) $Id: login_with_vk.php,v 1.2 2017/08/20 20:15:53 mlemos Exp $
+ * @(#) $Id: login_with_fitbit2.php,v 1.1 2015/07/23 20:45:00 mlemos Exp $
  *
  */
 
@@ -15,28 +15,24 @@
 	$client = new oauth_client_class;
 	$client->debug = false;
 	$client->debug_http = true;
-	$client->server = 'VK';
+	$client->server = 'Fitbit2';
 	$client->redirect_uri = 'http://'.$_SERVER['HTTP_HOST'].
-		dirname(strtok($_SERVER['REQUEST_URI'],'?')).'/login_with_vk.php';
+		dirname(strtok($_SERVER['REQUEST_URI'],'?')).'/login_with_fitbit2.php';
 
 	$client->client_id = ''; $application_line = __LINE__;
 	$client->client_secret = '';
 
 	if(strlen($client->client_id) == 0
 	|| strlen($client->client_secret) == 0)
-		die('Please go to VK create application page http://vk.com/editapp?act=create , '.
-			'create a Website application, and in the line '.$application_line.
-			' set the client_id to App ID/API Key and client_secret with App Secret');
+		die('Please go to Fitbit application registration page https://dev.fitbit.com/apps/new , '.
+			'create an application, and in the line '.$application_line.
+			' set the client_id to Consumer key and client_secret with Consumer secret. '.
+			'The Callback URL must be '.$client->redirect_uri).' Make sure this URL is '.
+			'not in a private network and accessible to the Fitbit site.';
 
 	/* API permissions
-	 *
-	 * Check for the numbers for each permission to add at
-	 *
-	 * https://vk.com/dev/permissions
-	 *
-	 * email - 4194304
 	 */
-	$client->scope = strval(4194304+0);
+	$client->scope = 'profile';
 	if(($success = $client->Initialize()))
 	{
 		if(($success = $client->Process()))
@@ -44,7 +40,7 @@
 			if(strlen($client->access_token))
 			{
 				$success = $client->CallAPI(
-					'https://api.vk.com/method/users.get', 
+					'https://api.fitbit.com/1/user/-/profile.json', 
 					'GET', array(), array('FailOnAccessError'=>true), $user);
 			}
 		}
@@ -58,15 +54,13 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-<title>VK OAuth client results</title>
+<title>Fitbit OAuth client results</title>
 </head>
 <body>
 <?php
-		echo '<h1>', HtmlSpecialChars($user->response[0]->first_name), 
-			' you have logged in successfully with VK!</h1>';
+		echo '<h1>', HtmlSpecialChars($user->user->displayName), 
+			' you have logged in successfully with Fitbit!</h1>';
 		echo '<pre>', HtmlSpecialChars(print_r($user, 1)), '</pre>';
-		echo '<p>User email and other details returned with the access token:</p>';
-		echo '<pre>', HtmlSpecialChars(print_r($client->access_token_response, 1)), '</pre>';
 ?>
 </body>
 </html>
@@ -82,7 +76,7 @@
 </head>
 <body>
 <h1>OAuth client error</h1>
-<pre>Error: <?php echo HtmlSpecialChars($client->error); ?></pre>
+<p>Error: <?php echo HtmlSpecialChars($client->error); ?></p>
 </body>
 </html>
 <?php
