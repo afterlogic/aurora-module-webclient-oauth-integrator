@@ -28,9 +28,9 @@ namespace Aurora\Modules\OAuthIntegratorWebclient\Classes;
 class Account extends \Aurora\System\EAV\Entity
 {
 	protected $aStaticMap = array(
-		'IdUser'		=> array('int', 0),
-		'IdSocial'		=> array('string', ''),
-		'Type'			=> array('string', ''),
+		'IdUser'		=> array('int', 0, true),
+		'IdSocial'		=> array('string', '', true),
+		'Type'			=> array('string', '', true),
 		'Name'			=> array('string', ''),
 		'Email'			=> array('string', ''),
 		'AccessToken'	=> array('text', ''),
