@@ -14,7 +14,6 @@ module.exports = function (oAppData) {
 		App = require('%PathToCoreWebclientModule%/js/App.js'),
 		
 		Settings = require('modules/%ModuleName%/js/Settings.js'),
-		oSettings = _.extend({}, oAppData[Settings.ServerModuleName] || {}, oAppData['%ModuleName%'] || {}),
 		
 		bNormalUser = App.getUserRole() === Enums.UserRole.NormalUser,
 		bAnonymUser = App.getUserRole() === Enums.UserRole.Anonymous,
@@ -31,7 +30,7 @@ module.exports = function (oAppData) {
 
 	;
 
-	Settings.init(oSettings);
+	Settings.init(oAppData);
 	
 	if (bAnonymUser)
 	{

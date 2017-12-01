@@ -23,19 +23,22 @@ module.exports = {
 	Services: [],
 	
 	/**
-	 * Initializes settings from AppData object section of this module.
+	 * Initializes settings from AppData object sections.
 	 * 
-	 * @param {Object} oAppDataSection Object contained module settings.
+	 * @param {Object} oAppData Object contained modules settings.
 	 */
-	init: function (oAppDataSection)
+	init: function (oAppData)
 	{
-		if (oAppDataSection)
+		var oAppDataSection = oAppData['%ModuleName%'];
+		
+		if (!_.isEmpty(oAppDataSection))
 		{
-			this.AuthModuleName = Types.pString(oAppDataSection.AuthModuleName);
-			this.OnlyPasswordForAccountCreate = !!oAppDataSection.OnlyPasswordForAccountCreate;
-			this.Services = _.isArray(oAppDataSection.Services) ? oAppDataSection.Services : [];
-			this.EOAuthIntegratorError = oAppDataSection.EOAuthIntegratorError ? oAppDataSection.EOAuthIntegratorError : {};
+			this.AuthModuleName = Types.pString(oAppDataSection.AuthModuleName, this.AuthModuleName);
+			this.OnlyPasswordForAccountCreate = Types.pBool(oAppDataSection.OnlyPasswordForAccountCreate, this.OnlyPasswordForAccountCreate);
+			this.Services = Types.pArray(oAppDataSection.Services, this.Services);
+			this.EOAuthIntegratorError = Types.pObject(oAppDataSection.EOAuthIntegratorError);
 		}
+		
 		App.registerUserAccountsCount(this.userAccountsCount);
 	},
 	
