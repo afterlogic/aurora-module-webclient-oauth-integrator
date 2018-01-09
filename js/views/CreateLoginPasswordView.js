@@ -1,10 +1,10 @@
 'use strict';
 
 var
-	_ = require('underscore'),
 	ko = require('knockout'),
 	
 	TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
+	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js'),
 	
 	Screens = require('%PathToCoreWebclientModule%/js/Screens.js'),
 	App = require('%PathToCoreWebclientModule%/js/App.js'),
@@ -18,9 +18,8 @@ var
 function CCreateLoginPasswordView()
 {
 	this.visible = ko.computed(function () {
-		return Settings.userAccountLogin() === '';
+		return Settings.OnlyPasswordForAccountCreate && !Types.isNonEmptyString(App.firstAccountWithPassLogin());
 	});
-	this.visibleSetPasswordForm = ko.observable(Settings.OnlyPasswordForAccountCreate);
 	this.password = ko.observable('');
 	this.passwordFocus = ko.observable(false);
 	this.confirmPassword = ko.observable('');
@@ -50,8 +49,7 @@ CCreateLoginPasswordView.prototype.setPassword = function ()
 	}
 	App.broadcastEvent(Settings.AuthModuleName + '::CreateUserAuthAccount', {
 		'Login': this.login(),
-		'Password': this.password(),
-		'SuccessCallback': _.bind(function () { this.visibleSetPasswordForm(false); }, this)
+		'Password': this.password()
 	});
 };
 

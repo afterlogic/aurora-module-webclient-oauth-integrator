@@ -8,7 +8,6 @@ module.exports = function (oAppData) {
 		
 		Routing = require('%PathToCoreWebclientModule%/js/Routing.js'),
 		TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
-		Types = require('%PathToCoreWebclientModule%/js/utils/Types.js'),
 		
 		Ajax = require('%PathToCoreWebclientModule%/js/Ajax.js'),
 		App = require('%PathToCoreWebclientModule%/js/App.js'),
@@ -95,15 +94,6 @@ module.exports = function (oAppData) {
 					fGetAccounts();
 				});
 				fGetAccounts();
-				App.subscribeEvent('ReceiveAjaxResponse::after', function (oParams) {
-					if (oParams.Request.Module === 'StandardAuth' && oParams.Request.Method === 'GetUserAccounts')
-					{
-						if (Types.isNonEmptyArray(oParams.Response.Result))
-						{
-							Settings.setUserAccountLogin(oParams.Response.Result[0].login);
-						}
-					}
-				});
 			},
 			getCreateLoginPasswordView: function () {
 				return require('modules/%ModuleName%/js/views/CreateLoginPasswordView.js');
