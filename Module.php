@@ -179,7 +179,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 						'UserId' => $iAuthUserId
 					);
 					$this->broadcastEvent(
-						'CreateAccount::before', 
+						'CreateAccount', 
 						$aArgs,
 						$oUser
 					);
