@@ -299,7 +299,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 	 */
 	public function GetAccount($Type)
 	{
-		\Aurora\System\Api::checkUserRoleIsAtLeast(\Aurora\System\Enums\UserRole::Anonymous);
+		\Aurora\System\Api::checkUserRoleIsAtLeast(\Aurora\System\Enums\UserRole::NormalUser);
 		
 		return $this->oManager->getAccount(
 			\Aurora\System\Api::getAuthenticatedUserId(),
@@ -423,7 +423,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 	 */
 	public function DeleteAccount($Type)
 	{
-		\Aurora\System\Api::checkUserRoleIsAtLeast(\Aurora\System\Enums\UserRole::Customer);
+		\Aurora\System\Api::checkUserRoleIsAtLeast(\Aurora\System\Enums\UserRole::NormalUser);
 		
 		return $this->oManager->deleteAccount(
 			\Aurora\System\Api::getAuthenticatedUserId(),
