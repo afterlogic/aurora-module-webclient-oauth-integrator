@@ -195,7 +195,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 				if (!($oUser instanceOf \Aurora\Modules\Core\Classes\User)  && 
 						($sOAuthIntegratorRedirect === 'register' || $this->getConfig('AllowNewUsersRegister', false)))
 				{
-					\Aurora\System\Api::skipCheckUserRole(true);
+					$bPrevState = \Aurora\System\Api::skipCheckUserRole(true);
 					
 					try
 					{
@@ -215,7 +215,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 						}
 					}
 					
-					\Aurora\System\Api::skipCheckUserRole(false);
+					\Aurora\System\Api::skipCheckUserRole($bPrevState);
 				}
 				
 				if ($oUser instanceOf \Aurora\Modules\Core\Classes\User)
