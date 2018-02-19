@@ -25,7 +25,7 @@ function CCreateLoginPasswordView()
 	this.confirmPassword = ko.observable('');
 	this.confirmPasswordFocus = ko.observable(false);
 	this.login = ko.computed(function () {
-		return App.userPublicId();
+		return App.getUserPublicId();
 	}, this);
 }
 
