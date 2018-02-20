@@ -256,7 +256,7 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 	{
 		$bResult = false;
 		
-		$oResult = $this->oEavManager->getEntity($oAccount->EntityId);
+		$oResult = $this->oEavManager->getEntity($oAccount->EntityId, $this->getModule()->getNamespace() . '\Classes\Account');
 				
 		if ($oResult instanceof Classes\Account)
 		{
