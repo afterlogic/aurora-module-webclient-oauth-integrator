@@ -236,7 +236,8 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 							'sign-me' => true,
 							'id' => $oUser->EntityId,
 							'time' => \time() + 60 * 60 * 24 * 30,
-							'account' => $oOAuthAccount->EntityId
+							'account' => $oOAuthAccount->EntityId,
+							'account_type' => $oOAuthAccount->getName()
 						)
 					);
 					@\setcookie(
