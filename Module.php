@@ -245,6 +245,9 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 						$sAuthToken
 					);
 					
+					//this will store user data in static variable of Api class for later usage
+					\Aurora\System\Api::getAuthenticatedUser($sAuthToken);
+					
 					if ($this->oHttp->GetQuery('mobile', '0') === '1')
 					{
 						return json_encode(
