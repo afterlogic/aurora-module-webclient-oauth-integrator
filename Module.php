@@ -163,7 +163,9 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 					);
 				}
 				
-				$oOAuthAccount->setScopes($mResult['scopes']);
+				$oOAuthAccount->setScopes(
+					array_merge($oAccountOld->getScopesAsArray(), $mResult['scopes'])						
+				);
 				$oOAuthAccount->EntityId = $oAccountOld->EntityId;
 				$oOAuthAccount->IdUser = $oAccountOld->IdUser;
 				$this->oManager->updateAccount($oOAuthAccount);
