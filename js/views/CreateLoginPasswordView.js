@@ -1,6 +1,7 @@
 'use strict';
 
 var
+	$ = require('jquery'),
 	ko = require('knockout'),
 	
 	TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
@@ -36,20 +37,25 @@ CCreateLoginPasswordView.prototype.ViewTemplate = '%ModuleName%_CreateLoginPassw
  */
 CCreateLoginPasswordView.prototype.setPassword = function ()
 {
-	if (this.password() === '')
+	var
+		sLogin = $.trim(this.login()),
+		sPassword = $.trim(this.password()),
+		sConfirmPassword = $.trim(this.confirmPassword())
+	;
+	if (sPassword === '')
 	{
 		this.passwordFocus(true);
 		return;
 	}
-	if (this.password() !== this.confirmPassword())
+	if (sPassword !== sConfirmPassword)
 	{
 		Screens.showError(TextUtils.i18n('COREWEBCLIENT/ERROR_PASSWORDS_DO_NOT_MATCH'));
 		this.confirmPasswordFocus(true);
 		return;
 	}
 	App.broadcastEvent(Settings.AuthModuleName + '::CreateUserAuthAccount', {
-		'Login': this.login(),
-		'Password': this.password()
+		'Login': sLogin,
+		'Password': sPassword
 	});
 };
 
