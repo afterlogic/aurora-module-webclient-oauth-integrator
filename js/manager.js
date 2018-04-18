@@ -7,7 +7,6 @@ module.exports = function (oAppData) {
 		ko = require('knockout'),
 		
 		Routing = require('%PathToCoreWebclientModule%/js/Routing.js'),
-		TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
 		
 		Ajax = require('%PathToCoreWebclientModule%/js/Ajax.js'),
 		App = require('%PathToCoreWebclientModule%/js/App.js'),
@@ -15,18 +14,7 @@ module.exports = function (oAppData) {
 		Settings = require('modules/%ModuleName%/js/Settings.js'),
 		
 		bNormalUser = App.getUserRole() === Enums.UserRole.NormalUser,
-		bAnonymUser = App.getUserRole() === Enums.UserRole.Anonymous,
-		
-		fGetErrorMessageByCode = function (oError) {
-			switch (oError.ErrorCode)
-			{
-				case Settings.EOAuthIntegratorError.ServiceNotAllowed: return TextUtils.i18n('%MODULENAME%/ERROR_SERVICE_NOT_ALLOWED');
-				case Settings.EOAuthIntegratorError.AccountNotAllowedToLogIn: return TextUtils.i18n('%MODULENAME%/ERROR_ACCOUNT_NOT_ALLOWED');
-				case Settings.EOAuthIntegratorError.AccountAlreadyConnected: return TextUtils.i18n('%MODULENAME%/ERROR_ACCOUNT_ALREADY_CONNECTED');
-			}
-			return '';
-		}
-
+		bAnonymUser = App.getUserRole() === Enums.UserRole.Anonymous
 	;
 
 	Settings.init(oAppData);
@@ -66,8 +54,7 @@ module.exports = function (oAppData) {
 
 				App.subscribeEvent('StandardLoginFormWebclient::ConstructView::after', fInitialize);
 				App.subscribeEvent('StandardRegisterFormWebclient::ConstructView::after', fInitialize);
-			},
-			getErrorMessageByCode: fGetErrorMessageByCode
+			}
 		};
 	}
 	
@@ -97,8 +84,7 @@ module.exports = function (oAppData) {
 			},
 			getCreateLoginPasswordView: function () {
 				return require('modules/%ModuleName%/js/views/CreateLoginPasswordView.js');
-			},
-			getErrorMessageByCode: fGetErrorMessageByCode
+			}
 		};
 	}
 	

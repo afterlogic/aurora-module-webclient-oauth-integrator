@@ -17,8 +17,6 @@ module.exports = {
 	OnlyPasswordForAccountCreate: true,
 	userAccountsCount: ko.observable(0),
 	
-	EOAuthIntegratorError: {},
-	
 	Services: [],
 	
 	/**
@@ -35,7 +33,6 @@ module.exports = {
 			this.AuthModuleName = Types.pString(oAppDataSection.AuthModuleName, this.AuthModuleName);
 			this.OnlyPasswordForAccountCreate = Types.pBool(oAppDataSection.OnlyPasswordForAccountCreate, this.OnlyPasswordForAccountCreate);
 			this.Services = Types.pArray(oAppDataSection.Services, this.Services);
-			this.EOAuthIntegratorError = Types.pObject(oAppDataSection.EOAuthIntegratorError);
 		}
 		
 		App.registerUserAccountsCount(this.userAccountsCount);

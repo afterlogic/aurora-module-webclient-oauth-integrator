@@ -15,22 +15,6 @@ namespace Aurora\Modules\OAuthIntegratorWebclient;
  * @internal
  * @package Modules
  */
-class EOAuthIntegratorError extends \Aurora\System\Enums\AbstractEnumeration
-{
-	const ServiceNotAllowed = 1;
-	const AccountNotAllowedToLogIn = 2;
-	const AccountAlreadyConnected = 3;
-	
-	protected $aConsts = array(
-		'ServiceNotAllowed' => self::ServiceNotAllowed,
-		'AccountNotAllowedToLogIn' => self::AccountNotAllowedToLogIn,
-		'AccountAlreadyConnected' => self::AccountAlreadyConnected,
-	);
-}
-
-/**
- * @package Modules
- */
 class Module extends \Aurora\System\Module\AbstractWebclientModule
 {
 	public $oManager = null;
@@ -45,6 +29,12 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 	{
 		include_once __DIR__.'/Classes/OAuthClient/http.php';
 		include_once __DIR__.'/Classes/OAuthClient/oauth_client.php';
+		
+		$this->aErrors = [
+			Enums\ErrorCodes::ServiceNotAllowed			=> $this->i18N('ERROR_SERVICE_NOT_ALLOWED'),
+			Enums\ErrorCodes::AccountNotAllowedToLogIn	=> $this->i18N('ERROR_ACCOUNT_NOT_ALLOWED'),
+			Enums\ErrorCodes::AccountAlreadyConnected	=> $this->i18N('ERROR_ACCOUNT_ALREADY_CONNECTED'),
+		];
 		
 		$this->oManager = new Manager($this);
 		
@@ -153,14 +143,14 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 				if ($sOAuthIntegratorRedirect === 'register')
 				{
 					\Aurora\System\Api::Location2(
-						'./?error=' . EOAuthIntegratorError::AccountAlreadyConnected . '&module=' . $this->GetName()
+						'./?error=' . Enums\ErrorCodes::AccountAlreadyConnected . '&module=' . $this->GetName()
 					);
 				}
 				
 				if (!$oAccountOld->issetScope('auth') && $sOAuthIntegratorRedirect !== 'connect')
 				{
 					\Aurora\System\Api::Location2(
-						'./?error=' . EOAuthIntegratorError::AccountNotAllowedToLogIn . '&module=' . $this->GetName()
+						'./?error=' . Enums\ErrorCodes::AccountNotAllowedToLogIn . '&module=' . $this->GetName()
 					);
 				}
 				
@@ -213,7 +203,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 						if ($oException->getCode() === \Aurora\System\Notifications::UserAlreadyExists)
 						{
 							\Aurora\System\Api::Location2(
-								'./?error=' . EOAuthIntegratorError::AccountAlreadyConnected . '&module=' . $this->GetName()
+								'./?error=' . Enums\ErrorCodes::AccountAlreadyConnected . '&module=' . $this->GetName()
 							);
 						}
 					}
@@ -267,7 +257,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 				else
 				{
 					\Aurora\System\Api::Location2(
-						'./?error=' . EOAuthIntegratorError::AccountNotAllowedToLogIn . '&module=' . $this->GetName()
+						'./?error=' . Enums\ErrorCodes::AccountNotAllowedToLogIn . '&module=' . $this->GetName()
 					);
 				}
 			}
@@ -279,7 +269,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 				if ($oUser && $iAuthUserId && $oUser->EntityId !== $iAuthUserId)
 				{
 					$sResult = 'false';
-					$sErrorCode = EOAuthIntegratorError::AccountAlreadyConnected;
+					$sErrorCode = Enums\ErrorCodes::AccountAlreadyConnected;
 				}
 				
 				echo
@@ -346,9 +336,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 	{
 		\Aurora\System\Api::checkUserRoleIsAtLeast(\Aurora\System\Enums\UserRole::Anonymous);
 		
-		$aSettings = array(
-			'EOAuthIntegratorError' => (new EOAuthIntegratorError)->getMap(),
-		);
+		$aSettings = array();
 		
 		$oUser = \Aurora\System\Api::getAuthenticatedUser();
 		if (!empty($oUser) && $oUser->Role === \Aurora\System\Enums\UserRole::SuperAdmin)
