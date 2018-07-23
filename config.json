@@ -9,7 +9,7 @@
 	],
     "OnlyPasswordForAccountCreate": [
 		true,
-		"book"
+		"bool"
 	],
     "AllowNewUsersRegister": [
         false,
