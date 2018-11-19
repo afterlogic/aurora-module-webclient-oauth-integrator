@@ -39,8 +39,8 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 		$this->oManager = new Manager($this);
 		
 		$this->AddEntry('oauth', 'OAuthIntegratorEntry');
-		$this->includeTemplate('StandardLoginFormWebclient_LoginView', 'Login-After', 'templates/SignInButtonsView.html', $this->GetName());
-		$this->includeTemplate('StandardRegisterFormWebclient_RegisterView', 'Register-After', 'templates/SignInButtonsView.html', $this->GetName());
+		$this->includeTemplate('StandardLoginFormWebclient_LoginView', 'Login-After', 'templates/SignInButtonsView.html', self::GetName());
+		$this->includeTemplate('StandardRegisterFormWebclient_RegisterView', 'Register-After', 'templates/SignInButtonsView.html', self::GetName());
 		$this->subscribeEvent('Core::AfterDeleteUser', array($this, 'onAfterDeleteUser'));
 		$this->subscribeEvent('Core::GetAccounts', array($this, 'onGetAccounts'));
 	}
@@ -129,7 +129,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 				@\setcookie('oauth-redirect', null, \strtotime('-1 hour'), \Aurora\System\Api::getCookiePath());
 			}
 			
-			$oOAuthAccount = new Classes\Account($this->GetName());
+			$oOAuthAccount = new Classes\Account(self::GetName());
 			$oOAuthAccount->Type = $mResult['type'];
 			$oOAuthAccount->AccessToken = isset($mResult['access_token']) ? $mResult['access_token'] : '';
 			$oOAuthAccount->RefreshToken = isset($mResult['refresh_token']) ? $mResult['refresh_token'] : '';
@@ -143,14 +143,14 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 				if ($sOAuthIntegratorRedirect === 'register')
 				{
 					\Aurora\System\Api::Location2(
-						'./?error=' . Enums\ErrorCodes::AccountAlreadyConnected . '&module=' . $this->GetName()
+						'./?error=' . Enums\ErrorCodes::AccountAlreadyConnected . '&module=' . self::GetName()
 					);
 				}
 				
 				if (!$oAccountOld->issetScope('auth') && $sOAuthIntegratorRedirect !== 'connect')
 				{
 					\Aurora\System\Api::Location2(
-						'./?error=' . Enums\ErrorCodes::AccountNotAllowedToLogIn . '&module=' . $this->GetName()
+						'./?error=' . Enums\ErrorCodes::AccountNotAllowedToLogIn . '&module=' . self::GetName()
 					);
 				}
 				
@@ -204,7 +204,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 						if ($oException->getCode() === \Aurora\System\Notifications::UserAlreadyExists)
 						{
 							\Aurora\System\Api::Location2(
-								'./?error=' . Enums\ErrorCodes::AccountAlreadyConnected . '&module=' . $this->GetName()
+								'./?error=' . Enums\ErrorCodes::AccountAlreadyConnected . '&module=' . self::GetName()
 							);
 						}
 					}
@@ -255,7 +255,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 				else
 				{
 					\Aurora\System\Api::Location2(
-						'./?error=' . Enums\ErrorCodes::AccountNotAllowedToLogIn . '&module=' . $this->GetName()
+						'./?error=' . Enums\ErrorCodes::AccountNotAllowedToLogIn . '&module=' . self::GetName()
 					);
 				}
 			}
@@ -274,7 +274,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 				"<script>"
 					.	" try {"
 					.		"if (typeof(window.opener.".$mResult['type']."ConnectCallback) !== 'undefined') {"
-					.			"window.opener.".$mResult['type']."ConnectCallback(".$sResult . ", '".$sErrorCode."','".$this->GetName()."');"
+					.			"window.opener.".$mResult['type']."ConnectCallback(".$sResult . ", '".$sErrorCode."','".self::GetName()."');"
 					.		"}"
 					.	" }"
 					.	" finally  {"
