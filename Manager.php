@@ -23,7 +23,7 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 	{
 		parent::__construct($oModule);
 		
-		$this->oEavManager = new \Aurora\System\Managers\Eav();
+		$this->oEavManager = \Aurora\System\Managers\Eav::getInstance();
 	}
 	
 	/**
@@ -38,7 +38,7 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 		try
 		{
 			$aEntities = $this->oEavManager->getEntities(
-				Module::getNamespace() .  '\Classes\Account',
+				Classes\Account::class,
 				array(),
 				0,
 				0,
@@ -71,7 +71,7 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 		try
 		{
 			$aEntities = $this->oEavManager->getEntities(
-				Module::getNamespace() .  '\Classes\Account',
+				Classes\Account::class,
 				array(),
 				0,
 				0,
@@ -105,7 +105,7 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 		try
 		{
 			$aResult = $this->oEavManager->getEntities(
-				Module::getNamespace() .  '\Classes\Account',
+				Classes\Account::class,
 				array(),
 				0,
 				0,
@@ -258,7 +258,7 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 	{
 		$bResult = false;
 		
-		$oResult = $this->oEavManager->getEntity($oAccount->EntityId, Module::getNamespace() . '\Classes\Account');
+		$oResult = $this->oEavManager->getEntity($oAccount->EntityId, Classes\Account::class);
 				
 		if ($oResult instanceof Classes\Account)
 		{
