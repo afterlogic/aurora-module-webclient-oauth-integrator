@@ -41,7 +41,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 		$this->AddEntry('oauth', 'OAuthIntegratorEntry');
 		$this->includeTemplate('StandardLoginFormWebclient_LoginView', 'Login-After', 'templates/SignInButtonsView.html', self::GetName());
 		$this->includeTemplate('StandardRegisterFormWebclient_RegisterView', 'Register-After', 'templates/SignInButtonsView.html', self::GetName());
-		$this->subscribeEvent('Core::AfterDeleteUser', array($this, 'onAfterDeleteUser'));
+		$this->subscribeEvent('Core::DeleteUser::before', array($this, 'onBeforeDeleteUser'));
 		$this->subscribeEvent('Core::GetAccounts', array($this, 'onGetAccounts'));
 	}
 	
@@ -51,7 +51,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 	 * @ignore
 	 * @param int $iUserId User identifier.
 	 */
-	public function onAfterDeleteUser($aArgs, &$iUserId)
+	public function onBeforeDeleteUser($aArgs, &$iUserId)
 	{
 		$this->oManager->deleteAccountByUserId($iUserId);
 	}
