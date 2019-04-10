@@ -51,9 +51,9 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 	 * @ignore
 	 * @param int $iUserId User identifier.
 	 */
-	public function onBeforeDeleteUser($aArgs, &$iUserId)
+	public function onBeforeDeleteUser($aArgs, &$mResult)
 	{
-		$this->oManager->deleteAccountByUserId($iUserId);
+		$this->oManager->deleteAccountByUserId($aArgs['UserId']);
 	}
 	
 	/**
