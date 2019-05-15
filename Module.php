@@ -351,7 +351,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 			$aSettings['Services'] = $aServices;
 		}
 		
-		if (!empty($oUser) && $oUser->Role === \Aurora\System\Enums\UserRole::NormalUser)
+		if (!empty($oUser) && $oUser->isNormalOrTenant())
 		{
 			$aSettings['AuthModuleName'] = $this->getConfig('AuthModuleName');
 			$aSettings['OnlyPasswordForAccountCreate'] = $this->getConfig('OnlyPasswordForAccountCreate');
