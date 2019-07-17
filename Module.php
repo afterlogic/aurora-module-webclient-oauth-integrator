@@ -128,7 +128,8 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 			if (isset($_COOKIE["oauth-redirect"]))
 			{
 				$sOAuthIntegratorRedirect = $_COOKIE["oauth-redirect"];
-				@\setcookie('oauth-redirect', null, \strtotime('-1 hour'), \Aurora\System\Api::getCookiePath());
+				@\setcookie('oauth-redirect', null, \strtotime('-1 hour'), \Aurora\System\Api::getCookiePath(), 
+						null, \Aurora\System\Api::getCookieSecure());
 			}
 			
 			$oOAuthAccount = new Classes\Account(self::GetName());
@@ -236,7 +237,8 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 							'account_type' => $oOAuthAccount->getName()
 						)
 					);
-					@\setcookie(\Aurora\System\Application::AUTH_TOKEN_KEY, $sAuthToken, \strtotime('+30 days'), \Aurora\System\Api::getCookiePath());
+					@\setcookie(\Aurora\System\Application::AUTH_TOKEN_KEY, $sAuthToken, \strtotime('+30 days'), 
+							\Aurora\System\Api::getCookiePath(), null, \Aurora\System\Api::getCookieSecure());
 					
 					//this will store user data in static variable of Api class for later usage
 					\Aurora\System\Api::getAuthenticatedUser($sAuthToken);
