@@ -120,7 +120,6 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 		}
 		if (false !== $mResult && \is_array($mResult))
 		{
-			$oCoreModuleDecorator = \Aurora\Modules\Core\Module::Decorator();
 			$iAuthUserId = isset($_COOKIE[\Aurora\System\Application::AUTH_TOKEN_KEY]) ? \Aurora\System\Api::getAuthenticatedUserId($_COOKIE[\Aurora\System\Application::AUTH_TOKEN_KEY]) : null;
 			
 			$oUser = null;
@@ -165,7 +164,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 				$oOAuthAccount->IdUser = $oAccountOld->IdUser;
 				$this->oManager->updateAccount($oOAuthAccount);
 				
-				$oUser = $oCoreModuleDecorator->GetUser($oOAuthAccount->IdUser);
+				$oUser = \Aurora\Modules\Core\Module::Decorator()->GetUserUnchecked($oOAuthAccount->IdUser);
 			}
 			else
 			{
@@ -196,10 +195,10 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 					
 					try
 					{
-						$iUserId = $oCoreModuleDecorator->CreateUser(0, $oOAuthAccount->Email);
+						$iUserId = \Aurora\Modules\Core\Module::Decorator()->CreateUser(0, $oOAuthAccount->Email);
 						if ($iUserId)
 						{
-							$oUser = $oCoreModuleDecorator->GetUser($iUserId);
+							$oUser = \Aurora\Modules\Core\Module::Decorator()->GetUserUnchecked($iUserId);
 						}
 					}
 					catch (\Aurora\System\Exceptions\ApiException $oException)
