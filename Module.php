@@ -227,14 +227,8 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 				if ($oUser)
 				{
 					$sAuthToken = \Aurora\System\Api::UserSession()->Set(
-						array(
-							'token' => 'auth',
-							'sign-me' => true,
-							'id' => $oUser->EntityId,
-							'time' => \time() + 60 * 60 * 24 * 30,
-							'account' => $oOAuthAccount->EntityId,
-							'account_type' => $oOAuthAccount->getName()
-						)
+						\Aurora\System\UserSession::getTokenData($oOAuthAccount, true),
+						\time() + 60 * 60 * 24 * 30
 					);
 					@\setcookie(\Aurora\System\Application::AUTH_TOKEN_KEY, $sAuthToken, \strtotime('+30 days'), 
 							\Aurora\System\Api::getCookiePath(), null, \Aurora\System\Api::getCookieSecure());
