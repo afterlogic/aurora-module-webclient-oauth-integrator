@@ -157,7 +157,6 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 				}
 				
 				$oOAuthAccount->setScopes(
-//					array_merge($oAccountOld->getScopesAsArray(), $mResult['scopes'])						
 					$mResult['scopes']
 				);
 				$oOAuthAccount->EntityId = $oAccountOld->EntityId;

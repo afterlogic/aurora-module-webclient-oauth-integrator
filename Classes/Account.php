@@ -46,7 +46,10 @@ class Account extends \Aurora\System\EAV\Entity
 		if (!$this->Disabled)
 		{
 			$aResult = array_map(function($sValue) {
-					return strtolower($sValue);
+					if (!empty($sValue))
+					{
+						return strtolower($sValue);
+					}
 				}, explode(' ', $this->Scopes)	
 			);	
 		}
