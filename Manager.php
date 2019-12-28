@@ -37,19 +37,10 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 		$mResult = false;
 		try
 		{
-			$aEntities = $this->oEavManager->getEntities(
-				Classes\Account::class,
-				array(),
-				0,
-				0,
-				array(
-					'IdUser' => $iUserId,
-					'Type' => $sType
-				));
-			if (is_array($aEntities) && count($aEntities) > 0)
-			{
-				$mResult = $aEntities[0];
-			}
+			$mResult = (new \Aurora\System\EAV\Query(Classes\Account::class))
+				->where(['IdUser' => $iUserId, 'Type' => $sType])
+				->one()
+				->exec();
 		}
 		catch (\Aurora\System\Exceptions\BaseException $oException)
 		{
@@ -70,21 +61,10 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 		$mResult = false;
 		try
 		{
-			$aEntities = $this->oEavManager->getEntities(
-				Classes\Account::class,
-				array(),
-				0,
-				0,
-				array(
-					'IdSocial' => $sIdSocial,
-					'Type' => $sType
-				)
-			);
-			if (is_array($aEntities) && count($aEntities) > 0)
-			{
-				$mResult = $aEntities[0];
-			}
-			
+			$mResult = (new \Aurora\System\EAV\Query(Classes\Account::class))
+				->where(['IdSocial' => $sIdSocial, 'Type' => $sType])
+				->one()
+				->exec();
 		}
 		catch (\Aurora\System\Exceptions\BaseException $oException)
 		{
@@ -104,14 +84,9 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 		$aResult = false;
 		try
 		{
-			$aResult = $this->oEavManager->getEntities(
-				Classes\Account::class,
-				array(),
-				0,
-				0,
-				array(
-					'IdUser' => $iIdUser
-				));
+			$aResult = (new \Aurora\System\EAV\Query(Classes\Account::class))
+				->where(['IdUser' => $iIdUser])
+				->exec();			
 		}
 		catch (\Aurora\System\Exceptions\BaseException $oException)
 		{
