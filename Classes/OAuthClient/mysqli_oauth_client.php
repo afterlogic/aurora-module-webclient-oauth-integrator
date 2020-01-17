@@ -112,7 +112,7 @@ class mysqli_oauth_client_class extends database_oauth_client_class
 					for($c = 0; $c < $tc; ++$c)
 					{
 						if(!IsSet($row[$c]))
-							continue 2;
+							continue;
 						switch($result_types[$c])
 						{
 							case 'b':
