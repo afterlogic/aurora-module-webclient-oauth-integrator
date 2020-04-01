@@ -38,7 +38,12 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 		try
 		{
 			$mResult = (new \Aurora\System\EAV\Query(Classes\Account::class))
-				->where(['IdUser' => $iUserId, 'Type' => $sType])
+				->where([
+					'$AND' => [
+						'IdUser' => $iUserId, 
+						'Type' => $sType
+					]
+				])
 				->one()
 				->exec();
 		}
@@ -62,7 +67,12 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 		try
 		{
 			$mResult = (new \Aurora\System\EAV\Query(Classes\Account::class))
-				->where(['IdSocial' => $sIdSocial, 'Type' => $sType])
+				->where([
+					'$AND' => [
+						'IdSocial' => $sIdSocial, 
+						'Type' => $sType
+					]
+				])
 				->one()
 				->exec();
 		}
