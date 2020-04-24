@@ -185,7 +185,7 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 			$oSocial = $this->getAccount($iIdUser, $sType);
 			if ($oSocial)
 			{
-				if (!$this->oEavManager->deleteEntity($oSocial->EntityId))
+				if (!$this->oEavManager->deleteEntity($oSocial->EntityId, \Aurora\Modules\OAuthIntegratorWebclient\Classes\Account::class))
 				{
 					throw new \Aurora\System\Exceptions\ManagerException(Errs::UsersManager_UserDeleteFailed);
 				}
@@ -216,7 +216,7 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 			{
 				if ($oSocial)
 				{
-					if (!$this->oEavManager->deleteEntity($oSocial->EntityId))
+					if (!$this->oEavManager->deleteEntity($oSocial->EntityId, \Aurora\Modules\OAuthIntegratorWebclient\Classes\Account::class))
 					{
 						throw new \Aurora\System\Exceptions\ManagerException(Errs::UsersManager_UserDeleteFailed);
 					}
