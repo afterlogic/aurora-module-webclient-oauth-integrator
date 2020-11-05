@@ -112,7 +112,7 @@
 		"Dropbox2v2":
 		{
 			"oauth_version": "2.0",
-			"dialog_url": "https://api.dropbox.com/oauth2/authorize?response_type=code&client_id={CLIENT_ID}&redirect_uri={REDIRECT_URI}&scope={SCOPE}&state={STATE}",
+			"dialog_url": "https://api.dropbox.com/oauth2/authorize?response_type=code&client_id={CLIENT_ID}&redirect_uri={REDIRECT_URI}&state={STATE}",
 			"access_token_url": "https://www.dropbox.com/oauth2/token"
 		},
 
