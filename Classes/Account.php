@@ -38,7 +38,7 @@ class Account extends \Aurora\System\EAV\Entity
 		'RefreshToken'	=> array('string', ''),
 		'Scopes'		=> array('string', ''),
 		'Disabled'		=> array('bool', false)
-	);	
+	);
 
 	public function getScopesAsArray()
 	{
@@ -50,13 +50,13 @@ class Account extends \Aurora\System\EAV\Entity
 					{
 						return strtolower($sValue);
 					}
-				}, explode(' ', $this->Scopes)	
-			);	
+				}, explode(' ', $this->Scopes)
+			);
 		}
-		
+
 		return $aResult;
 	}
-	
+
 	/**
 	 * @param string $sScope
 	 *
@@ -65,8 +65,8 @@ class Account extends \Aurora\System\EAV\Entity
 	public function issetScope($sScope)
 	{
 		return /*'' === $this->Scopes || */false !== strpos(strtolower($this->Scopes), strtolower($sScope));
-	}	
-	
+	}
+
 	/**
 	 * @param string $sScope
 	 */
@@ -78,15 +78,15 @@ class Account extends \Aurora\System\EAV\Entity
 			$aScopes[] = $sScope;
 			$this->Scopes = implode(' ', array_unique($aScopes));
 		}
-	}	
-	
+	}
+
 	/**
 	 * @param array $aScopes
 	 */
 	public function setScopes($aScopes)
 	{
 		$this->Scopes = implode(' ', array_unique(array_merge($aScopes, $this->getScopesAsArray())));
-	}	
+	}
 
 	/**
 	 * @param string $sScope
@@ -95,7 +95,7 @@ class Account extends \Aurora\System\EAV\Entity
 	{
 		$aScopes = array_map(function($sValue) {
 				return strtolower($sValue);
-			}, explode(' ', $this->Scopes)	
+			}, explode(' ', $this->Scopes)
 		);
 		$mResult = array_search($sScope, $aScopes);
 		if ($mResult !== false)
@@ -103,8 +103,8 @@ class Account extends \Aurora\System\EAV\Entity
 			unset($aScopes[$mResult]);
 			$this->Scopes = implode(' ', $aScopes);
 		}
-	}	
-	
+	}
+
 	public function toResponseArray()
 	{
 		return $this->toArray();

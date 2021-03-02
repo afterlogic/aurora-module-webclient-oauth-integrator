@@ -45,6 +45,10 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 		$this->includeTemplate('StandardRegisterFormWebclient_RegisterView', 'Register-After', 'templates/SignInButtonsView.html', self::GetName());
 		$this->subscribeEvent('Core::DeleteUser::after', array($this, 'onAfterDeleteUser'));
 		$this->subscribeEvent('Core::GetAccounts', array($this, 'onGetAccounts'));
+
+		$this->denyMethodsCallByWebApi([
+			'GetAccessToken'
+		]);
 	}
 
 	/**
@@ -98,6 +102,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 		$aArgs = array(
 			'Service' => $this->oHttp->GetQuery('oauth', '')
 		);
+
 		$this->broadcastEvent(
 			'OAuthIntegratorAction',
 			$aArgs,
@@ -260,7 +265,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 			}
 			else
 			{
-				$sResult = $mResult !== false ? 'true' : 'false';
+				$sResult = $mResult !== false ? \json_encode($mResult) : 'false';
 				$sErrorCode = '';
 
 				if ($oUser && $iAuthUserId && $oUser->EntityId !== $iAuthUserId)
@@ -426,7 +431,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 	{
 		\Aurora\System\Api::checkUserRoleIsAtLeast(\Aurora\System\Enums\UserRole::NormalUser);
 
-		$aArgs = [];
+		$aArgs = [$Type];
 		$mResult = false;
 		$this->broadcastEvent(
 			'RevokeAccessToken',
@@ -437,6 +442,26 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 			\Aurora\System\Api::getAuthenticatedUserId(),
 			$Type
 		);
+	}
+
+	public function GetAccessToken($sType)
+	{
+		$mResult = false;
+		$oAccount = $this->GetAccount($sType);
+		if ($oAccount)
+		{
+			$aArgs = [
+				'Service' => $sType,
+				'Account' => $oAccount
+			];
+			$this->broadcastEvent(
+				'GetAccessToken',
+				$aArgs,
+				$mResult
+			);
+		}
+
+		return $mResult;
 	}
 	/***** public functions might be called with web API *****/
 }
