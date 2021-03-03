@@ -431,7 +431,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 	{
 		\Aurora\System\Api::checkUserRoleIsAtLeast(\Aurora\System\Enums\UserRole::NormalUser);
 
-		$aArgs = [$Type];
+		$aArgs = ['Service' => $Type];
 		$mResult = false;
 		$this->broadcastEvent(
 			'RevokeAccessToken',
