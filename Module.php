@@ -467,12 +467,12 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 	public function CreateMailAccount($OAuthAccountData)
 	{
 		$UserId = \Aurora\Api::getAuthenticatedUserId();
-		$FriendlyName = $OAuthAccountData->name;
-		$Email = $OAuthAccountData->email;
-		$IncomingLogin = $OAuthAccountData->email;
+		$FriendlyName = $OAuthAccountData['name'];
+		$Email = $OAuthAccountData['email'];
+		$IncomingLogin = $OAuthAccountData['email'];
 
 		$IncomingPassword = '';
-		\Aurora\Modules\Mail\Module::Decorator()->CreateAccount($UserId, $FriendlyName, $Email, $IncomingLogin, $IncomingPassword, null, $OAuthAccountData->type);
+		\Aurora\Modules\Mail\Module::Decorator()->CreateAccount($UserId, $FriendlyName, $Email, $IncomingLogin, $IncomingPassword, null, $OAuthAccountData['type']);
 	}
 	/***** public functions might be called with web API *****/
 }
