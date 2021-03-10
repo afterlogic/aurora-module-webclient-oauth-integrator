@@ -99,6 +99,23 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 	public function OAuthIntegratorEntry()
 	{
 		$mResult = false;
+		$sOAuthArg = $this->oHttp->GetQuery('oauth', '');
+		$sOAuthArg = \explode('-', $sOAuthArg);
+
+		if (isset($sOAuthArg[1]) && $sOAuthArg[1] === 'connect')
+		{
+			$aArgs['Service'] = $sOAuthArg[0];
+			$this->broadcastEvent(
+				'ResetAccessToken',
+				$aArgs,
+				$mResult
+			);
+			$mResult = false;
+			setcookie('oauth-redirect', 'connect');
+			\Aurora\System\Api::Location2('./?oauth=' . $sOAuthArg[0]);
+			return true;
+		}
+
 		$aArgs = array(
 			'Service' => $this->oHttp->GetQuery('oauth', '')
 		);
@@ -148,7 +165,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 			$oOAuthAccount->Email = $mResult['email'];
 
 			$oAccountOld = $this->oManager->getAccountById($oOAuthAccount->IdSocial, $oOAuthAccount->Type);
-			if ($oAccountOld)
+			if ($oAccountOld && !$oAccountOld->issetScope('mail'))
 			{
 				if ($sOAuthIntegratorRedirect === 'register')
 				{
@@ -305,13 +322,14 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 	 * @param string $Type Type of oauth account.
 	 * @return \Aurora\Modules\OAuthIntegratorWebclient\Classes\Account
 	 */
-	public function GetAccount($Type)
+	public function GetAccount($Type, $Email = '')
 	{
 		\Aurora\System\Api::checkUserRoleIsAtLeast(\Aurora\System\Enums\UserRole::NormalUser);
 
 		return $this->oManager->getAccount(
 			\Aurora\System\Api::getAuthenticatedUserId(),
-			$Type
+			$Type,
+			$Email
 		);
 	}
 
@@ -407,15 +425,19 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 		$mAccounts = $this->oManager->getAccounts($UserId);
 		if (\is_array($mAccounts))
 		{
-			foreach ($mAccounts as $oAccount) {
-				$aResult[] = array(
-					'Id' => $oAccount->EntityId,
-					'UUID' => $oAccount->UUID,
-					'Type' => $oAccount->Type,
-					'Email' => $oAccount->Email,
-					'Name' => $oAccount->Name,
-					'Scopes' => $oAccount->Scopes,
-				);
+			foreach ($mAccounts as $oAccount) 
+			{
+				if (!$oAccount->issetScope('mail'))
+				{
+					$aResult[] = array(
+						'Id' => $oAccount->EntityId,
+						'UUID' => $oAccount->UUID,
+						'Type' => $oAccount->Type,
+						'Email' => $oAccount->Email,
+						'Name' => $oAccount->Name,
+						'Scopes' => $oAccount->Scopes,
+					);
+				}
 			}
 		}
 		return $aResult;
@@ -427,27 +449,31 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 	 * @param string $Type Type of oauth account.
 	 * @return boolean
 	 */
-	public function DeleteAccount($Type)
+	public function DeleteAccount($Type, $Email = '')
 	{
 		\Aurora\System\Api::checkUserRoleIsAtLeast(\Aurora\System\Enums\UserRole::NormalUser);
 
-		$aArgs = ['Service' => $Type];
+		$aArgs = [
+			'Service' => $Type,
+			'Email' => $Email
+		];
 		$mResult = false;
 		$this->broadcastEvent(
-			'RevokeAccessToken',
+			'ResetAccessToken',
 			$aArgs,
 			$mResult
 		);
 		return $this->oManager->deleteAccount(
 			\Aurora\System\Api::getAuthenticatedUserId(),
-			$Type
+			$Type,
+			$Email
 		);
 	}
 
-	public function GetAccessToken($sType)
+	public function GetAccessToken($sType, $sEmail)
 	{
 		$mResult = false;
-		$oAccount = $this->GetAccount($sType);
+		$oAccount = $this->GetAccount($sType, $sEmail);
 		if ($oAccount)
 		{
 			$aArgs = [

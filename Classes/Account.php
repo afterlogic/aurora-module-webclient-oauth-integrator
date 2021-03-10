@@ -37,7 +37,8 @@ class Account extends \Aurora\System\EAV\Entity
 		'AccessToken'	=> array('text', ''),
 		'RefreshToken'	=> array('string', ''),
 		'Scopes'		=> array('string', ''),
-		'Disabled'		=> array('bool', false)
+		'Disabled'		=> array('bool', false),
+		'AccountType'   => array('string', 'oauth', true)
 	);
 
 	public function getScopesAsArray()

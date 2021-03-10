@@ -32,6 +32,9 @@ class Connector
 
 	public function Init($sId, $sSecret, $sScope = '') {}
 
+	/**
+	 * @return \oauth_client_class
+	 */
 	public function CreateClient($sId, $sSecret, $sScopes) {}
 
 	public function GetAccessToken($Id, $sSecret)
@@ -47,22 +50,37 @@ class Connector
 		return $mAccessToken;
 	}
 
-	public function RevokeAccessToken($Id, $sSecret)
+	public function RevokeAccessToken($Id, $sSecret, $sAccessToken = "")
 	{
 		$oClient = $this->CreateClient($Id, $sSecret, "");
 		if($oClient)
 		{
-			$oUser = null;
 			if(($bSuccess = $oClient->Initialize()))
 			{
 				if($bSuccess = $oClient->CheckAccessToken($sRedirectUrl))
 				{
 					if(!IsSet($sRedirectUrl))
 					{
+						if (!empty($sAccessToken))
+						{
+							$oClient->access_token = $sAccessToken;
+						}
 						$bSuccess = $oClient->RevokeToken();
 					}
 				}
 				$bSuccess = $oClient->Finalize($bSuccess);
+			}
+		}
+	}
+
+	public function ResetAccessToken($Id, $sSecret)
+	{
+		$oClient = $this->CreateClient($Id, $sSecret, "");
+		if($oClient)
+		{
+			if(($bSuccess = $oClient->Initialize()))
+			{
+				$oClient->ResetAccessToken();
 			}
 		}
 	}
