@@ -498,7 +498,18 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 		$IncomingLogin = $OAuthAccountData['email'];
 
 		$IncomingPassword = '';
-		return \Aurora\Modules\Mail\Module::Decorator()->CreateAccount($UserId, $FriendlyName, $Email, $IncomingLogin, $IncomingPassword, null, $OAuthAccountData['type']);
+		$mResult = \Aurora\Modules\Mail\Module::Decorator()->CreateAccount($UserId, $FriendlyName, $Email, $IncomingLogin, $IncomingPassword, null, $OAuthAccountData['type']);
+
+		if ($mResult instanceof \Aurora\Modules\Mail\Classes\Account)
+		{
+			$oResException = \Aurora\Modules\Mail\Module::getInstance()->getMailManager()->validateAccountConnection($mResult, false);
+			if ($oResException instanceof \Exception)
+			{
+				\Aurora\Modules\Mail\Module::Decorator()->DeleteAccount($mResult->EntityId);
+				throw new \Aurora\System\Exceptions\ApiException(0, $oResException, $this->i18N('ERROR_ACCOUNT_IMAP_VALIDATION_FAILED'));
+			}
+		}
+		return $mResult;
 	}
 	/***** public functions might be called with web API *****/
 }
