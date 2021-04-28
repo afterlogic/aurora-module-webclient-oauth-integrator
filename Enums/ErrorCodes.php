@@ -17,7 +17,8 @@ class ErrorCodes
 	const ServiceNotAllowed = 1;
 	const AccountNotAllowedToLogIn = 2;
 	const AccountAlreadyConnected = 3;
-	
+	const NotConfigured = 4;
+
 	/**
 	 * @var array
 	 */
@@ -25,5 +26,6 @@ class ErrorCodes
 		'ServiceNotAllowed' => self::ServiceNotAllowed,
 		'AccountNotAllowedToLogIn' => self::AccountNotAllowedToLogIn,
 		'AccountAlreadyConnected' => self::AccountAlreadyConnected,
+		'NotConfigured' => self::NotConfigured,
 	];
 }

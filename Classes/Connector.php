@@ -95,6 +95,11 @@ class Connector
 			if(($bSuccess = $oClient->Initialize()))
 			{
 				$aResult = $oClient->RefreshToken($RefreshToken);
+
+				if (isset($aResult['error']))
+				{
+					throw new \Aurora\System\Exceptions\ApiException(0, null, 'An error occurred while refreshing the access token: ' . $aResult['error']);
+				}
 			}
 		}
 
