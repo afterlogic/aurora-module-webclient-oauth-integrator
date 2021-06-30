@@ -7,6 +7,8 @@
 
 namespace Aurora\Modules\OAuthIntegratorWebclient;
 
+use Aurora\Modules\OAuthIntegratorWebclient\Models\OauthAccount;
+
 /**
  * @license https://www.gnu.org/licenses/agpl-3.0.html AGPL-3.0
  * @license https://afterlogic.com/products/common-licensing Afterlogic Software License
@@ -14,43 +16,29 @@ namespace Aurora\Modules\OAuthIntegratorWebclient;
  */
 class Manager extends \Aurora\System\Managers\AbstractManager
 {
-	/**
-	 * @var \Aurora\System\Managers\Eav
-	 */
-	public $oEavManager = null;
-	
 	public function __construct(\Aurora\System\Module\AbstractModule $oModule = null)
 	{
 		parent::__construct($oModule);
-		
-		$this->oEavManager = \Aurora\System\Managers\Eav::getInstance();
 	}
-	
+
 	/**
 	 * @param int $iUserId
 	 * @param string $sType
 	 *
-	 * @return \Aurora\Modules\OAuthIntegratorWebclient\Classes\Account
+	 * @return \Aurora\Modules\OAuthIntegratorWebclient\Models\OauthAccount
 	 */
 	public function getAccount($iUserId, $sType, $sEmail = '')
 	{
 		$mResult = false;
-		$aWhere = [
-			'IdUser' => $iUserId, 
-			'Type' => $sType
-		];
+
+		$oQuery = OauthAccount::where('IdUser', $iUserId)->where('Type', $sType);
 		if (!empty($sEmail))
 		{
-			$aWhere['Email'] = $sEmail;
+			$oQuery = $oQuery->where('Email', $sEmail);
 		}
 		try
 		{
-			$mResult = (new \Aurora\System\EAV\Query(Classes\Account::class))
-				->where([
-					'$AND' => $aWhere
-				])
-				->one()
-				->exec();
+			$mResult = $oQuery->first();
 		}
 		catch (\Aurora\System\Exceptions\BaseException $oException)
 		{
@@ -58,8 +46,8 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 			$this->setLastException($oException);
 		}
 		return $mResult;
-	}	
-	
+	}
+
 	/**
 	 * @param string $sIdSocial
 	 * @param string $sType
@@ -71,15 +59,7 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 		$mResult = false;
 		try
 		{
-			$mResult = (new \Aurora\System\EAV\Query(Classes\Account::class))
-				->where([
-					'$AND' => [
-						'IdSocial' => $sIdSocial, 
-						'Type' => $sType
-					]
-				])
-				->one()
-				->exec();
+			$mResult = OauthAccount::where('IdSocial', $sIdSocial)->where('Type', $sType)->first();
 		}
 		catch (\Aurora\System\Exceptions\BaseException $oException)
 		{
@@ -87,8 +67,8 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 			$this->setLastException($oException);
 		}
 		return $mResult;
-	}		
-	
+	}
+
 	/**
 	 * @param int $iIdUser
 	 *
@@ -99,9 +79,7 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 		$aResult = false;
 		try
 		{
-			$aResult = (new \Aurora\System\EAV\Query(Classes\Account::class))
-				->where(['IdUser' => $iIdUser])
-				->exec();			
+			$aResult = OauthAccount::where('IdUser', $iIdUser)->get();
 		}
 		catch (\Aurora\System\Exceptions\BaseException $oException)
 		{
@@ -109,14 +87,14 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 			$this->setLastException($oException);
 		}
 		return $aResult;
-	}	
-	
+	}
+
 	/**
-	 * @param \Aurora\Modules\OAuthIntegratorWebclient\Classes\Account &$oAccount
+	 * @param \Aurora\Modules\OAuthIntegratorWebclient\Models\OauthAccount &$oAccount
 	 *
 	 * @return bool
 	 */
-	public function createAccount(\Aurora\Modules\OAuthIntegratorWebclient\Classes\Account &$oAccount)
+	public function createAccount(OauthAccount &$oAccount)
 	{
 		$bResult = false;
 		try
@@ -125,14 +103,14 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 			{
 				if (!$this->isExists($oAccount))
 				{
-					if (!$this->oEavManager->saveEntity($oAccount))
+					if (!$oAccount->save())
 					{
-						throw new \Aurora\System\Exceptions\ManagerException(Errs::UsersManager_UserCreateFailed);
+						throw new \Aurora\System\Exceptions\ManagerException(0);
 					}
 				}
 				else
 				{
-					throw new \Aurora\System\Exceptions\ManagerException(Errs::UsersManager_UserAlreadyExists);
+					throw new \Aurora\System\Exceptions\ManagerException(0);
 				}
 			}
 
@@ -148,20 +126,20 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 	}
 
 	/**
-	 * @param \Aurora\Modules\OAuthIntegratorWebclient\Classes\Account &$oAccount
+	 * @param \Aurora\Modules\OAuthIntegratorWebclient\Models\OauthAccount &$oAccount
 	 *
 	 * @return bool
 	 */
-	public function updateAccount(\Aurora\Modules\OAuthIntegratorWebclient\Classes\Account &$oAccount)
+	public function updateAccount(OauthAccount &$oAccount)
 	{
 		$bResult = false;
 		try
 		{
 			if ($oAccount->validate())
 			{
-				if (!$this->oEavManager->saveEntity($oAccount))
+				if (!$oAccount->save())
 				{
-					throw new \Aurora\System\Exceptions\ManagerException(Errs::UsersManager_UserCreateFailed);
+					throw new \Aurora\System\Exceptions\ManagerException(0);
 				}
 			}
 
@@ -175,7 +153,7 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 
 		return $bResult;
 	}
-	
+
 	/**
 	 * @param int $iIdUser
 	 * @param string $sType
@@ -190,9 +168,10 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 			$oSocial = $this->getAccount($iIdUser, $sType, $sEmail);
 			if ($oSocial)
 			{
-				if (!$this->oEavManager->deleteEntity($oSocial->EntityId, \Aurora\Modules\OAuthIntegratorWebclient\Classes\Account::class))
+
+				if (!$oSocial->delete())
 				{
-					throw new \Aurora\System\Exceptions\ManagerException(Errs::UsersManager_UserDeleteFailed);
+					throw new \Aurora\System\Exceptions\ManagerException(0);
 				}
 				$bResult = true;
 			}
@@ -205,7 +184,7 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 
 		return $bResult;
 	}
-	
+
 	/**
 	 * @param int $iIdUser
 	 *
@@ -221,9 +200,9 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 			{
 				if ($oSocial)
 				{
-					if (!$this->oEavManager->deleteEntity($oSocial->EntityId, \Aurora\Modules\OAuthIntegratorWebclient\Classes\Account::class))
+					if (!$oSocial->delete())
 					{
-						throw new \Aurora\System\Exceptions\ManagerException(Errs::UsersManager_UserDeleteFailed);
+						throw new \Aurora\System\Exceptions\ManagerException(0);
 					}
 				}
 			}
@@ -237,24 +216,22 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 
 		return $bResult;
 
-	}	
-	
+	}
+
 	/**
-	 * @param \Aurora\Modules\OAuthIntegratorWebclient\Classes\Account &$oAccount
+	 * @param \Aurora\Modules\OAuthIntegratorWebclient\Models\OauthAccount &$oAccount
 	 *
 	 * @return bool
 	 */
-	public function isExists(\Aurora\Modules\OAuthIntegratorWebclient\Classes\Account $oAccount)
+	public function isExists(OauthAccount $oAccount)
 	{
-		$bResult = false;
-		
-		$oResult = $this->oEavManager->getEntity($oAccount->EntityId, Classes\Account::class);
-				
-		if ($oResult instanceof Classes\Account)
+		$oResult = OauthAccount::find($oAccount->Id);
+
+		if ($oResult instanceof Models\OauthAccount)
 		{
 			$bResult = true;
 		}
-		
+
 		return $bResult;
-	}	
+	}
 }

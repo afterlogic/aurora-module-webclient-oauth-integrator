@@ -81,7 +81,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 			{
 				foreach ($mAccounts as $oAccount) {
 					$aResult[] = array(
-						'Id' => $oAccount->EntityId,
+						'Id' => $oAccount->Id,
 						'UUID' => $oAccount->UUID,
 						'Type' => $oAccount->getName(),
 						'Email' => $oAccount->Email
@@ -156,7 +156,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 						null, \Aurora\System\Api::getCookieSecure());
 			}
 
-			$oOAuthAccount = new Classes\Account(self::GetName());
+			$oOAuthAccount = new Models\OauthAccount();
 			$oOAuthAccount->Type = $mResult['type'];
 			$oOAuthAccount->AccessToken = isset($mResult['access_token']) ? $mResult['access_token'] : '';
 			$oOAuthAccount->RefreshToken = isset($mResult['refresh_token']) ? $mResult['refresh_token'] : '';
@@ -184,7 +184,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 				$oOAuthAccount->setScopes(
 					$mResult['scopes']
 				);
-				$oOAuthAccount->EntityId = $oAccountOld->EntityId;
+				$oOAuthAccount->Id = $oAccountOld->Id;
 				$oOAuthAccount->IdUser = $oAccountOld->IdUser;
 				$this->oManager->updateAccount($oOAuthAccount);
 
@@ -212,7 +212,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 					$oUser
 				);
 
-				if (!($oUser instanceOf \Aurora\Modules\Core\Classes\User)  &&
+				if (!($oUser instanceOf \Aurora\Modules\Core\Models\User)  &&
 						($sOAuthIntegratorRedirect === 'register' || $this->getConfig('AllowNewUsersRegister', false)))
 				{
 					$bPrevState = \Aurora\System\Api::skipCheckUserRole(true);
@@ -238,9 +238,9 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 					\Aurora\System\Api::skipCheckUserRole($bPrevState);
 				}
 
-				if ($oUser instanceOf \Aurora\Modules\Core\Classes\User)
+				if ($oUser instanceOf \Aurora\Modules\Core\Models\User)
 				{
-					$oOAuthAccount->IdUser = $oUser->EntityId;
+					$oOAuthAccount->IdUser = $oUser->Id;
 					$oOAuthAccount->setScopes($mResult['scopes']);
 					$this->oManager->createAccount($oOAuthAccount);
 				}
@@ -285,7 +285,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 				$sResult = $mResult !== false ? \json_encode($mResult) : 'false';
 				$sErrorCode = '';
 
-				if ($oUser && $iAuthUserId && $oUser->EntityId !== $iAuthUserId)
+				if ($oUser && $iAuthUserId && $oUser->Id !== $iAuthUserId)
 				{
 					$sResult = 'false';
 					$sErrorCode = Enums\ErrorCodes::AccountAlreadyConnected;
@@ -320,7 +320,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 	 * Returns oauth account with specified type.
 	 *
 	 * @param string $Type Type of oauth account.
-	 * @return \Aurora\Modules\OAuthIntegratorWebclient\Classes\Account
+	 * @return \Aurora\Modules\OAuthIntegratorWebclient\Models\OauthAccount
 	 */
 	public function GetAccount($Type, $Email = '')
 	{
@@ -336,10 +336,10 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 	/**
 	 * Updates oauth acount.
 	 *
-	 * @param \Aurora\Modules\OAuthIntegratorWebclient\Classes\Account $oAccount Oauth account.
+	 * @param \Aurora\Modules\OAuthIntegratorWebclient\Models\OauthAccount $oAccount Oauth account.
 	 * @return boolean
 	 */
-	public function UpdateAccount(\Aurora\Modules\OAuthIntegratorWebclient\Classes\Account $oAccount)
+	public function UpdateAccount(\Aurora\Modules\OAuthIntegratorWebclient\Models\OauthAccount $oAccount)
 	{
 		return $this->oManager->updateAccount($oAccount);
 	}
@@ -430,7 +430,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 				if (!$oAccount->issetScope('mail'))
 				{
 					$aResult[] = array(
-						'Id' => $oAccount->EntityId,
+						'Id' => $oAccount->Id,
 						'UUID' => $oAccount->UUID,
 						'Type' => $oAccount->Type,
 						'Email' => $oAccount->Email,
@@ -500,12 +500,12 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 		$IncomingPassword = '';
 		$mResult = \Aurora\Modules\Mail\Module::Decorator()->CreateAccount($UserId, $FriendlyName, $Email, $IncomingLogin, $IncomingPassword, null, $OAuthAccountData['type']);
 
-		if ($mResult instanceof \Aurora\Modules\Mail\Classes\Account)
+		if ($mResult instanceof \Aurora\Modules\Mail\Models\MailAccount)
 		{
 			$oResException = \Aurora\Modules\Mail\Module::getInstance()->getMailManager()->validateAccountConnection($mResult, false);
 			if ($oResException instanceof \Exception)
 			{
-				\Aurora\Modules\Mail\Module::Decorator()->DeleteAccount($mResult->EntityId);
+				\Aurora\Modules\Mail\Module::Decorator()->DeleteAccount($mResult->Id);
 				throw new \Aurora\System\Exceptions\ApiException(0, $oResException, $this->i18N('ERROR_ACCOUNT_IMAP_VALIDATION_FAILED'));
 			}
 		}
