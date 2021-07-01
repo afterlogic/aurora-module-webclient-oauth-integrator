@@ -20,7 +20,7 @@ class CreateOauthAccountsTable extends Migration
             $table->string('Type')->default('');
             $table->string('Name')->default('');
             $table->string('Email')->default('');
-            $table->text('AccessToken')->default('');
+            $table->text('AccessToken');
             $table->string('RefreshToken')->default('');
             $table->string('Scopes')->default('');
             $table->boolean('Disabled')->default(false);
