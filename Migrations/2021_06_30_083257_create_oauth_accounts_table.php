@@ -25,7 +25,9 @@ class CreateOauthAccountsTable extends Migration
             $table->string('Scopes')->default('');
             $table->boolean('Disabled')->default(false);
             $table->string('AccountType')->default('oauth');
-            $table->timestamps();
+            $table->timestamp(\Aurora\System\Classes\Model::CREATED_AT)->nullable();
+            $table->timestamp(\Aurora\System\Classes\Model::UPDATED_AT)->nullable();
+
         });
     }
 
