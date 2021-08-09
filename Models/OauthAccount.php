@@ -7,6 +7,7 @@ use Aurora\System\Classes\Model;
 class OauthAccount extends Model
 {
     protected $fillable = [
+		'Id',
 		'IdUser',
 		'IdSocial',
 		'Type',
