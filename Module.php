@@ -186,7 +186,17 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 				);
 				$oOAuthAccount->Id = $oAccountOld->Id;
 				$oOAuthAccount->IdUser = $oAccountOld->IdUser;
-				$this->oManager->updateAccount($oOAuthAccount);
+
+				$oAccountOld->Type = $mResult['type'];
+				$oAccountOld->AccessToken = isset($mResult['access_token']) ? $mResult['access_token'] : '';
+				$oAccountOld->RefreshToken = isset($mResult['refresh_token']) ? $mResult['refresh_token'] : '';
+				$oAccountOld->IdSocial = $mResult['id'];
+				$oAccountOld->Name = $mResult['name'];
+				$oAccountOld->Email = $mResult['email'];
+				$oAccountOld->setScopes(
+					$mResult['scopes']
+				);
+				$this->oManager->updateAccount($oAccountOld);
 
 				$oUser = \Aurora\Modules\Core\Module::Decorator()->GetUserUnchecked($oOAuthAccount->IdUser);
 			}
