@@ -77,17 +77,16 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 		{
 			$iUserId = $aUserInfo['userId'];
 			$mAccounts = $this->oManager->getAccounts($iUserId);
-			if (\is_array($mAccounts))
-			{
-				foreach ($mAccounts as $oAccount) {
-					$aResult[] = array(
-						'Id' => $oAccount->Id,
-						'UUID' => $oAccount->UUID,
-						'Type' => $oAccount->getName(),
-						'Email' => $oAccount->Email
-					);
-				}
+
+			foreach ($mAccounts as $oAccount) {
+				$aResult[] = array(
+					'Id' => $oAccount->Id,
+					'UUID' => '', //TODO
+					'Type' => $oAccount->getName(),
+					'Email' => $oAccount->Email
+				);
 			}
+
 		}
 	}
 	/***** private functions *****/
@@ -433,23 +432,22 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 		$UserId = \Aurora\System\Api::getAuthenticatedUserId();
 		$aResult = array();
 		$mAccounts = $this->oManager->getAccounts($UserId);
-		if (\is_array($mAccounts))
+
+		foreach ($mAccounts as $oAccount) 
 		{
-			foreach ($mAccounts as $oAccount) 
+			if (!$oAccount->issetScope('mail'))
 			{
-				if (!$oAccount->issetScope('mail'))
-				{
-					$aResult[] = array(
-						'Id' => $oAccount->Id,
-						'UUID' => $oAccount->UUID,
-						'Type' => $oAccount->Type,
-						'Email' => $oAccount->Email,
-						'Name' => $oAccount->Name,
-						'Scopes' => $oAccount->Scopes,
-					);
-				}
+				$aResult[] = array(
+					'Id' => $oAccount->Id,
+					'UUID' => '', //TODO
+					'Type' => $oAccount->Type,
+					'Email' => $oAccount->Email,
+					'Name' => $oAccount->Name,
+					'Scopes' => $oAccount->Scopes,
+				);
 			}
 		}
+
 		return $aResult;
 	}
 
