@@ -225,13 +225,6 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 	 */
 	public function isExists(OauthAccount $oAccount)
 	{
-		$oResult = OauthAccount::find($oAccount->Id);
-
-		if ($oResult instanceof Models\OauthAccount)
-		{
-			$bResult = true;
-		}
-
-		return $bResult;
+		return (OauthAccount::find($oAccount->Id) instanceof OauthAccount);
 	}
 }
