@@ -192,30 +192,7 @@ class Manager extends \Aurora\System\Managers\AbstractManager
 	 */
 	public function deleteAccountByUserId($iIdUser)
 	{
-		$bResult = false;
-		try
-		{
-			$aSocials = $this->getAccounts($iIdUser);
-			foreach ($aSocials as $oSocial)
-			{
-				if ($oSocial)
-				{
-					if (!$oSocial->delete())
-					{
-						throw new \Aurora\System\Exceptions\ManagerException(0);
-					}
-				}
-			}
-			$bResult = true;
-		}
-		catch (\Aurora\System\Exceptions\BaseException $oException)
-		{
-			$bResult = false;
-			$this->setLastException($oException);
-		}
-
-		return $bResult;
-
+		return !!OauthAccount::where('IdUser', $iIdUser)->delete();
 	}
 
 	/**
