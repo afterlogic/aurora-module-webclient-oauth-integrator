@@ -25,6 +25,6 @@ class AlterOauthAccountsTable extends Migration
     public function down()
     {
         $prefix = Capsule::connection()->getTablePrefix();
-        Capsule::statement("ALTER TABLE {$prefix}oauth_accounts ALTER COLUMN RefreshToken varchar(255)");
+        Capsule::statement("ALTER TABLE {$prefix}oauth_accounts MODIFY RefreshToken varchar(255)");
     }
 }
