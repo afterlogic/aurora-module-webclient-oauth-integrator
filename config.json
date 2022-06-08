@@ -1,18 +1,34 @@
 {
-	"Disabled": [
-		false,
-		"bool"
-	],
-    "AuthModuleName": [
-		"StandardAuth",
-		"string"
-	],
-    "OnlyPasswordForAccountCreate": [
-		true,
-		"bool"
-	],
-    "AllowNewUsersRegister": [
-        false,
-        "bool"
-    ]	
+  "Disabled": [
+    false,
+    "bool"
+  ],
+  "Disabled_Description": [
+    "",
+    "string"
+  ],
+  "AuthModuleName": [
+    "StandardAuth",
+    "string"
+  ],
+  "AuthModuleName_Description": [
+    "",
+    "string"
+  ],
+  "OnlyPasswordForAccountCreate": [
+    true,
+    "bool"
+  ],
+  "OnlyPasswordForAccountCreate_Description": [
+    "",
+    "string"
+  ],
+  "AllowNewUsersRegister": [
+    false,
+    "bool"
+  ],
+  "AllowNewUsersRegister_Description": [
+    "",
+    "string"
+  ]
 }
