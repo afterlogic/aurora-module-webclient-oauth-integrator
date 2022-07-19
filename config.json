@@ -4,7 +4,7 @@
 		"bool"
 	],
 	"Disabled_Description": [
-		"",
+		"Setting to true disables the module",
 		"string"
 	],
 	"AuthModuleName": [
@@ -12,7 +12,7 @@
 		"string"
 	],
 	"AuthModuleName_Description": [
-		"",
+		"Reserved for authentication by login/password that relies on database",
 		"string"
 	],
 	"OnlyPasswordForAccountCreate": [
@@ -20,7 +20,7 @@
 		"bool"
 	],
 	"OnlyPasswordForAccountCreate_Description": [
-		"",
+		"Enables adding password for Outlook Sync and Mobile Sync settings screen for otherwise passwordless accounts",
 		"string"
 	],
 	"AllowNewUsersRegister": [
@@ -28,7 +28,7 @@
 		"bool"
 	],
 	"AllowNewUsersRegister_Description": [
-		"",
+		"Enables creating new user account on first login with a social account",
 		"string"
 	]
 }
