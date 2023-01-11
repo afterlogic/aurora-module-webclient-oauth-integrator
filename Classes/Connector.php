@@ -35,7 +35,10 @@ class Connector
 	/**
 	 * @return \oauth_client_class
 	 */
-	public function CreateClient($sId, $sSecret, $sScopes) {}
+	public function CreateClient($sId, $sSecret, $sScopes) 
+	{
+		return null;
+	}
 
 	public function GetAccessToken($Id, $sSecret)
 	{

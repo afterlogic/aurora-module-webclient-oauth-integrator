@@ -363,6 +363,8 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 	public function GetServices()
 	{
 		\Aurora\System\Api::checkUserRoleIsAtLeast(\Aurora\System\Enums\UserRole::Anonymous);
+
+		return [];
 	}
 
 	/**
