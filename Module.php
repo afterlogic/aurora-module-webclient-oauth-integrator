@@ -7,6 +7,8 @@
 
 namespace Aurora\Modules\OAuthIntegratorWebclient;
 
+use Aurora\Api;
+
 /**
  * Brings oAuth support into Aurora platform.
  *
@@ -502,23 +504,33 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 
 	public function CreateMailAccount($OAuthAccountData)
 	{
+		$mResult = false;
+
 		$UserId = \Aurora\Api::getAuthenticatedUserId();
 		$FriendlyName = $OAuthAccountData['name'];
 		$Email = $OAuthAccountData['email'];
 		$IncomingLogin = $OAuthAccountData['email'];
 
 		$IncomingPassword = '';
-		$mResult = \Aurora\Modules\Mail\Module::Decorator()->CreateAccount($UserId, $FriendlyName, $Email, $IncomingLogin, $IncomingPassword, null, $OAuthAccountData['type']);
 
-		if ($mResult instanceof \Aurora\Modules\Mail\Models\MailAccount)
-		{
-			$oResException = \Aurora\Modules\Mail\Module::getInstance()->getMailManager()->validateAccountConnection($mResult, false);
-			if ($oResException instanceof \Exception)
+		$oMailModuleDecorator = Api::GetModuleDecorator('Mail');
+		if ($oMailModuleDecorator) {
+
+			$mResult = $oMailModuleDecorator->CreateAccount($UserId, $FriendlyName, $Email, $IncomingLogin, $IncomingPassword, null, $OAuthAccountData['type']);
+
+			if ($mResult)
 			{
-				\Aurora\Modules\Mail\Module::Decorator()->DeleteAccount($mResult->Id);
-				throw new \Aurora\System\Exceptions\ApiException(0, $oResException, $this->i18N('ERROR_ACCOUNT_IMAP_VALIDATION_FAILED'));
+				if (class_exists('\Aurora\Modules\Mail\Module')) {
+					$oResException = \Aurora\Modules\Mail\Module::getInstance()->getMailManager()->validateAccountConnection($mResult, false);
+					if ($oResException instanceof \Exception)
+					{
+						$oMailModuleDecorator->DeleteAccount($mResult->Id);
+						throw new \Aurora\System\Exceptions\ApiException(0, $oResException, $this->i18N('ERROR_ACCOUNT_IMAP_VALIDATION_FAILED'));
+					}
+				}
 			}
 		}
+
 		return $mResult;
 	}
 	/***** public functions might be called with web API *****/
