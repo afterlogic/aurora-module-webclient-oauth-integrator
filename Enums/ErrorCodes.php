@@ -14,18 +14,18 @@ namespace Aurora\Modules\OAuthIntegratorWebclient\Enums;
  */
 class ErrorCodes
 {
-	const ServiceNotAllowed = 1;
-	const AccountNotAllowedToLogIn = 2;
-	const AccountAlreadyConnected = 3;
-	const NotConfigured = 4;
+    public const ServiceNotAllowed = 1;
+    public const AccountNotAllowedToLogIn = 2;
+    public const AccountAlreadyConnected = 3;
+    public const NotConfigured = 4;
 
-	/**
-	 * @var array
-	 */
-	protected $aConsts = [
-		'ServiceNotAllowed' => self::ServiceNotAllowed,
-		'AccountNotAllowedToLogIn' => self::AccountNotAllowedToLogIn,
-		'AccountAlreadyConnected' => self::AccountAlreadyConnected,
-		'NotConfigured' => self::NotConfigured,
-	];
+    /**
+     * @var array
+     */
+    protected $aConsts = [
+        'ServiceNotAllowed' => self::ServiceNotAllowed,
+        'AccountNotAllowedToLogIn' => self::AccountNotAllowedToLogIn,
+        'AccountAlreadyConnected' => self::AccountAlreadyConnected,
+        'NotConfigured' => self::NotConfigured,
+    ];
 }

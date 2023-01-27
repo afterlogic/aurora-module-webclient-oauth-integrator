@@ -12,8 +12,8 @@ namespace Aurora\Modules\OAuthIntegratorWebclient\Exceptions;
  * @license https://afterlogic.com/products/common-licensing Afterlogic Software License
  * @copyright Copyright (c) 2023, Afterlogic Corp.
  */
-class NotConfigured extends \Aurora\System\Exceptions\ApiException {
-
+class NotConfigured extends \Aurora\System\Exceptions\ApiException
+{
     public function __construct($iCode)
     {
         parent::__construct($iCode, null, 'Connector is not configured. Please contact your system administrator.');

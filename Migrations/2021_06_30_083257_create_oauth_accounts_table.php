@@ -27,7 +27,6 @@ class CreateOauthAccountsTable extends Migration
             $table->string('AccountType')->default('oauth');
             $table->timestamp(\Aurora\System\Classes\Model::CREATED_AT)->nullable();
             $table->timestamp(\Aurora\System\Classes\Model::UPDATED_AT)->nullable();
-
         });
     }
 
