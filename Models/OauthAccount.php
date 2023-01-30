@@ -30,10 +30,10 @@ class OauthAccount extends Model
         if (!$this->Disabled) {
             $aResult = array_map(
                 function ($sValue) {
-                if (!empty($sValue)) {
-                    return strtolower($sValue);
-                }
-            },
+                    if (!empty($sValue)) {
+                        return strtolower($sValue);
+                    }
+                },
                 explode(' ', $this->Scopes)
             );
         }
@@ -78,8 +78,8 @@ class OauthAccount extends Model
     {
         $aScopes = array_map(
             function ($sValue) {
-            return strtolower($sValue);
-        },
+                return strtolower($sValue);
+            },
             explode(' ', $this->Scopes)
         );
         $mResult = array_search($sScope, $aScopes);
