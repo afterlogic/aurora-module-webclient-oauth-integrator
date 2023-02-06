@@ -86,14 +86,35 @@ class Connector
     {
         $aResult = false;
         $oClient = $this->CreateClient($Id, $sSecret, "");
-        if ($oClient) {
-            $oUser = null;
-            if (($bSuccess = $oClient->Initialize())) {
-                $aResult = $oClient->RefreshToken($RefreshToken);
+        if ($oClient && $oClient->Initialize()) {
+            $values = [
+                'refresh_token' => $RefreshToken,
+                'grant_type'=>'refresh_token',
+                'client_id' => $oClient->client_id,
+                'client_secret' => $oClient->client_secret
+            ];
+    
+            $options = [
+                'Resource'=>'OAuth refresh token',
+                'ConvertObjects'=>true
+            ];
 
-                if (isset($aResult['error'])) {
-                    throw new \Aurora\System\Exceptions\ApiException(0, null, 'An error occurred while refreshing the access token: ' . $aResult['error']);
-                }
+            $access_token_url = '';
+            if (!$oClient->GetAccessTokenURL($access_token_url)) {
+                return false;
+            }
+            if (strlen($oClient->access_token_content_type)) {
+                $options['ResponseContentType'] = $oClient->access_token_content_type;
+            }
+            $response = [];
+            if (!$oClient->SendAPIRequest($access_token_url, 'POST', $values, null, $options, $response)) {
+                return false;
+            }
+    
+            $aResult = $response;
+
+            if (isset($aResult['error'])) {
+                throw new \Aurora\System\Exceptions\ApiException(0, null, 'An error occurred while refreshing the access token: ' . $aResult['error']);
             }
         }
 
