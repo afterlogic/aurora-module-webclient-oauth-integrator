@@ -3266,6 +3266,29 @@ class oauth_client_class
 			return $this->ResetAccessToken();
 		return true;
 	}
+
+	function RefreshToken($refresh_token)
+	{
+		$values = array(
+			'refresh_token'=>$refresh_token,
+			'grant_type'=>'refresh_token'
+		);
+
+		$options = array(
+			'Resource'=>'OAuth refresh token',
+			'ConvertObjects'=>true
+		);
+		$values['client_id'] = $this->client_id;
+		$values['client_secret'] = $this->client_secret;
+		if(!$this->GetAccessTokenURL($access_token_url))
+			return false;
+		if(strlen($this->access_token_content_type))
+			$options['ResponseContentType'] = $this->access_token_content_type;
+		if(!$this->SendAPIRequest($access_token_url, 'POST', $values, null, $options, $response))
+			return false;
+
+		return $response;
+	}
 /*
 {metadocument}
 		</do>
