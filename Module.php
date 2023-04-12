@@ -23,6 +23,14 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 {
     public $oManager = null;
 
+    /**
+     * @return Module
+     */
+    public static function Decorator()
+    {
+        return parent::Decorator();
+    }
+
     /***** private functions *****/
     /**
      * Initializes module.
