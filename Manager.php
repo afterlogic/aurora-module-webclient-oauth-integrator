@@ -48,7 +48,7 @@ class Manager extends \Aurora\System\Managers\AbstractManager
      * @param string $sIdSocial
      * @param string $sType
      *
-     * @return \CSocial
+     * @return OauthAccount|bool
      */
     public function getAccountById($sIdSocial, $sType)
     {

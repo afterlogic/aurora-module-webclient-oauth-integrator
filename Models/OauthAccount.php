@@ -5,6 +5,48 @@ namespace Aurora\Modules\OAuthIntegratorWebclient\Models;
 use Aurora\System\Classes\Model;
 use Aurora\Modules\Core\Models\User;
 
+/**
+ * Aurora\Modules\OAuthIntegratorWebclient\Models\OauthAccount
+ *
+ * @property integer $Id
+ * @property integer $IdUser
+ * @property string $IdSocial
+ * @property string $Type
+ * @property string $Name
+ * @property string $Email
+ * @property string $AccessToken
+ * @property string|null $RefreshToken
+ * @property string $Scopes
+ * @property integer $Disabled
+ * @property string $AccountType
+ * @property \Illuminate\Support\Carbon|null $CreatedAt
+ * @property \Illuminate\Support\Carbon|null $UpdatedAt
+ * @property-read mixed $entity_id
+ * @method static int count(string $columns = '*')
+ * @method static \Illuminate\Database\Eloquent\Builder|\Aurora\Modules\OAuthIntegratorWebclient\Models\OauthAccount find(int|string $id, array|string $columns = ['*'])
+ * @method static \Illuminate\Database\Eloquent\Builder|\Aurora\Modules\OAuthIntegratorWebclient\Models\OauthAccount findOrFail(int|string $id, mixed $id, Closure|array|string $columns = ['*'], Closure $callback = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Aurora\Modules\OAuthIntegratorWebclient\Models\OauthAccount first(array|string $columns = ['*'])
+ * @method static \Illuminate\Database\Eloquent\Builder|\Aurora\Modules\OAuthIntegratorWebclient\Models\OauthAccount firstWhere(Closure|string|array|\Illuminate\Database\Query\Expression $column, mixed $operator = null, mixed $value = null, string $boolean = 'and')
+ * @method static \Illuminate\Database\Eloquent\Builder|OauthAccount newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|OauthAccount newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|OauthAccount query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\Aurora\Modules\OAuthIntegratorWebclient\Models\OauthAccount where(Closure|string|array|\Illuminate\Database\Query\Expression $column, mixed $operator = null, mixed $value = null, string $boolean = 'and')
+ * @method static \Illuminate\Database\Eloquent\Builder|OauthAccount whereAccessToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OauthAccount whereAccountType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OauthAccount whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OauthAccount whereDisabled($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OauthAccount whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OauthAccount whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OauthAccount whereIdSocial($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OauthAccount whereIdUser($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Aurora\Modules\OAuthIntegratorWebclient\Models\OauthAccount whereIn(string $column, mixed $values, string $boolean = 'and', bool $not = false)
+ * @method static \Illuminate\Database\Eloquent\Builder|OauthAccount whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OauthAccount whereRefreshToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OauthAccount whereScopes($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OauthAccount whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|OauthAccount whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class OauthAccount extends Model
 {
     protected $foreignModel = User::class;

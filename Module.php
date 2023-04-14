@@ -65,7 +65,8 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
      * Deletes all oauth accounts which are owened by the specified user.
      *
      * @ignore
-     * @param int $iUserId User identifier.
+     * @param array $aArgs
+     * @param mixed $mResult
      */
     public function onAfterDeleteUser($aArgs, &$mResult)
     {
@@ -365,7 +366,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
         $aSettings = array();
 
         $oUser = \Aurora\System\Api::getAuthenticatedUser();
-        if (!empty($oUser) && $oUser->Role === \Aurora\System\Enums\UserRole::SuperAdmin) {
+        if ($oUser && $oUser->Role === \Aurora\System\Enums\UserRole::SuperAdmin) {
             $aArgs = array();
             $aServices = array();
             $this->broadcastEvent(
@@ -376,7 +377,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
             $aSettings['Services'] = $aServices;
         }
 
-        if (!empty($oUser) && $oUser->isNormalOrTenant()) {
+        if ($oUser && $oUser->isNormalOrTenant()) {
             $aSettings['AuthModuleName'] = $this->getConfig('AuthModuleName');
             $aSettings['OnlyPasswordForAccountCreate'] = $this->getConfig('OnlyPasswordForAccountCreate');
         }
@@ -493,6 +494,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
         $IncomingPassword = '';
 
         $oMailModuleDecorator = Api::GetModuleDecorator('Mail');
+        /** @var \Aurora\Modules\Mail\Module $oMailModuleDecorator */
         if ($oMailModuleDecorator) {
             $mResult = $oMailModuleDecorator->CreateAccount($UserId, $FriendlyName, $Email, $IncomingLogin, $IncomingPassword, null, $OAuthAccountData['type']);
 
