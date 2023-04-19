@@ -17,6 +17,8 @@ use Aurora\Api;
  * @copyright Copyright (c) 2023, Afterlogic Corp.
  *
  * @internal
+ * @property Settings $oModuleSettings
+ *
  * @package Modules
  */
 class Module extends \Aurora\System\Module\AbstractWebclientModule
@@ -231,7 +233,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
                 );
 
                 if (!($oUser instanceof \Aurora\Modules\Core\Models\User)  &&
-                        ($sOAuthIntegratorRedirect === 'register' || $this->getConfig('AllowNewUsersRegister', false))) {
+                        ($sOAuthIntegratorRedirect === 'register' || $this->oModuleSettings->AllowNewUsersRegister)) {
                     $bPrevState = \Aurora\System\Api::skipCheckUserRole(true);
 
                     try {
@@ -387,8 +389,8 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
         }
 
         if ($oUser && $oUser->isNormalOrTenant()) {
-            $aSettings['AuthModuleName'] = $this->getConfig('AuthModuleName');
-            $aSettings['OnlyPasswordForAccountCreate'] = $this->getConfig('OnlyPasswordForAccountCreate');
+            $aSettings['AuthModuleName'] = $this->oModuleSettings->AuthModuleName;
+            $aSettings['OnlyPasswordForAccountCreate'] = $this->oModuleSettings->OnlyPasswordForAccountCreate;
         }
 
         return $aSettings;
