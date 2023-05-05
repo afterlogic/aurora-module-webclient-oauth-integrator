@@ -93,7 +93,7 @@ class Connector
                 'client_id' => $oClient->client_id,
                 'client_secret' => $oClient->client_secret
             ];
-    
+
             $options = [
                 'Resource'=>'OAuth refresh token',
                 'ConvertObjects'=>true
@@ -110,7 +110,7 @@ class Connector
             if (!$oClient->SendAPIRequest($access_token_url, 'POST', $values, null, $options, $response)) {
                 return false;
             }
-    
+
             $aResult = $response;
 
             if (isset($aResult['error'])) {
