@@ -27,12 +27,10 @@ class Connector
 
     public function GetRedirectUrl()
     {
-        return rtrim(\MailSo\Base\Http::SingletonInstance()->GetFullUrl(), '\\/ ').'/?oauth='.$this->Name;
+        return rtrim(\MailSo\Base\Http::SingletonInstance()->GetFullUrl(), '\\/ ') . '/?oauth=' . $this->Name;
     }
 
-    public function Init($sId, $sSecret, $sScope = '')
-    {
-    }
+    public function Init($sId, $sSecret, $sScope = '') {}
 
     /**
      * @return \oauth_client_class
@@ -89,14 +87,14 @@ class Connector
         if ($oClient && $oClient->Initialize()) {
             $values = [
                 'refresh_token' => $RefreshToken,
-                'grant_type'=>'refresh_token',
+                'grant_type' => 'refresh_token',
                 'client_id' => $oClient->client_id,
                 'client_secret' => $oClient->client_secret
             ];
 
             $options = [
-                'Resource'=>'OAuth refresh token',
-                'ConvertObjects'=>true
+                'Resource' => 'OAuth refresh token',
+                'ConvertObjects' => true
             ];
 
             $access_token_url = '';
