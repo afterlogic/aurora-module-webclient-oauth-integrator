@@ -140,8 +140,9 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
             return true;
         }
 
+        $sService = $this->oHttp->GetQuery('oauth', '');
         $aArgs = array(
-            'Service' => $this->oHttp->GetQuery('oauth', '')
+            'Service' => $sService
         );
 
         $this->broadcastEvent(
@@ -310,7 +311,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
                 self::EchoJsCallback($mResult['type'], $sResult, $sErrorCode);
             }
         } else {
-            self::EchoJsCallback($mResult['type'], 'false', '');
+            self::EchoJsCallback($sService, 'false', '');
         }
     }
 
