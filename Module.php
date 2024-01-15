@@ -512,17 +512,19 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 
         $IncomingPassword = '';
 
-        $oMailModuleDecorator = Api::GetModuleDecorator('Mail');
-        /** @var \Aurora\Modules\Mail\Module $oMailModuleDecorator */
-        if ($oMailModuleDecorator) {
-            $mResult = $oMailModuleDecorator->CreateAccount($UserId, $FriendlyName, $Email, $IncomingLogin, $IncomingPassword, null, $OAuthAccountData['type']);
+        if (class_exists('\Aurora\Modules\Mail\Module')) {
+            $oMailModuleDecorator = Api::GetModuleDecorator('Mail');
+            /** @var \Aurora\Modules\Mail\Module $oMailModuleDecorator */
+            if ($oMailModuleDecorator) {
+                $mResult = $oMailModuleDecorator->CreateAccount($UserId, $FriendlyName, $Email, $IncomingLogin, $IncomingPassword, null, $OAuthAccountData['type']);
 
-            if ($mResult) {
-                if (class_exists('\Aurora\Modules\Mail\Module')) {
-                    $oResException = \Aurora\Modules\Mail\Module::getInstance()->getMailManager()->validateAccountConnection($mResult, false);
-                    if ($oResException instanceof \Exception) {
-                        $oMailModuleDecorator->DeleteAccount($mResult->Id);
-                        throw new \Aurora\System\Exceptions\ApiException(0, $oResException, $this->i18N('ERROR_ACCOUNT_IMAP_VALIDATION_FAILED'));
+                if ($mResult) {
+                    if (class_exists('\Aurora\Modules\Mail\Module')) {
+                        $oResException = \Aurora\Modules\Mail\Module::getInstance()->getMailManager()->validateAccountConnection($mResult, false);
+                        if ($oResException instanceof \Exception) {
+                            $oMailModuleDecorator->DeleteAccount($mResult->Id);
+                            throw new \Aurora\System\Exceptions\ApiException(0, $oResException, $this->i18N('ERROR_ACCOUNT_IMAP_VALIDATION_FAILED'));
+                        }
                     }
                 }
             }
