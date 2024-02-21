@@ -100,10 +100,8 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
      */
     public function onGetAccounts($aArgs, &$aResult)
     {
-        $aUserInfo = \Aurora\System\Api::getAuthenticatedUserInfo($aArgs['AuthToken']);
-        if (isset($aUserInfo['userId'])) {
-            $iUserId = $aUserInfo['userId'];
-            $mAccounts = $this->oManager->getAccounts($iUserId);
+        if (isset($aArgs['UserId'])) {
+            $mAccounts = $this->oManager->getAccounts($aArgs['UserId']);
 
             foreach ($mAccounts as $oAccount) {
                 $aResult[] = array(
