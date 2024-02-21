@@ -57,8 +57,8 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
      */
     public function init()
     {
-        include_once __DIR__.'/Classes/OAuthClient/http.php';
-        include_once __DIR__.'/Classes/OAuthClient/oauth_client.php';
+        include_once __DIR__ . '/Classes/OAuthClient/http.php';
+        include_once __DIR__ . '/Classes/OAuthClient/oauth_client.php';
 
         $this->aErrors = [
             Enums\ErrorCodes::ServiceNotAllowed			=> $this->i18N('ERROR_SERVICE_NOT_ALLOWED'),
@@ -317,14 +317,13 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
     {
         echo
         "<script>"
-            .	" try {"
-            .		"if (typeof(window.opener.".$sType."ConnectCallback) !== 'undefined') {"
-            .			"window.opener.".$sType."ConnectCallback(".$sResult . ", '".$sErrorCode."','".self::GetName()."');"
-            .		"}"
-            .	" }"
-            .	" finally  {"
-            .		"window.close();"
-            .	" }"
+            . "try {"
+            . "  if (typeof(window.opener." . $sType . "ConnectCallback) !== 'undefined') {"
+            . "    window.opener." . $sType . "ConnectCallback(" . $sResult . ", '" . $sErrorCode . "','" . self::GetName() . "');"
+            . "  }"
+            . "} finally  {"
+            . "  window.close();"
+            . "}"
         . "</script>";
         exit;
     }
