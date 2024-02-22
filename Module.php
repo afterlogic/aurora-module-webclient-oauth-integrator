@@ -105,9 +105,9 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 
             foreach ($mAccounts as $oAccount) {
                 $aResult[] = array(
-                    'Id' => $oAccount->Id,
-                    'UUID' => '', //TODO
                     'Type' => $oAccount->getName(),
+                    'Module' => $this->GetName(),
+                    'Id' => $oAccount->Id,
                     'Email' => $oAccount->Email
                 );
             }
