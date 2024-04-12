@@ -15,7 +15,7 @@ namespace Aurora\Modules\OAuthIntegratorWebclient\Classes;
 class Connector
 {
     protected $Name = 'connector';
-    public static $Debug = false;
+    public static $Debug = true;
     public static $Scopes = array();
 
     public $oModule = null;
