@@ -133,7 +133,10 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
                 $mResult
             );
             $mResult = false;
-            setcookie('oauth-redirect', 'connect');
+            \Aurora\System\Api::setCookie(
+                'oauth-redirect',
+                'connect'
+            );
             \Aurora\System\Api::Location2('./?oauth=' . $sOAuthArg[0]);
             return true;
         }
@@ -168,13 +171,10 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
             $sOAuthIntegratorRedirect = 'login';
             if (isset($_COOKIE["oauth-redirect"])) {
                 $sOAuthIntegratorRedirect = $_COOKIE["oauth-redirect"];
-                @\setcookie(
+                \Aurora\System\Api::setCookie(
                     'oauth-redirect',
                     null,
-                    \strtotime('-1 hour'),
-                    \Aurora\System\Api::getCookiePath(),
-                    null,
-                    \Aurora\System\Api::getCookieSecure()
+                    \strtotime('-1 hour')
                 );
             }
 
@@ -271,14 +271,8 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
                         \Aurora\System\UserSession::getTokenData($oOAuthAccount, true),
                         \time() + 60 * 60 * 24 * 30
                     );
-                    @\setcookie(
-                        \Aurora\System\Application::AUTH_TOKEN_KEY,
-                        $sAuthToken,
-                        \strtotime('+30 days'),
-                        \Aurora\System\Api::getCookiePath(),
-                        null,
-                        \Aurora\System\Api::getCookieSecure()
-                    );
+
+                    Api::setAuthTokenCookie($sAuthToken);
 
                     //this will store user data in static variable of Api class for later usage
                     \Aurora\System\Api::getAuthenticatedUser($sAuthToken);
