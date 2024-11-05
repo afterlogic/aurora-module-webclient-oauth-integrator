@@ -135,7 +135,9 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
             $mResult = false;
             \Aurora\System\Api::setCookie(
                 'oauth-redirect',
-                'connect'
+                'connect',
+                0,
+                false
             );
             \Aurora\System\Api::Location2('./?oauth=' . $sOAuthArg[0]);
             return true;
@@ -174,7 +176,8 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
                 \Aurora\System\Api::setCookie(
                     'oauth-redirect',
                     null,
-                    \strtotime('-1 hour')
+                    \strtotime('-1 hour'),
+                    false
                 );
             }
 
