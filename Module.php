@@ -283,7 +283,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
                     if ($this->oHttp->GetQuery('mobile', '0') === '1') {
                         return json_encode(
                             array(
-                                'AuthToken' => $sAuthToken
+                                \Aurora\System\Application::AUTH_TOKEN_KEY => $sAuthToken
                             )
                         );
                     } else {
