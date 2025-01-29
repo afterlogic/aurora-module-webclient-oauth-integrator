@@ -312,16 +312,20 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 
     protected static function EchoJsCallback($sType, $sResult, $sErrorCode)
     {
-        echo
-        "<script>"
-            . "try {"
-            . "  if (typeof(window.opener." . $sType . "ConnectCallback) !== 'undefined') {"
-            . "    window.opener." . $sType . "ConnectCallback(" . $sResult . ", '" . $sErrorCode . "','" . self::GetName() . "');"
-            . "  }"
-            . "} finally  {"
-            . "  window.close();"
-            . "}"
-        . "</script>";
+        if (in_array($sType, self::Decorator()->GetServices())) {
+            echo
+            "<script>"
+                . "try {"
+                . "  if (typeof(window.opener." . $sType . "ConnectCallback) !== 'undefined') {"
+                . "    window.opener." . $sType . "ConnectCallback(" . $sResult . ", '" . $sErrorCode . "','" . self::GetName() . "');"
+                . "  }"
+                . "} finally  {"
+                . "  window.close();"
+                . "}"
+            . "</script>";
+        } else {
+            http_response_code(404);
+        }
         exit;
     }
 
