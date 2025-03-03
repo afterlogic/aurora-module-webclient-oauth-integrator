@@ -202,7 +202,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
                 );
                 $this->oManager->updateAccount($oOAuthAccount);
 
-                $oUser = \Aurora\Modules\Core\Module::Decorator()->GetUserWithoutRoleCheck($oOAuthAccount->IdUser);
+                $oUser = Api::getUserById($oOAuthAccount->IdUser);
             } else {
                 if ($iAuthUserId) {
                     $aArgs = array(
@@ -230,7 +230,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
                     try {
                         $iUserId = \Aurora\Modules\Core\Module::Decorator()->CreateUser(0, $mResult['email']);
                         if ($iUserId) {
-                            $oUser = \Aurora\Modules\Core\Module::Decorator()->GetUserWithoutRoleCheck($iUserId);
+                            $oUser = Api::getUserById($iUserId);
                         }
                     } catch (\Aurora\System\Exceptions\ApiException $oException) {
                         if ($oException->getCode() === \Aurora\System\Notifications::UserAlreadyExists) {
