@@ -75,7 +75,8 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
         $this->subscribeEvent('Core::GetAccounts', array($this, 'onGetAccounts'));
 
         $this->denyMethodsCallByWebApi([
-            'GetAccessToken'
+            'GetAccessToken',
+            'GetAccount'
         ]);
     }
 
@@ -133,13 +134,8 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
                 $mResult
             );
             $mResult = false;
-            \Aurora\System\Api::setCookie(
-                'oauth-redirect',
-                'connect',
-                0,
-                false
-            );
-            \Aurora\System\Api::Location2('./?oauth=' . $sOAuthArg[0]);
+            $_COOKIE['oauth-redirect'] = 'connect';
+            Api::Location2('./?oauth=' . $sOAuthArg[0]);
             return true;
         }
 
@@ -148,6 +144,9 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
             'Service' => $sService
         );
 
+        if (!isset($_SESSION['AuroraUserId'])) {
+            $_SESSION['AuroraUserId'] = Api::getAuthenticatedUserId();
+        }
         $this->broadcastEvent(
             'OAuthIntegratorAction',
             $aArgs,
@@ -160,65 +159,48 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
                 $sOAuthIntegratorRedirect = $_COOKIE["oauth-redirect"];
                 $sInvitationLinkHash =  isset($_COOKIE["InvitationLinkHash"]) ? $_COOKIE["InvitationLinkHash"] : null;
                 if ($sOAuthIntegratorRedirect === 'register' && isset($sInvitationLinkHash)) {
-                    \Aurora\System\Api::Location2(
+                    Api::Location2(
                         './#register/' . $sInvitationLinkHash
                     );
                 }
             }
         }
         if (false !== $mResult && \is_array($mResult) && !isset($mResult['error'])) {
-            $iAuthUserId = isset($_COOKIE[\Aurora\System\Application::AUTH_TOKEN_KEY]) ? \Aurora\System\Api::getAuthenticatedUserId($_COOKIE[\Aurora\System\Application::AUTH_TOKEN_KEY]) : null;
+            $iAuthUserId = Api::getAuthenticatedUserId();
+            if (!$iAuthUserId && isset($_SESSION['AuroraUserId'])) {
+                $iAuthUserId = $_SESSION['AuroraUserId'];
+                unset($_SESSION['AuroraUserId']);
+            }
 
             $oUser = null;
             $sOAuthIntegratorRedirect = 'login';
             if (isset($_COOKIE["oauth-redirect"])) {
                 $sOAuthIntegratorRedirect = $_COOKIE["oauth-redirect"];
-                \Aurora\System\Api::setCookie(
-                    'oauth-redirect',
-                    null,
-                    \strtotime('-1 hour'),
-                    false
-                );
+                unset($_COOKIE['oauth-redirect']);
             }
 
-            $oOAuthAccount = new Models\OauthAccount();
-            $oOAuthAccount->Type = $mResult['type'];
-            $oOAuthAccount->AccessToken = isset($mResult['access_token']) ? $mResult['access_token'] : '';
-            $oOAuthAccount->RefreshToken = isset($mResult['refresh_token']) ? $mResult['refresh_token'] : '';
-            $oOAuthAccount->IdSocial = $mResult['id'];
-            $oOAuthAccount->Name = $mResult['name'];
-            $oOAuthAccount->Email = $mResult['email'];
-
-            $oAccountOld = $this->oManager->getAccountById($oOAuthAccount->IdSocial, $oOAuthAccount->Type);
-            if ($oAccountOld && !$oAccountOld->issetScope('mail')) {
+            $oOAuthAccount = $this->oManager->getAccountById($mResult['id'], $mResult['type']);
+            if ($oOAuthAccount) {
                 if ($sOAuthIntegratorRedirect === 'register') {
-                    \Aurora\System\Api::Location2(
+                    Api::Location2(
                         './?error=' . Enums\ErrorCodes::AccountAlreadyConnected . '&module=' . self::GetName()
                     );
                 }
 
-                if (!$oAccountOld->issetScope('auth') && $sOAuthIntegratorRedirect !== 'connect') {
-                    \Aurora\System\Api::Location2(
+                if (!$oOAuthAccount->issetScope('auth') && $sOAuthIntegratorRedirect !== 'connect') {
+                    Api::Location2(
                         './?error=' . Enums\ErrorCodes::AccountNotAllowedToLogIn . '&module=' . self::GetName()
                     );
                 }
 
+                $oOAuthAccount->AccessToken = isset($mResult['access_token']) ? $mResult['access_token'] : '';
+                $oOAuthAccount->RefreshToken = isset($mResult['refresh_token']) ? $mResult['refresh_token'] : '';
+                $oOAuthAccount->Name = $mResult['name'];
+                $oOAuthAccount->Email = $mResult['email'];
                 $oOAuthAccount->setScopes(
                     $mResult['scopes']
                 );
-                $oOAuthAccount->Id = $oAccountOld->Id;
-                $oOAuthAccount->IdUser = $oAccountOld->IdUser;
-
-                $oAccountOld->Type = $mResult['type'];
-                $oAccountOld->AccessToken = isset($mResult['access_token']) ? $mResult['access_token'] : '';
-                $oAccountOld->RefreshToken = isset($mResult['refresh_token']) ? $mResult['refresh_token'] : '';
-                $oAccountOld->IdSocial = $mResult['id'];
-                $oAccountOld->Name = $mResult['name'];
-                $oAccountOld->Email = $mResult['email'];
-                $oAccountOld->setScopes(
-                    $mResult['scopes']
-                );
-                $this->oManager->updateAccount($oAccountOld);
+                $this->oManager->updateAccount($oOAuthAccount);
 
                 $oUser = \Aurora\Modules\Core\Module::Decorator()->GetUserWithoutRoleCheck($oOAuthAccount->IdUser);
             } else {
@@ -243,10 +225,10 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 
                 if (!($oUser instanceof \Aurora\Modules\Core\Models\User)  &&
                         ($sOAuthIntegratorRedirect === 'register' || $this->oModuleSettings->AllowNewUsersRegister)) {
-                    $bPrevState = \Aurora\System\Api::skipCheckUserRole(true);
+                    $bPrevState = Api::skipCheckUserRole(true);
 
                     try {
-                        $iUserId = \Aurora\Modules\Core\Module::Decorator()->CreateUser(0, $oOAuthAccount->Email);
+                        $iUserId = \Aurora\Modules\Core\Module::Decorator()->CreateUser(0, $mResult['email']);
                         if ($iUserId) {
                             $oUser = \Aurora\Modules\Core\Module::Decorator()->GetUserWithoutRoleCheck($iUserId);
                         }
@@ -258,19 +240,28 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
                         }
                     }
 
-                    \Aurora\System\Api::skipCheckUserRole($bPrevState);
+                    Api::skipCheckUserRole($bPrevState);
                 }
 
                 if ($oUser instanceof \Aurora\Modules\Core\Models\User) {
+                    $oOAuthAccount = new Models\OauthAccount();
+                    $oOAuthAccount->IdSocial = $mResult['id'];
                     $oOAuthAccount->IdUser = $oUser->Id;
-                    $oOAuthAccount->setScopes($mResult['scopes']);
+                    $oOAuthAccount->Type = $mResult['type'];
+                    $oOAuthAccount->AccessToken = isset($mResult['access_token']) ? $mResult['access_token'] : '';
+                    $oOAuthAccount->RefreshToken = isset($mResult['refresh_token']) ? $mResult['refresh_token'] : '';
+                    $oOAuthAccount->Name = $mResult['name'];
+                    $oOAuthAccount->Email = $mResult['email'];
+                    $oOAuthAccount->setScopes(
+                        $mResult['scopes']
+                    );
                     $this->oManager->createAccount($oOAuthAccount);
                 }
             }
 
             if ($sOAuthIntegratorRedirect === 'login' || $sOAuthIntegratorRedirect === 'register') {
                 if ($oUser) {
-                    $sAuthToken = \Aurora\System\Api::UserSession()->Set(
+                    $sAuthToken = Api::UserSession()->Set(
                         \Aurora\System\UserSession::getTokenData($oOAuthAccount, true),
                         \time() + 60 * 60 * 24 * 30
                     );
@@ -278,7 +269,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
                     Api::setAuthTokenCookie($sAuthToken);
 
                     //this will store user data in static variable of Api class for later usage
-                    \Aurora\System\Api::getAuthenticatedUser($sAuthToken);
+                    Api::getAuthenticatedUser($sAuthToken);
 
                     if ($this->oHttp->GetQuery('mobile', '0') === '1') {
                         return json_encode(
@@ -287,10 +278,10 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
                             )
                         );
                     } else {
-                        \Aurora\System\Api::Location2('./');
+                        Api::Location2('./');
                     }
                 } else {
-                    \Aurora\System\Api::Location2(
+                    Api::Location2(
                         './?error=' . Enums\ErrorCodes::AccountNotAllowedToLogIn . '&module=' . self::GetName()
                     );
                 }
@@ -312,7 +303,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 
     protected static function EchoJsCallback($sType, $sResult, $sErrorCode)
     {
-        if (in_array($sType, self::Decorator()->GetServices())) {
+        if (in_array($sType, self::Decorator()->GetServiceTypes())) {
             echo
             "<script>"
                 . "try {"
@@ -333,14 +324,16 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
      * Returns oauth account with specified type.
      *
      * @param string $Type Type of oauth account.
+     * @param string $Email
+     * @param int $UserId Id of user.
      * @return \Aurora\Modules\OAuthIntegratorWebclient\Models\OauthAccount
      */
-    public function GetAccount($Type, $Email = '')
+    public function GetAccount($Type, $Email = '', $UserId = null)
     {
         \Aurora\System\Api::checkUserRoleIsAtLeast(\Aurora\System\Enums\UserRole::NormalUser);
 
         return $this->oManager->getAccount(
-            \Aurora\System\Api::getAuthenticatedUserId(),
+            $UserId ? $UserId : \Aurora\System\Api::getAuthenticatedUserId(),
             $Type,
             $Email
         );
@@ -365,6 +358,19 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
      * @return array
      */
     public function GetServices()
+    {
+        \Aurora\System\Api::checkUserRoleIsAtLeast(\Aurora\System\Enums\UserRole::Anonymous);
+
+        return [];
+    }
+
+    /***** public functions might be called with web API *****/
+    /**
+     * Returns all oauth services types.
+     *
+     * @return array
+     */
+    public function GetServiceTypes()
     {
         \Aurora\System\Api::checkUserRoleIsAtLeast(\Aurora\System\Enums\UserRole::Anonymous);
 
