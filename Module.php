@@ -57,6 +57,8 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
      */
     public function init()
     {
+        session_start();
+        
         include_once __DIR__ . '/Classes/OAuthClient/http.php';
         include_once __DIR__ . '/Classes/OAuthClient/oauth_client.php';
 
