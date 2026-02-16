@@ -72,6 +72,7 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 
         $this->AddEntry('oauth', 'OAuthIntegratorEntry');
         $this->includeTemplate('StandardLoginFormWebclient_LoginView', 'Login-After', 'templates/SignInButtonsView.html', self::GetName());
+        $this->includeTemplate('MailLoginFormWebclient_LoginView', 'Login-After', 'templates/SignInButtonsView.html', self::GetName());
         $this->includeTemplate('StandardRegisterFormWebclient_RegisterView', 'Register-After', 'templates/SignInButtonsView.html', self::GetName());
         $this->subscribeEvent('Core::DeleteUser::after', array($this, 'onAfterDeleteUser'));
         $this->subscribeEvent('Core::GetAccounts', array($this, 'onGetAccounts'));

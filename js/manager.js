@@ -53,6 +53,7 @@ module.exports = function (oAppData) {
 
 				App.subscribeEvent('StandardLoginFormWebclient::ConstructView::after', fInitialize);
 				App.subscribeEvent('StandardRegisterFormWebclient::ConstructView::after', fInitialize);
+				App.subscribeEvent('MailLoginFormWebclient::ConstructView::after', fInitialize);
 			}
 		};
 	}
