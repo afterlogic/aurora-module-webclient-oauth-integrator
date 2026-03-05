@@ -8,6 +8,7 @@
 namespace Aurora\Modules\OAuthIntegratorWebclient;
 
 use Aurora\Api;
+use Aurora\System\Facades\Route;
 
 /**
  * Brings oAuth support into Aurora platform.
@@ -70,7 +71,13 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
 
         $this->oManager = new Manager($this);
 
-        $this->AddEntry('oauth', 'OAuthIntegratorEntry');
+        Route::add(
+            $this,
+            [
+                'oauth' => 'OAuthIntegratorEntry',
+            ]
+        );
+
         $this->includeTemplate('StandardLoginFormWebclient_LoginView', 'Login-After', 'templates/SignInButtonsView.html', self::GetName());
         $this->includeTemplate('MailLoginFormWebclient_LoginView', 'Login-After', 'templates/SignInButtonsView.html', self::GetName());
         $this->includeTemplate('StandardRegisterFormWebclient_RegisterView', 'Register-After', 'templates/SignInButtonsView.html', self::GetName());
