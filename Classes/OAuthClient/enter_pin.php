@@ -29,7 +29,8 @@ if (isset($_GET['submit'])
      * include the selected authorization script
      */
     define('OAUTH_PIN', $_GET['pin']);
-    require $_GET['script'];
+    $sScript = $authorizations[$_GET['script']];
+    require __DIR__ . '/' . $sScript;
 } else {
     /*
      * Present the pin input form

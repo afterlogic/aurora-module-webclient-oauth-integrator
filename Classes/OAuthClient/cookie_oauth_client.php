@@ -125,8 +125,8 @@ class cookie_oauth_client_class extends oauth_client_class
         if (($serialized = $this->DecodeText($_COOKIE[$this->cookie_name], $encode_time, $this->error)) === '') {
             return null;
         }
-        $value = unserialize($serialized);
-        if (GetType($value) != 'array') {
+        $value = json_decode($serialized, true);
+        if (json_last_error() !== JSON_ERROR_NONE || !is_array($value)) {
             return null;
         }
         return($this->cookie_value = $value);
@@ -134,7 +134,7 @@ class cookie_oauth_client_class extends oauth_client_class
 
     public function Serialize($s)
     {
-        if (($encrypted = $this->EncodeText(serialize($this->cookie_value = $s), 'Serialize', $this->error)) === '') {
+        if (($encrypted = $this->EncodeText(json_encode($this->cookie_value = $s), 'Serialize', $this->error)) === '') {
             return false;
         }
         SetCookie($this->cookie_name, $encrypted);

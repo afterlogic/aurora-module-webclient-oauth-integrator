@@ -242,9 +242,9 @@ class Module extends \Aurora\System\Module\AbstractWebclientModule
                                 './?error=' . Enums\ErrorCodes::AccountAlreadyConnected . '&module=' . self::GetName()
                             );
                         }
+                    } finally {
+                        Api::skipCheckUserRole($bPrevState);
                     }
-
-                    Api::skipCheckUserRole($bPrevState);
                 }
 
                 if ($oUser instanceof \Aurora\Modules\Core\Models\User) {
